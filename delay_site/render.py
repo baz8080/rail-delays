@@ -93,25 +93,30 @@ def _short(when):
 
 
 def day_caption(row):
+    """What a day cell says. The breakdown may add to more than the total.
+
+    A disruption naming a fault and the knock-on it caused counts in both
+    families, so the parts are introduced as what the notices named rather than
+    as a partition of the day.
+    """
     counts = row["counts"]
     if counts is None:
         return BAND_LABEL[NO_DATA]
-    total = sum(counts.values())
+    total = row["total"]
     if not total:
         return "nothing listed"
     parts = [
-        f"{count} {FAMILY_LABEL[family]}" if family else f"{count} with no cause stated"
+        f"{count} {FAMILY_LABEL[family]}" if family else f"{count} named no cause at all"
         for family, count in sorted(counts.items(), key=lambda kv: (-kv[1], str(kv[0])))
     ]
-    return f"{total} listed: " + ", ".join(parts)
+    return f"{total} listed, naming " + ", ".join(parts)
 
 
 def day_bar(rows):
     """The month's day cells, with the family breakdown in each caption."""
     cells = []
     for row in rows:
-        counts = row["counts"]
-        code = band(None if counts is None else sum(counts.values()))
+        code = band(row["total"])
         cap = f"{statusui.fmt_day(row['day'])}: {day_caption(row)}"
         cells.append(f'<i class="b{code}" data-cap="{_esc(cap)}"></i>')
     return "".join(cells)

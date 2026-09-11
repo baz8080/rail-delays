@@ -48,10 +48,12 @@ does not know about it yet.
   disruption. "The 09:50 Dublin Connolly to Belfast" carries `start`
   2026-08-28T09:50:00. On a lift notice in the sibling repository the same field
   means something else entirely.
-- **`eventStops` empties part-way through a notice's life**, on the same polls
-  `locationCodes` does. 186 of the 361 notices here are seen both with a route
-  and without one. A key that takes the field as it arrives gives 671
-  disruptions where there are 394; `model.resolve` fills it back in.
+- **`eventStops` describes what is affected right now and is not an identity.**
+  It empties part-way through a notice's life on the same polls `locationCodes`
+  does (186 of the 361 notices are seen both with a route and without one), and
+  on a multi-leg notice it is the list of services still affected, so its first
+  leg moves as they recover. A key that takes the field as it arrives gives 671
+  disruptions where there are 392; `model.resolve` repairs both shapes.
 - **The head carries the minutes**, so it changes at almost every poll. Nothing
   may key on it.
 - **The apology sentence ends in the word "caused".** 300 of the 416 notices
@@ -67,8 +69,9 @@ does not know about it yet.
 | Decision | Where |
 |---|---|
 | One disruption is one event, not one notice: keyed on `start` plus the resolved `eventStops` route, because Irish Rail re-words a live notice as it develops and the collector's key fractures on the head | `notes/site.md` § One disruption is one event |
-| `eventStops` empties out like `locationCodes`, and the route is resolved from the `start` rather than taken as it arrives. `start` alone was rejected: it would have merged 8 same-minute pairs into 4 events that never happened | `notes/site.md` § `eventStops` empties out |
-| The subject is disruption, not the word "delay": a head filter drops "Services suspended between Newry and Portadown", the worst event on the corpus. Lift outages, test alerts and reduced-capacity notices are excluded, the last of those counted and named on the page because it is a third of the feed | `notes/site.md` § What counts as a disruption |
+| `eventStops` empties out like `locationCodes`, and on a multi-leg notice its first leg moves as services recover, so the route is resolved from the `start` rather than taken as it arrives and a multi-service start keys on the start alone. `start` alone for everything was rejected: it would have merged 6 same-minute pairs into 3 events that never happened | `notes/site.md` § `eventStops` empties out, § A multi-leg `eventStops` |
+| A day's family breakdown does not partition the day, because one disruption can name a fault and its knock-on. The row carries the total separately and nothing sums the breakdown | `notes/site.md` § The day bar |
+| The subject is disruption, not the word "delay": a head filter drops "Services suspended between Newry and Portadown", the worst event on the corpus. Lift outages, test alerts and reduced-capacity notices are excluded, the last of those counted and named on the page because it is a third of the feed, and judged on every wording a disruption ever had rather than its newest | `notes/site.md` § What counts as a disruption |
 | Minutes are never summed, anywhere. The naive total overstates by 1.26x and mixes one observed train with a forecast over a line. Each disruption shows the worst figure it ever claimed, prefixed "at least" because a range reads at its lower bound | `notes/site.md` § The minutes are never added up |
 | No percentage and no on-time performance: there is no published roll of services that ran, so there is nothing to divide by | `notes/site.md` § No denominator |
 | The day bar's bands are cut from the corpus and not from round numbers, and a real-corpus test fails when the newest month stops spreading across them | `notes/site.md` § The day bar |

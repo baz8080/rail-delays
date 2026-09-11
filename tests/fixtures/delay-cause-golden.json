@@ -512,15 +512,6 @@
   {
    "causes": [
     {
-     "category": "level_crossing",
-     "earlier": false,
-     "family": "origin",
-     "marker": "due to",
-     "matched": "level crossing",
-     "phrase": "a level crossing issue",
-     "role": "proximate"
-    },
-    {
      "category": "vehicle_strike",
      "earlier": true,
      "family": "origin",
@@ -4060,15 +4051,6 @@
   {
    "causes": [
     {
-     "category": "level_crossing",
-     "earlier": false,
-     "family": "origin",
-     "marker": "due to",
-     "matched": "level crossing",
-     "phrase": "a level crossing issue",
-     "role": "proximate"
-    },
-    {
      "category": "vehicle_strike",
      "earlier": true,
      "family": "origin",
@@ -4215,15 +4197,6 @@
   {
    "causes": [
     {
-     "category": "level_crossing",
-     "earlier": false,
-     "family": "origin",
-     "marker": "due to",
-     "matched": "level crossing",
-     "phrase": "a level crossing issue",
-     "role": "proximate"
-    },
-    {
      "category": "vehicle_strike",
      "earlier": true,
      "family": "origin",
@@ -4239,15 +4212,6 @@
   },
   {
    "causes": [
-    {
-     "category": "level_crossing",
-     "earlier": false,
-     "family": "origin",
-     "marker": "due to",
-     "matched": "level crossing",
-     "phrase": "a level crossing issue",
-     "role": "proximate"
-    },
     {
      "category": "vehicle_strike",
      "earlier": true,
@@ -6001,15 +5965,6 @@
   },
   {
    "causes": [
-    {
-     "category": "level_crossing",
-     "earlier": false,
-     "family": "origin",
-     "marker": "due to",
-     "matched": "level crossing",
-     "phrase": "a level crossing issue",
-     "role": "proximate"
-    },
     {
      "category": "vehicle_strike",
      "earlier": false,

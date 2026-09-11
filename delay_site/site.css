@@ -1,8 +1,10 @@
 /* This site's own rules, inlined after statusui's base.css. */
 
-/* day cells: 0 nothing listed, 1 one or two, 2 three to five, 3 six to nine,
-   4 ten or more, 8 no data. A count, banded - not a severity, because the feed
-   carries no magnitude and a busy day is not a worse day for any one train. */
+/* day cells, banded by how many disruptions were first listed that day: 0 none,
+   1 one to three, 2 four to eight, 3 nine to sixteen, 4 seventeen or more,
+   8 no data. `render.BANDS` holds the cuts and the reason they are those. A
+   count, not a severity: the feed carries no magnitude, and a busy day is not a
+   worse day for any one train. */
 .bar i.b0, .legend i.b0 { background: var(--good); }
 .bar i.b1, .legend i.b1 { background: var(--fair); }
 .bar i.b2, .legend i.b2 { background: var(--warning); }
@@ -30,7 +32,9 @@
 .rank + .rank { border-top: 1px solid var(--border); }
 .rname { font-size: 13.5px; }
 .rank .bar { height: 8px; background: var(--cell-empty); }
-.rank .bar i { display: block; height: 100%; background: var(--ink-2); }
+/* flex: none or statusui's `.bar i { flex: 1 }` wins and every bar draws full
+   width, which is a ranking that ranks nothing. */
+.rank .bar i { display: block; flex: none; height: 100%; background: var(--ink-2); }
 .rn { text-align: right; font-variant-numeric: tabular-nums; font-weight: 650; font-size: 13.5px; }
 /* 600 and not 480: below about 600 the proportional bar is squeezed to a sliver
    that reads as an artifact rather than a bar, so it goes before it gets there. */

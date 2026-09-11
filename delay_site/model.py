@@ -78,6 +78,10 @@ class Sighting(NamedTuple):
     origin: str | None
     destination: str | None
     seen_at: datetime
+    # How many legs `eventStops` carried. On a multi-leg notice the list is the
+    # services still affected and it shrinks as they recover, so the first leg
+    # is not an identity; `resolve` reads this rather than the route.
+    legs: int = 1
 
 
 class Disruption(NamedTuple):
@@ -134,8 +138,13 @@ def _parse_run(line):
         return None, None
     if not isinstance(items, list):
         return None, None
-    seen_at = datetime.strptime(run["fetched_at_utc"], "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=UTC)
-    return seen_at, items
+    try:
+        seen_at = datetime.strptime(run.get("fetched_at_utc") or "", "%Y-%m-%dT%H:%M:%SZ")
+    except (TypeError, ValueError):
+        # Every other field here is guarded, and one odd line in a log that is
+        # append-only and years long must not take the whole build down.
+        return None, None
+    return seen_at.replace(tzinfo=UTC), items
 
 
 def ours(head, text):
@@ -183,6 +192,7 @@ def sightings(data_dir):
                             origin=(first.get("sStop") or "").strip() or None,
                             destination=(first.get("eStop") or "").strip() or None,
                             seen_at=seen_at,
+                            legs=len(stops),
                         )
                     )
     return found, horizon, runs
@@ -202,6 +212,10 @@ def claimed_minutes(head, text):
     return None
 
 
+# What the route reads as when a notice names more than one service.
+SEVERAL = "Several services"
+
+
 def routes_by_start(found):
     """The routes each `start` was ever seen with, ignoring the empty ones."""
     routes = defaultdict(set)
@@ -211,25 +225,43 @@ def routes_by_start(found):
     return routes
 
 
+def network_starts(found):
+    """The starts whose notice ever named more than one service.
+
+    `eventStops` on such a notice is the list of services still affected, and it
+    shrinks as they recover: the Connolly signalling failure of 2026-08-20 ran
+    1 leg, then 4, then 10, then 7, and its first leg changed from Donabate to
+    Maynooth on the way. So the first leg is not an identity for it, and nothing
+    keys on the route under these starts at all.
+
+    Decided per start rather than per sighting, because the same notice is
+    single-leg at one poll and multi-leg at the next.
+    """
+    return {s.start for s in found if s.legs > 1}
+
+
 def resolve(found):
-    """[(sighting, route)], with the emptied-out `eventStops` filled back in.
+    """[(sighting, route)], with the route each sighting belongs to.
 
-    `eventStops` empties part-way through a notice's life exactly as
-    `locationCodes` does, and on the same polls: 186 of the 361 notices on the
-    corpus are seen both with a route and without one, and in every one of those
-    the `start` holds still while the stops go. Keying on the field as it
-    arrives splits one disruption into two, which is the bug this exists to
-    avoid, so a sighting that lost its route is given the one its `start`
-    carries.
+    Two separate repairs, both for the same underlying behaviour: the feed's
+    location fields are a description of what is affected right now, not an
+    identity, and they move underneath a live notice.
 
-    That works because `start` is very nearly a key on its own: 362 of the 370
-    starts on the corpus carry exactly one route. The 8 that carry two are two
-    real services leaving at the same minute, and there an empty sighting is
-    matched on its wording instead. A wording alone is never enough - "Customer
-    Notice: This train has reduced capacity" is boilerplate on 36 routes - so it
-    is only ever consulted inside a single `start`.
+    **An emptied `eventStops`.** It goes empty part-way through a notice's life
+    exactly as `locationCodes` does, and on the same polls: 186 of the 361
+    notices on the corpus are seen both with a route and without one, and in
+    every one of those the `start` holds still while the stops go. Such a
+    sighting takes the route its `start` carries, which is unambiguous for 362
+    of the 370 starts. Under a start that carries two it is matched on its
+    wording instead - a wording alone is never enough, "Customer Notice: This
+    train has reduced capacity" being boilerplate on 36 routes, so it is only
+    ever consulted inside a single start.
+
+    **A shrinking leg list.** See `network_starts`. Those starts key on the
+    start alone and their route reads `SEVERAL`.
     """
     routes = routes_by_start(found)
+    network = network_starts(found)
     wordings = {}
     for sighting in sorted(found, key=lambda s: s.seen_at):
         if sighting.origin or sighting.destination:
@@ -239,7 +271,9 @@ def resolve(found):
             )
     out = []
     for sighting in found:
-        if sighting.origin or sighting.destination:
+        if sighting.start in network:
+            route = (SEVERAL, None)
+        elif sighting.origin or sighting.destination:
             route = (sighting.origin, sighting.destination)
         else:
             known = routes.get(sighting.start, set())
@@ -303,7 +337,16 @@ def group(found):
 
 
 def is_capacity(disruption):
-    return bool(CAPACITY_NOTICE.search(f"{disruption.head} {disruption.text}"))
+    """Whether every wording this disruption ever had was a capacity notice.
+
+    Every, not the latest. A train can carry a capacity banner and a delay
+    banner at the same `start`, and reading only the newest filed three real
+    disruptions - two technical faults and a bus transfer - as seating notices,
+    which took them off the site entirely.
+    """
+    return all(
+        CAPACITY_NOTICE.search(f"{head} {text}") for _, head, text in disruption.updates
+    )
 
 
 def load(data_dir):
@@ -348,7 +391,12 @@ def days_in(ym):
 
 
 def day_counts(disruptions, ym, until):
-    """One row per day of the month: the families listed that day, and the total.
+    """One row per day of the month: how many were listed, and of what families.
+
+    `total` and `counts` are separate because a disruption can name two families
+    - a signalling fault and the knock-on it caused - and would then be counted
+    twice by anything summing the breakdown. Seven days in September 2026 read
+    one too high that way, and one of them was painted a band too dark.
 
     A day past the horizon has no row at all rather than a zero: the collector
     had not reached it, and a chart that draws nothing and a chart that draws
@@ -357,15 +405,21 @@ def day_counts(disruptions, ym, until):
     horizon_day = until.astimezone(DUBLIN).date()
     rows = []
     listed = defaultdict(lambda: defaultdict(int))
+    total = defaultdict(int)
     for disruption in disruptions:
         if disruption.day.strftime("%Y-%m") != ym:
             continue
+        total[disruption.day] += 1
         for family in disruption.families or (None,):
             listed[disruption.day][family] += 1
     for number in range(1, days_in(ym) + 1):
         day = date(int(ym[:4]), int(ym[5:7]), number)
         if day > horizon_day or day < COLLECTION_START.astimezone(DUBLIN).date():
-            rows.append({"day": day.isoformat(), "counts": None})
+            rows.append({"day": day.isoformat(), "counts": None, "total": None})
             continue
-        rows.append({"day": day.isoformat(), "counts": dict(listed.get(day, {}))})
+        rows.append({
+            "day": day.isoformat(),
+            "counts": dict(listed.get(day, {})),
+            "total": total.get(day, 0),
+        })
     return rows

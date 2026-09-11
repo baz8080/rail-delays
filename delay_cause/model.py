@@ -273,7 +273,19 @@ def read(head, text=""):
                         causes.append(cause)
     if not causes and not unread:
         causes = _bare(head, text)
-    return Reading(tuple(causes), tuple(dict.fromkeys(unread)))
+    return Reading(tuple(_suppress(causes)), tuple(dict.fromkeys(unread)))
+
+
+def _suppress(causes):
+    """Specific beats general, across the whole notice and not one clause.
+
+    A head saying "a level crossing issue" over a body saying a vehicle struck
+    the crossing is one event described twice, and reading the two clauses
+    independently published both. Five pinned notices did that, and each one
+    counted twice in a ranking of what went wrong.
+    """
+    beaten = {name for cause in causes for name in SUPPRESSES.get(cause.category, ())}
+    return [c for c in causes if c.category not in beaten]
 
 
 def _bare(head, text):

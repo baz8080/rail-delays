@@ -26,8 +26,9 @@ where a head is a fixed sentence, and it is not portable here.
 **The key is `start` plus the `eventStops` origin and destination.** `start` on a
 delay notice is the train's scheduled departure, not the start of the
 disruption, and that is what makes it work: it identifies a train on a day.
-362 of the 370 starts on the corpus carry exactly one route. The 8 that carry
-two are two real services leaving at the same minute and stay apart.
+362 of the 370 starts on the corpus carry exactly one route; of the 8 that carry
+two, 6 are two real services leaving at the same minute and stay apart, and the
+other 2 are the case below.
 
 ### `eventStops` empties out, exactly as `locationCodes` does
 
@@ -40,7 +41,7 @@ no lift or escalator notice has ever done it once.
 seen both with a route and without one**, and in every one of those the `start`
 holds still while the stops go. A key that takes the field as it arrives splits
 one event into two, which is the bug this whole module exists to avoid: it gave
-671 disruptions on a corpus that has 394.
+671 disruptions on a corpus that has 392.
 
 So `resolve` fills the route back in. A sighting that lost its stops takes the
 route its `start` carries, which is unambiguous for 362 of 370 starts; under a
@@ -49,8 +50,33 @@ never enough and is only ever consulted inside a single start: "Customer Notice:
 This train has reduced capacity" is boilerplate on 36 different routes.
 
 Rejected: **`start` alone as the key.** It merges only 12 more notices on this
-corpus and it would have merged the 8 same-minute pairs into 4 events that never
+corpus and it would have merged the 6 same-minute pairs into 3 events that never
 happened. The route is cheap to resolve and the merge is not reversible.
+
+### A multi-leg `eventStops` is not a journey, and its first leg moves
+
+Found in review, after the above had already shipped. 324 of the sightings carry
+one leg, and for those `eventStops[0]` is the service the notice is about. **The
+rest carry up to ten, and there the list is the services still affected** - it
+grows as an incident spreads and shrinks as they recover.
+
+The Connolly signalling failure of 2026-08-20 is the worked example. One notice,
+one `start`, and its leg list ran 1, then 4, then 10, then 7, with the first leg
+changing from Donabate to Lansdowne Road into Maynooth to Dublin Connolly on the
+way. Keyed on the first leg that is four disruptions, none of which happened.
+The Westport disruption of 2026-09-03 does the same.
+
+So a `start` whose notice ever named more than one service keys on the `start`
+alone, and its route reads "Several services". 8 of the 370 starts are of that
+shape. Decided per start and not per sighting, because the same notice is
+single-leg at one poll and multi-leg at the next - that is precisely how the
+Connolly one split.
+
+The two repairs are the same fact twice: **the feed's location fields describe
+what is affected right now, and are not an identity.** `locationCodes` empties,
+`eventStops` empties and also re-orders. Anything keyed on either has to be
+resolved from something that holds still, and `start` is the only field that
+does.
 
 ## What counts as a disruption
 
@@ -66,13 +92,18 @@ real feed, telling customers to ignore them. Dropped by name, because their name
 is the only thing that distinguishes them.
 
 **Trains listed as having reduced capacity.** This one is large enough to argue
-about: "Customer Notice: This train has reduced capacity" is **133 of the 394
-disruptions, a third of the corpus, from two distinct headlines**, and 130 of
-them give "operational reasons" as the cause. It is a template about the seating
-and the catering, not about a train running late, and with it in, the page was
-mostly a list of identical entries saying nothing. It is counted separately and
-the count is printed above each month's list: a third of the subject going
+about: "Customer Notice: This train has reduced capacity" is **130 of the 392
+disruptions, a third of the corpus, from two distinct headlines**, and almost all
+of them give "operational reasons" as the cause. It is a template about the
+seating and the catering, not about a train running late, and with it in the page
+was mostly a list of identical entries saying nothing. It is counted separately
+and the count is printed above each month's list: a third of the subject going
 missing without a number beside it is the kind of thing this family does not do.
+
+*Every* wording, not the newest one. A train can carry a capacity banner and a
+delay banner at the same `start`, and reading only the latest filed three real
+disruptions as seating notices - two technical faults and a bus transfer - which
+took them off the site entirely. Found in review.
 
 Rejected: **"every notice whose head says delay".** The prototype's filter, and
 it drops exactly the events that matter most. "Services suspended between Newry
@@ -124,8 +155,15 @@ One cell per day, banded by how many disruptions were first listed that day,
 with the family breakdown in the caption. The same component, and the same
 caption listener, as the three sibling sites.
 
+**The breakdown does not partition the day.** A disruption naming a signalling
+fault and the knock-on it caused counts in two families, so the families add to
+more than the total, and the row carries both rather than letting anything sum
+the breakdown. Summing it overstated seven days in September 2026 and painted
+one of them a band too dark. The caption says "16 listed, naming ..." for that
+reason.
+
 **The cuts come from the corpus, not from round numbers.** Over the 31 days to
-11 September the daily count runs 1 to 25 with a median of 6. The first version
+11 September the daily count runs 1 to 24 with a median of 6. The first version
 banded at 1-2, 3-5, 6-9 and 10+, and almost every day came out in the top band:
 the bar was one colour and said nothing. The bands are 1-3, 4-8, 9-16 and 17+,
 which split those 31 days roughly evenly.

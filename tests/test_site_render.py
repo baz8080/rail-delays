@@ -63,11 +63,19 @@ class TheDayBands(unittest.TestCase):
         self.assertNotEqual(render.band(None), render.band(0))
 
     def test_a_caption_names_the_families_and_the_total(self):
-        row = {"day": "2026-09-10", "counts": {"origin": 3, "consequence": 1}}
+        row = {"day": "2026-09-10", "counts": {"origin": 3, "consequence": 1}, "total": 4}
         caption = render.day_caption(row)
         self.assertIn("4 listed", caption)
         self.assertIn("3 something went wrong", caption)
         self.assertIn("1 knock-on from another delay", caption)
+
+    def test_a_breakdown_adding_to_more_than_the_total_still_reads_the_total(self):
+        # One disruption naming a fault and the knock-on it caused counts in
+        # both families. Summing the breakdown overstated seven days in
+        # September 2026 and painted one of them a band too dark.
+        row = {"day": "2026-09-09", "counts": {"origin": 9, "consequence": 8}, "total": 16}
+        self.assertIn("16 listed", render.day_caption(row))
+        self.assertEqual(render.band(row["total"]), "3")
 
 
 class TheMinutesAreNeverAddedUp(unittest.TestCase):

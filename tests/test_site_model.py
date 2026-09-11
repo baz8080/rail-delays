@@ -19,8 +19,8 @@ def at(hour, minute=0, day=10, month=9):
 
 
 def sighting(head, text="", start="2026-09-10T09:00:00", origin="Dublin Connolly",
-             destination="Belfast", seen_at=None):
-    return model.Sighting(head, text, start, origin, destination, seen_at or at(9))
+             destination="Belfast", seen_at=None, legs=1):
+    return model.Sighting(head, text, start, origin, destination, seen_at or at(9), legs)
 
 
 class ARouteThatEmptiesOutIsStillTheSameDisruption(unittest.TestCase):
@@ -48,13 +48,28 @@ class ARouteThatEmptiesOutIsStillTheSameDisruption(unittest.TestCase):
         self.assertEqual(len(disruptions[0].updates), 2)
 
     def test_two_services_leaving_at_the_same_minute_stay_apart(self):
-        # 8 of the 370 starts on the corpus carry two routes. They are two real
-        # trains and merging them would invent one.
         found = [
             sighting("Delayed", origin="Westport", destination="Dublin Heuston"),
             sighting("Delayed", origin="Dublin Heuston", destination="Galway (Ceannt)"),
         ]
         self.assertEqual(len(model.group(found)), 2)
+
+    def test_a_shrinking_leg_list_is_one_disruption_and_not_several(self):
+        # On a multi-leg notice `eventStops` is the services still affected and
+        # it shrinks as they recover: the Connolly failure of 2026-08-20 ran 1
+        # leg, then 4, then 10, then 7, and its first leg moved from Donabate to
+        # Maynooth. Keying on the first leg made that four disruptions.
+        found = [
+            sighting("Signalling Issue", origin="Donabate",
+                     destination="Lansdowne Road", seen_at=at(12), legs=1),
+            sighting("Signalling Issue", origin="Donabate",
+                     destination="Lansdowne Road", seen_at=at(13), legs=10),
+            sighting("Services Resuming", origin="Maynooth",
+                     destination="Dublin Connolly", seen_at=at(14), legs=7),
+        ]
+        disruptions = model.group(found)
+        self.assertEqual(len(disruptions), 1)
+        self.assertEqual(disruptions[0].route, model.SEVERAL)
 
     def test_an_empty_sighting_under_a_contested_start_is_matched_on_its_wording(self):
         found = [
@@ -95,6 +110,17 @@ class WhatTheSiteIsAbout(unittest.TestCase):
                 "Due to an incident on the line, services are suspended.",
             )
         )
+
+    def test_a_train_that_was_also_delayed_is_not_filed_as_a_seating_notice(self):
+        # `is_capacity` read the newest wording only, and three real disruptions
+        # - two technical faults and a bus transfer - vanished off the site.
+        found = [
+            sighting("Service delay +15", "Delayed due to a technical issue.", seen_at=at(9)),
+            sighting("Customer Notice: This train has reduced capacity",
+                     "Due to operational reasons, this train will operate with reduced "
+                     "capacity.", seen_at=at(10)),
+        ]
+        self.assertFalse(model.is_capacity(model.group(found)[0]))
 
     def test_a_reduced_capacity_notice_is_kept_apart_rather_than_dropped(self):
         found = [
@@ -161,12 +187,21 @@ class TheCausesComeFromEveryWording(unittest.TestCase):
 
 
 class TheDayRows(unittest.TestCase):
+    def test_a_disruption_naming_two_families_counts_once_in_the_total(self):
+        found = [sighting(
+            "Delays", "Delayed due to a signalling issue and an earlier service delay."
+        )]
+        rows = model.day_counts(model.group(found), "2026-09", at(17))
+        row = next(r for r in rows if r["day"] == "2026-09-10")
+        self.assertEqual(row["total"], 1)
+        self.assertEqual(sum(row["counts"].values()), 2)
+
     def test_a_day_past_the_horizon_has_no_row_rather_than_a_zero(self):
         found = [sighting("Delayed", "Due to a signalling issue.", seen_at=at(9, 0, day=10))]
         rows = model.day_counts(model.group(found), "2026-09", at(12, 0, day=10))
         tenth = next(r for r in rows if r["day"] == "2026-09-10")
         eleventh = next(r for r in rows if r["day"] == "2026-09-11")
-        self.assertEqual(tenth["counts"], {"origin": 1})
+        self.assertEqual((tenth["counts"], tenth["total"]), ({"origin": 1}, 1))
         self.assertIsNone(
             eleventh["counts"], "a day the collector had not reached is not a quiet day"
         )
