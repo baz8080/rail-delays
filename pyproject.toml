@@ -1,0 +1,29 @@
+# No runtime dependencies, the same rule as the collector repo this reads from:
+# everything here runs on the standard library, and the one build-time dependency
+# is the shared statusui design layer, carried in the `site` group.
+[project]
+name = "rail-delays"
+version = "1.0.0"
+description = "Reads Irish Rail's delay notices and publishes what they say went wrong"
+requires-python = ">=3.11"
+dependencies = []
+
+[dependency-groups]
+dev = ["ruff>=0.15"]
+site = ["statusui"]
+
+# Pinned to a commit in uv.lock; ../statusui/rollout.sh moves the pin.
+[tool.uv.sources]
+statusui = { git = "https://github.com/baz8080/statusui" }
+
+# Not a distributable package: the entry points are run as modules from the
+# source tree. Without this uv would try to build a wheel on every `uv run`.
+[tool.uv]
+package = false
+default-groups = ["dev", "site"]
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "C4", "UP"]

@@ -1,0 +1,59 @@
+/* This site's own rules, inlined after statusui's base.css. */
+
+/* day cells: 0 nothing listed, 1 one or two, 2 three to five, 3 six to nine,
+   4 ten or more, 8 no data. A count, banded - not a severity, because the feed
+   carries no magnitude and a busy day is not a worse day for any one train. */
+.bar i.b0, .legend i.b0 { background: var(--good); }
+.bar i.b1, .legend i.b1 { background: var(--fair); }
+.bar i.b2, .legend i.b2 { background: var(--warning); }
+.bar i.b3, .legend i.b3 { background: var(--serious); }
+.bar i.b4, .legend i.b4 { background: var(--critical); }
+.bar i.b8, .legend i.b8 { background: var(--cell-empty); }
+
+.bar { height: 22px; }
+
+.stale {
+  margin: -8px 0 16px; padding: 9px 14px; border-radius: 8px; font-size: 13px;
+  background: color-mix(in srgb, var(--warning) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--warning) 40%, transparent);
+}
+
+.months a {
+  color: var(--ink-2); font-size: 13.5px; padding: 5px 12px; border-radius: 6px;
+  flex: none; white-space: nowrap; text-decoration: none;
+}
+.months a:hover, .months a:focus { background: var(--grid); color: var(--ink); }
+.months a.on { background: var(--grid); color: var(--ink); font-weight: 600; }
+
+/* the ranked origins: name, proportional bar, count */
+.rank { display: grid; grid-template-columns: 1fr 120px 34px; gap: 12px; align-items: center; padding: 7px 0; }
+.rank + .rank { border-top: 1px solid var(--border); }
+.rname { font-size: 13.5px; }
+.rank .bar { height: 8px; background: var(--cell-empty); }
+.rank .bar i { display: block; height: 100%; background: var(--ink-2); }
+.rn { text-align: right; font-variant-numeric: tabular-nums; font-weight: 650; font-size: 13.5px; }
+/* 600 and not 480: below about 600 the proportional bar is squeezed to a sliver
+   that reads as an artifact rather than a bar, so it goes before it gets there. */
+@media (max-width: 600px) { .rank { grid-template-columns: 1fr 34px; } .rank .bar { display: none; } }
+
+/* a cause, in the page's own words. Coloured by family and not by category:
+   eleven hues would be a code to learn, and the distinction a reader needs is
+   whether the notice named a fault or blamed another delay. */
+.chip {
+  font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 99px;
+  flex: none; white-space: nowrap;
+}
+.chip-origin { background: color-mix(in srgb, var(--critical) 15%, transparent); color: var(--critical-text); }
+.chip-consequence { background: color-mix(in srgb, var(--warning) 20%, transparent); color: var(--warning-text); }
+.chip-planned { background: color-mix(in srgb, var(--maint) 15%, transparent); color: var(--maint); }
+.chip-unstated, .chip-none { background: var(--grid); color: var(--muted); }
+
+.case .top { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.case .when { color: var(--muted); font-size: 12.5px; margin-left: auto; font-variant-numeric: tabular-nums; }
+.case .min { font-weight: 650; font-size: 13px; }
+.case .sum { font-weight: 600; font-size: 14px; margin-top: 5px; }
+.case .txt { color: var(--ink-2); font-size: 12.5px; margin-top: 3px; }
+.case .txt.head { color: var(--muted); font-style: italic; }
+.case .tl { margin-top: 6px; font-size: 12px; color: var(--muted); }
+
+.quiet { color: var(--muted); font-size: 13px; padding: 9px 4px; }

@@ -1,0 +1,60 @@
+name: Build site
+
+on:
+  # lifts-data can dispatch this on every push, the way it dispatches the lift
+  # site's build. The crons are the fallback for a dispatch that never arrives,
+  # and they are late by design: scheduled runs here land hours after their cron
+  # time, so they cannot be aimed at a window.
+  schedule:
+    - cron: '20 7 * * *'
+    - cron: '20 14 * * *'
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Queue rather than cancel: two deploys racing would publish whichever finished
+# second, which is not necessarily the newer data.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Check out the collected data
+        uses: actions/checkout@v7
+        with:
+          repository: baz8080/lifts-data
+          path: lifts-data
+
+      - uses: astral-sh/setup-uv@v10.0.1
+        with:
+          prune-cache: true
+
+      - name: Sync
+        run: uv sync --all-groups
+
+      - name: Build
+        run: uv run python -m delay_site --data-dir lifts-data --out out/site
+
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: out/site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

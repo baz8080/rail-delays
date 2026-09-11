@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: astral-sh/setup-uv@v10.0.1
+        with:
+          prune-cache: true
+
+      - name: Install dev tooling
+        run: uv sync --group dev
+
+      - name: Lint
+        run: uv run ruff check
+
+      # The house dash is a spaced hyphen. See CLAUDE.md.
+      - name: No em dashes
+        run: ./scripts/no-em-dash.sh
+
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.11", "3.14"]
+    env:
+      UV_PYTHON: ${{ matrix.python }}
+    steps:
+      - uses: actions/checkout@v7
+
+      # The real-corpus test skips without it, and skipping unnoticed is how a
+      # guard stops guarding.
+      - name: Check out the collected data
+        uses: actions/checkout@v7
+        with:
+          repository: baz8080/lifts-data
+          path: lifts-data
+
+      - uses: astral-sh/setup-uv@v10.0.1
+        with:
+          prune-cache: true
+
+      - name: Sync
+        run: uv sync --all-groups
+
+      - name: Test
+        env:
+          LIFT_STATUS_DATA_DIR: lifts-data
+        run: uv run python -m unittest discover -s tests -t .
