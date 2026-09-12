@@ -273,3 +273,33 @@ lift notice's head is "Lift(s) out of order" and nothing else. Both stay.
 the browser against the reader's clock. These pages have no JS but the caption
 listener, so the only age they could print is the one true at build time, which
 is wrong the moment the page is cached. The stamp is a fact that stays true.
+
+## How this gets published - 2026-09-12
+
+The site had not moved since the manual build of 2026-09-11 20:29Z, with the
+data a poll behind it from 05:01Z the next morning. Nothing was broken: the
+first two deploys failed before Pages was pointed at Actions and have been fine
+since, and the build takes under a second.
+
+**Nothing asks for the build.** `lifts-data/.github/workflows/build-site.yml`
+posts one dispatch, to `baz8080/lifts/actions/workflows/pages.yml`, and that is
+what keeps the lift site within a minute of the data landing. This repository
+reads the same logs and is not on that list, so its only cadence is the two
+crons in `pages.yml`, which GitHub runs hours late when it runs them: the
+07:20Z one did not fire at all on 2026-09-12.
+
+The fix is a second step in `lifts-data`, the same three lines pointed here:
+
+```yaml
+      - env:
+          GH_TOKEN: ${{ secrets.SITE_BUILD_TOKEN }}
+        run: |
+          gh api -X POST \
+            repos/baz8080/rail-delays/actions/workflows/pages.yml/dispatches \
+            -f ref=main
+```
+
+`SITE_BUILD_TOKEN` is a fine-grained token with Actions: write on
+`baz8080/lifts`; it needs the same on `baz8080/rail-delays` before that step can
+work. Both are owner actions in another repository, so they are not done here.
+Until they are, the crons stand and a stale page says so in its own stamp.
