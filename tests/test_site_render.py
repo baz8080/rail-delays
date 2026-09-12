@@ -66,8 +66,8 @@ class TheDayBands(unittest.TestCase):
         row = {"day": "2026-09-10", "counts": {"origin": 3, "consequence": 1}, "total": 4}
         caption = render.day_caption(row)
         self.assertIn("4 listed", caption)
-        self.assertIn("3 something went wrong", caption)
-        self.assertIn("1 knock-on from another delay", caption)
+        self.assertIn("3 named something that went wrong", caption)
+        self.assertIn("1 a knock-on from another delay", caption)
 
     def test_a_breakdown_adding_to_more_than_the_total_still_reads_the_total(self):
         # One disruption naming a fault and the knock-on it caused counts in
@@ -80,7 +80,7 @@ class TheDayBands(unittest.TestCase):
 
 class TheMinutesAreNeverAddedUp(unittest.TestCase):
     def test_a_figure_is_shown_as_a_floor_and_not_a_measurement(self):
-        self.assertIn("at least +25 min", page([SIGNALLING]))
+        self.assertIn("at least 25 minutes late", page([SIGNALLING]))
 
     def test_no_rendered_page_states_a_total_in_minutes(self):
         # The prototype's headline summed them and overstated by 1.26x. Nothing
@@ -174,6 +174,74 @@ class TheBudget(unittest.TestCase):
             ))
         rendered = page(found)
         self.assertLess(len(rendered.encode("utf-8")), render.BUDGET_BYTES)
+
+
+class ADayTheMonthHasNotReachedYet(unittest.TestCase):
+    """A day still to come is not a day the collector missed.
+
+    The three sibling sites draw the two the same grey and say different things
+    about them. Without the distinction two thirds of a live month reads as data
+    somebody failed to collect.
+    """
+
+    def test_it_says_still_to_come_rather_than_no_data(self):
+        future = {"day": "2026-09-30", "counts": None, "total": None, "future": True}
+        missed = {"day": "2026-08-01", "counts": None, "total": None, "future": False}
+        self.assertEqual(render.day_caption(future), "still to come")
+        self.assertEqual(render.day_caption(missed), "no data collected for this day")
+
+    def test_the_key_says_nothing_about_it(self):
+        # Nobody needs a legend to be told that tomorrow has not happened.
+        self.assertNotIn("still to come", render.legend())
+
+
+class TheTagsOnARow(unittest.TestCase):
+    def test_no_cause_given_goes_where_the_notice_also_named_one(self):
+        # A notice re-worded from a mechanical issue into "an operational issue"
+        # carried both answers at once, which read as the page contradicting
+        # itself. Five disruptions on the corpus to 2026-09-12 are this shape.
+        rendered = prose(page([
+            sighting("Service CANCELLED", "Cancelled due to a mechanical issue.", seen_at=at(9)),
+            sighting("Service CANCELLED", "Cancelled due to an operational issue.", seen_at=at(10)),
+        ]))
+        self.assertIn("Technical or mechanical fault", rendered)
+        self.assertNotIn("No cause given", rendered)
+
+    def test_a_notice_that_named_nothing_still_says_so(self):
+        self.assertIn("No cause given", prose(page([sighting("Delayed", "Delayed.")])))
+
+
+class TheBanner(unittest.TestCase):
+    def test_the_month_still_collecting_says_so_far(self):
+        self.assertIn("September 2026 so far:", page([SIGNALLING]))
+
+    def test_a_finished_month_states_a_final_figure(self):
+        rendered = page([SIGNALLING], ym="2026-08")
+        self.assertIn("August 2026:", rendered)
+        self.assertNotIn("August 2026 so far", rendered)
+
+    def test_data_past_the_stale_threshold_is_marked_on_the_stamp(self):
+        # The default horizon is a day behind the default build clock.
+        self.assertIn('Data to <span class="stale">', page([SIGNALLING]))
+
+    def test_fresh_data_is_not(self):
+        # Not a bare "stale": base.css carries the rule that paints it.
+        self.assertNotIn('<span class="stale">', page([SIGNALLING], now=at(18)))
+
+
+class TheDisruptionRow(unittest.TestCase):
+    def test_the_time_sits_inside_the_phrase_it_measures(self):
+        # It used to float at the top right on its own, saying only that
+        # something happened at 10:00.
+        self.assertIn("first listed 10 Sep,", page([SIGNALLING]))
+
+    def test_a_notice_re_worded_once_is_not_re_worded_1_times(self):
+        rendered = page([
+            sighting("Delayed", "Delayed due to a signalling issue.", seen_at=at(9)),
+            sighting("Delayed further", "Delayed further due to a signalling issue.",
+                     seen_at=at(10)),
+        ])
+        self.assertIn("re-worded once while it was listed", rendered)
 
 
 class TheTemplateIsFilled(unittest.TestCase):

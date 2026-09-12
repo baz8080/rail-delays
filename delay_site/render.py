@@ -46,6 +46,7 @@ BUDGET_BYTES = 500 * 1024
 BANDS = ((1, "0"), (4, "1"), (9, "2"), (17, "3"))
 OVER_BAND = "4"
 NO_DATA = "8"
+FUTURE = "9"
 
 BAND_LABEL = {
     "0": "nothing listed",
@@ -56,15 +57,24 @@ BAND_LABEL = {
     NO_DATA: "no data",
 }
 
+# The two cells that carry no count. A day the rest of the month has not reached
+# yet is not a day the collector missed, and the three sibling sites draw the
+# same two cells the same grey and keep the second out of the key: nobody needs
+# a legend to be told that tomorrow has not happened.
+EMPTY_LABEL = {
+    NO_DATA: "no data collected for this day",
+    FUTURE: "still to come",
+}
+
 # What a family means in the page's own words. `origin` is deliberately not
 # called "cause": the consequence families are causes too, in the sense that the
 # notice names them, and the distinction this draws is whether the thing named
 # is a fault or another delay.
 FAMILY_LABEL = {
-    ORIGIN: "something went wrong",
-    CONSEQUENCE: "knock-on from another delay",
+    ORIGIN: "something that went wrong",
+    CONSEQUENCE: "a knock-on from another delay",
     PLANNED_FAMILY: "planned works",
-    UNSTATED: "no cause given",
+    UNSTATED: "no cause at all",
 }
 
 month_label = statusui.month_label
@@ -96,27 +106,36 @@ def day_caption(row):
     """What a day cell says. The breakdown may add to more than the total.
 
     A disruption naming a fault and the knock-on it caused counts in both
-    families, so the parts are introduced as what the notices named rather than
-    as a partition of the day.
+    families, so the parts are read as what the notices named rather than as a
+    partition of the day, and nothing sums them.
+
+    A notice that named nothing and a notice that said "an operational issue"
+    are one phrase here, not two. They are separate categories and the
+    disruption's own row still tells them apart, but a caption that reads
+    "7 named no cause at all, 1 no cause given" is the page talking to itself.
     """
     counts = row["counts"]
     if counts is None:
-        return BAND_LABEL[NO_DATA]
+        return EMPTY_LABEL[FUTURE if row.get("future") else NO_DATA]
     total = row["total"]
     if not total:
         return "nothing listed"
-    parts = [
-        f"{count} {FAMILY_LABEL[family]}" if family else f"{count} named no cause at all"
-        for family, count in sorted(counts.items(), key=lambda kv: (-kv[1], str(kv[0])))
-    ]
-    return f"{total} listed, naming " + ", ".join(parts)
+    merged = Counter()
+    for family, count in counts.items():
+        merged[family or UNSTATED] += count
+    ranked = sorted(merged.items(), key=lambda kv: (-kv[1], kv[0]))
+    # "named" once and elided after it: a caption is a sentence, not a table.
+    first, count = ranked[0]
+    parts = [f"{count} named {FAMILY_LABEL[first]}"]
+    parts += [f"{count} {FAMILY_LABEL[family]}" for family, count in ranked[1:]]
+    return f"{total} listed, " + ", ".join(parts)
 
 
 def day_bar(rows):
     """The month's day cells, with the family breakdown in each caption."""
     cells = []
     for row in rows:
-        code = band(row["total"])
+        code = FUTURE if row.get("future") else band(row["total"])
         cap = f"{statusui.fmt_day(row['day'])}: {day_caption(row)}"
         cells.append(f'<i class="b{code}" data-cap="{_esc(cap)}"></i>')
     return "".join(cells)
@@ -130,30 +149,33 @@ def legend():
 
 
 def tiles(disruptions):
+    """Four counts of the month's disruptions.
+
+    The fourth is not the month's most-named fault, which is what a status tile
+    usually wants to be: that is the first row of the ranked panel eight lines
+    below it. Nothing else on the page counts the notices that named nothing.
+
+    They do not partition the month. A notice naming a fault and the knock-on it
+    caused is in the second and the third.
+    """
     named = sum(1 for d in disruptions if d.origins)
     knock_on = sum(1 for d in disruptions if CONSEQUENCE in d.families)
-    counted = Counter(c.category for d in disruptions for c in d.origins)
-    top = counted.most_common(1)
+    silent = sum(1 for d in disruptions if not (set(d.families) - {UNSTATED}))
     values = [
-        (str(len(disruptions)), "disruptions listed", False),
-        (str(named), "named something that went wrong", False),
-        (str(knock_on), "blamed another delay", False),
-        (
-            LABEL[top[0][0]] if top else "Nothing",
-            f"most named ({top[0][1]} of them)" if top else "no fault named this month",
-            True,
-        ),
+        (len(disruptions), "disruptions listed"),
+        (named, "named something that went wrong"),
+        (knock_on, "blamed congestion or an earlier service"),
+        (silent, "named no cause at all"),
     ]
-    cards = "".join(
-        f'<div class="tile"><div class="v{" txt" if is_text else ""}">{_esc(value)}</div>'
+    return "".join(
+        f'<div class="tile"><div class="v">{value}</div>'
         f'<div class="k">{_esc(key)}</div></div>'
-        for value, key, is_text in values
+        for value, key in values
     )
-    return cards
 
 
 def routes_named(disruptions):
-    return len({d.route for d in disruptions if d.route != "Not stated"})
+    return len({d.route for d in disruptions if d.route != model.UNNAMED_ROUTE})
 
 
 def origins_panel(disruptions):
@@ -186,33 +208,52 @@ def _chip(cause):
     return f'<span class="chip chip-{cause.family}">{lead}{_esc(LABEL[cause.category])}</span>'
 
 
+def shown_causes(causes):
+    """The causes a row carries as tags.
+
+    "No cause given" is an answer only when it is the whole answer: beside a
+    mechanical fault it reads as the page contradicting itself. Five disruptions
+    to 2026-09-12 were re-worded between the two and carried both. The reading
+    itself keeps both; this is what the row shows.
+    """
+    named = tuple(c for c in causes if c.family != UNSTATED)
+    return named or causes
+
+
 def case(disruption):
-    chips = "".join(_chip(c) for c in disruption.causes)
+    """One disruption: what it is, what is known about it, then its own words.
+
+    The instant sits inside the phrase it measures rather than floating at the
+    top right, which is the move the esb rows made and for the same reason:
+    "11 Sep, 17:00" alone does not say what happened then, and the `title` that
+    used to explain it is unopenable on a touch screen.
+    """
+    chips = "".join(_chip(c) for c in shown_causes(disruption.causes))
     if not chips:
-        chips = '<span class="chip chip-none">No cause stated</span>'
+        chips = '<span class="chip chip-none">No cause given</span>'
     minutes = (
-        f'<span class="min">at least +{disruption.minutes} min</span>'
+        f'<span class="when">at least {disruption.minutes} '
+        f'{"minute" if disruption.minutes == 1 else "minutes"} late</span>'
         if disruption.minutes is not None
         else ""
     )
-    updates = ""
+    bits = [f"first listed {statusui.when(_short(disruption.first_seen))}"]
     if len(disruption.updates) > 1:
         times = len(disruption.updates) - 1
-        updates = (
-            f'<div class="tl">Re-worded {times} time{"s" if times != 1 else ""} while it was '
-            f"listed, last at {_esc(statusui.when(_short(disruption.updates[-1][0])))}.</div>"
+        last = statusui.when(_short(disruption.updates[-1][0]))
+        bits.append(
+            f"re-worded once while it was listed, at {last}"
+            if times == 1
+            else f"re-worded {times} times while it was listed, last at {last}"
         )
     return (
         '<div class="case">'
         '<div class="top">'
-        f"{chips}{minutes}"
-        f'<span class="when" title="First listed, Dublin time">'
-        f"{_esc(statusui.when(_short(disruption.first_seen)))}</span>"
+        f'<span class="where">{_esc(disruption.route)}</span>{chips}{minutes}'
         "</div>"
-        f'<div class="sum">{_esc(disruption.route)}</div>'
+        f'<div class="sum">{_esc(" · ".join(bits))}</div>'
         f'<div class="txt head">{_esc(readable(disruption.head))}</div>'
         f'<div class="txt">{_esc(readable(disruption.text))}</div>'
-        f"{updates}"
         "</div>"
     )
 
@@ -233,29 +274,32 @@ def tabs(ym, months):
 
 
 def month_page(ym, disruptions, corpus, months, now, template, css):
-    rows = model.day_counts(corpus.disruptions, ym, corpus.horizon)
+    rows = model.day_counts(corpus.disruptions, ym, corpus.horizon, now)
     cases = "".join(case(d) for d in sorted(disruptions, key=lambda d: d.first_seen, reverse=True))
     if not cases:
         cases = '<p class="empty">No disruption notice was listed this month.</p>'
-    age = now - corpus.horizon
-    stale = (
-        '<p class="stale">The newest data here is '
-        f"{statusui.hours(age.total_seconds() / 3600)} old.</p>"
-        if age > model.STALE_AFTER
-        else ""
-    )
+    # Past STALE_AFTER the stamp itself goes red, which is how the sibling
+    # static pages say it. An age in words is only true at build time, and this
+    # page has no clock at read time to correct one.
+    observed = statusui.stamp(corpus.horizon)
+    if now - corpus.horizon > model.STALE_AFTER:
+        observed = f'<span class="stale">{observed}</span>'
     routes = routes_named(disruptions)
     count = len(disruptions)
     capacity = sum(1 for d in corpus.capacity if d.day.strftime("%Y-%m") == ym)
     capacity_note = (
-        f"Irish Rail also listed {capacity} train{'s' if capacity != 1 else ''} as having "
-        "reduced capacity this month, which is about the seating rather than about a train "
-        "running late. Those are not counted anywhere on this page."
+        f"Irish Rail listed another {capacity} train{'s' if capacity != 1 else ''} as having "
+        "reduced capacity this month, which is a notice about the seating rather than about a "
+        "train running late. Those are counted nowhere on this page."
         if capacity
         else ""
     )
+    # "so far" while the month is the one still collecting, as the sibling
+    # banners say it: a headline for a finished month is a final figure.
+    so_far = " so far" if ym == _dublin(corpus.horizon).strftime("%Y-%m") else ""
     headline = (
-        f"{month_label(ym)}: {count} disruption{'s' if count != 1 else ''} listed"
+        f"<b>{_esc(month_label(ym) + so_far)}:</b> "
+        f"{count} disruption{'s' if count != 1 else ''} listed"
         + (f" across {routes} route{'s' if routes != 1 else ''}" if routes else "")
     )
     start_day = model.COLLECTION_START.astimezone(model.DUBLIN).date().isoformat()
@@ -265,9 +309,8 @@ def month_page(ym, disruptions, corpus, months, now, template, css):
             "SITE-CSS": css,
             "CANONICAL": f"{BASE_URL}/" if ym == months[-1] else f"{BASE_URL}/m/{ym}.html",
             "MONTH": _esc(month_label(ym)),
-            "STALE": stale,
-            "HEADLINE": _esc(headline),
-            "META": f"Collected to {statusui.stamp(corpus.horizon)}",
+            "HEADLINE": headline,
+            "META": f"Data to {observed}",
             "TABS": tabs(ym, months),
             "TILES": tiles(disruptions),
             "BAR": day_bar(rows),
@@ -276,7 +319,6 @@ def month_page(ym, disruptions, corpus, months, now, template, css):
             "CASES": cases,
             "CAPACITY": _esc(capacity_note),
             "START": _esc(statusui.fmt_day(start_day)),
-            "BUILT": statusui.stamp(now),
         },
     )
 

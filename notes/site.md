@@ -197,3 +197,79 @@ without thinking:
   longer listed" and measures the listing; this site shows when a disruption was
   first listed and says nothing about the end, because a delay notice's listing
   is a few hours of an author's attention rather than a measurement of anything.
+
+## The content pass - 2026-09-12
+
+Everything above was written in one sitting and never read back. uisce, esb and
+lifts each had a pass over their words after the numbers settled, and the shapes
+they arrived at are in their own notes; this is the same pass over this page,
+against those three. Nothing here changed what is counted. Corpus: the logs to
+2026-09-12 05:01Z, 262 disruptions and 130 capacity notices.
+
+**A day still to come is not a day with no data.** On 12 September the bar drew
+eighteen grey cells captioned "no data" for days that had not happened. The three
+sibling sites have carried two codes for this from the start - cell 8 "no data
+collected for this day", cell 9 "still to come" - and paint them the same grey,
+keeping the second out of the key because nobody needs a legend to be told that
+tomorrow has not happened. `day_counts` takes the build clock now and marks the
+row; `render.EMPTY_LABEL` carries both captions.
+
+**The day caption answered one question twice.** A notice that named nothing
+counted under no family at all, and a notice saying "an operational issue"
+counted under `unstated`, so a caption could read "7 named no cause at all ... 1
+no cause given" - two phrasings of the same answer, in one sentence, from the
+page's own internals. They are merged into one count. The distinction is real and
+the disruption's own row still carries it as a tag; a reader hovering a day cell
+is not asking it. The caption also says "named" once and elides it after, because
+a caption is a sentence: "17 listed, 7 named something that went wrong, 6 a
+knock-on from another delay, 4 no cause at all".
+
+**The fourth tile said again what the next section says.** It named the month's
+most common fault, which is the first row of the ranked panel eight lines below
+it. It counts the notices that named nothing instead - 20 of the 105 in
+September - which nothing else on the page carried. It was also the one tile
+whose value was text, and at 24px bold it set the height of the whole row.
+
+**The bare timestamp moved into the phrase it measures.** The row carried
+"11 Sep, 17:00" floating at its top right, explained only by a `title` a touch
+screen cannot open. It reads "first listed 11 Sep, 17:00" now, on the line with
+the re-wording count, which is where esb put the same thing and for the same
+reason. The route moved up into `.where`, which is the heading slot the sibling
+rows use, and the minutes into `.when`: "at least 25 minutes late" rather than
+"at least +25 min". "Re-worded 1 time" is "re-worded once".
+
+**"No cause given" goes where the notice also named a cause.** Five disruptions
+were re-worded between a named fault and "an operational issue", and their rows
+carried both tags at once, which reads as the page contradicting itself. The
+reading keeps both; the row shows the answer only when it is the whole answer.
+
+**The stale box became the stamp.** `Collected to 2026-09-12 05:01 UTC` and,
+under it, a bordered box reading "The newest data here is 17 hours old". The
+sibling static pages carry one thing, `Data to <stamp>`, and redden the stamp
+past `STALE_AFTER`; the box was a second way of saying it and a local override of
+a shared rule. The site.css `.stale` block went with it. The banner says
+"September 2026 so far" while the month is the one still collecting, as the
+sibling banners do, and the build clock left the footer: a reader cares where the
+record stops, not when the page was assembled.
+
+**The footer took the sibling shape.** "Why there are no totals in minutes" and
+"Why there is no percentage" were two disclosures defending the page against
+questions nobody had asked yet; they are three paragraphs of one
+"What this cannot tell you", which is what esb calls its own. "How to read a
+disruption" is new and both esb and lifts carry one. The last line ends "not
+affiliated with Iarnród Éireann." like all three.
+
+### Rejected
+
+**Showing only the notice's body, as the lift site does.** The rows print Irish
+Rail's headline and then the sentence under it, which looked like the same thing
+twice. It is not: 232 of the 262 heads are not verbatim inside their own body,
+and reading the widest gaps, the head is where "Train held at Clongriffin",
+"Platform 1 Connolly", "All services cancelled" and "a bus transfer will operate
+between Belfast and Newry" are stated. The lift site can drop the head because a
+lift notice's head is "Lift(s) out of order" and nothing else. Both stay.
+
+**An age in words on the banner, as the app pages show.** `freshness()` runs in
+the browser against the reader's clock. These pages have no JS but the caption
+listener, so the only age they could print is the one true at build time, which
+is wrong the moment the page is cached. The stamp is a fact that stays true.

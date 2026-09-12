@@ -102,7 +102,7 @@ class Disruption(NamedTuple):
     def route(self):
         if self.origin and self.destination and self.origin != self.destination:
             return f"{self.origin} to {self.destination}"
-        return self.origin or self.destination or "Not stated"
+        return self.origin or self.destination or UNNAMED_ROUTE
 
     @property
     def day(self):
@@ -214,6 +214,10 @@ def claimed_minutes(head, text):
 
 # What the route reads as when a notice names more than one service.
 SEVERAL = "Several services"
+
+# And when it never named one at all. It heads the disruption's row, where
+# "Not stated" read like an empty database column rather than a sentence.
+UNNAMED_ROUTE = "Route not stated"
 
 
 def routes_by_start(found):
@@ -390,7 +394,7 @@ def days_in(ym):
     return (nxt - date(year, month, 1)).days
 
 
-def day_counts(disruptions, ym, until):
+def day_counts(disruptions, ym, until, now=None):
     """One row per day of the month: how many were listed, and of what families.
 
     `total` and `counts` are separate because a disruption can name two families
@@ -401,8 +405,13 @@ def day_counts(disruptions, ym, until):
     A day past the horizon has no row at all rather than a zero: the collector
     had not reached it, and a chart that draws nothing and a chart that draws
     zero say different things.
+
+    A day that has not started yet is marked `future` and says so instead. Given
+    `now` it is the same distinction the three sibling sites draw, and without it
+    two thirds of a live month reads as data somebody failed to collect.
     """
     horizon_day = until.astimezone(DUBLIN).date()
+    today = now.astimezone(DUBLIN).date() if now else None
     rows = []
     listed = defaultdict(lambda: defaultdict(int))
     total = defaultdict(int)
@@ -415,11 +424,17 @@ def day_counts(disruptions, ym, until):
     for number in range(1, days_in(ym) + 1):
         day = date(int(ym[:4]), int(ym[5:7]), number)
         if day > horizon_day or day < COLLECTION_START.astimezone(DUBLIN).date():
-            rows.append({"day": day.isoformat(), "counts": None, "total": None})
+            rows.append({
+                "day": day.isoformat(),
+                "counts": None,
+                "total": None,
+                "future": bool(today and day > today),
+            })
             continue
         rows.append({
             "day": day.isoformat(),
             "counts": dict(listed.get(day, {})),
             "total": total.get(day, 0),
+            "future": False,
         })
     return rows

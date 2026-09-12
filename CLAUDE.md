@@ -62,7 +62,8 @@ does not know about it yet.
 - **Four "Test HIM Alert Message" notices are in the corpus**, telling customers
   to ignore them. They are live tests on the real feed.
 - **A run that failed is not a run that saw nothing.** The horizon is the newest
-  successful run, and days past it are "no data", never a quiet day.
+  successful run, and days past it are "no data", never a quiet day. A day that
+  has not happened yet is neither: it is its own cell, "still to come".
 
 ## Settled - don't re-litigate without reading the note
 
@@ -78,6 +79,8 @@ does not know about it yet.
 | A notice's cause is read from its own clause into eleven corpus-derived categories, each with a family. A cause naming another delay is a `consequence`, never a peer of a signalling fault; "an incident on the line" is never decoded; "an operational issue" is a non-answer with its own category | `notes/cause-reading.md` |
 | No routes view, no feeds, no CSV, no shards, and nothing about when a disruption ended. Each one is a decision with a reason | `notes/site.md` § What the page does not have yet |
 | A delays site is a repository of its own reading `lifts-data`, not a second collector and not a poll target | `baz8080/lifts` `notes/delays-site.md` |
+| The page's words were read back against uisce, esb and lifts: one name per thing, the day caption merged the two ways it said "no cause", a day still to come is its own cell and not "no data", the row's bare timestamp moved inside the phrase it measures, the stale box became the reddened stamp the sibling static pages use, and the footer took esb's disclosure shape. Nothing it counts moved | `notes/site.md` § The content pass |
+| Both of Irish Rail's fields stay on a row, its headline and its body. Showing the body alone was rejected: 232 of 262 heads are not verbatim inside their body, and the head is where a platform, a held train or a bus transfer is named | `notes/site.md` § The content pass, Rejected |
 
 Decisions go in `notes/`, dated, with the rejected alternatives and their
 numbers. Add a row here when one closes something off - this file carries
