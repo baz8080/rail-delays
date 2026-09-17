@@ -518,3 +518,24 @@ clause ("by when Irish Rail first listed the notice") is still true of every
 row underneath it; nothing reads it back out except this one sentence, so the
 list's own dates carry it now. The capacity fact itself stays, in six words
 instead of twenty-six.
+
+## Four more trims, and one word fixed - 2026-09-17
+
+Same live review, same pattern: shorter where the words repeated something
+next to them. "What each notice said went wrong, in its own words. A notice
+blaming another delay is counted in the tiles above but not ranked here:
+another delay is not a thing that went wrong." became "What each notice said
+went wrong. Blaming another delay doesn't count here." The tiles' own labels
+shortened too - "named something that went wrong" to "named a cause" (this
+tile is origin-family only, so the word is accurate here in a way it would
+not be for the family label the content pass deliberately avoided earlier),
+"named no cause at all" to "named no cause" - and the legend dropped "listed"
+from every band ("nothing", "1 to 3", "4 to 9", "10 or more"), leaving the
+hover caption's own "nothing listed" alone since nobody asked about that one.
+
+One of these was a mistake catching a mistake: the capacity sentence added
+two reviews ago said "not counted as a delay," reintroducing the one word
+this whole family of pages avoids on purpose (`notes/site.md` § What counts
+as a disruption - the subject is disruption, not the word "delay"). Caught by
+the same reviewer pointing at the word itself. Fixed to "not counted as a
+disruption."

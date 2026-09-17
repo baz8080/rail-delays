@@ -134,7 +134,7 @@ class TheReducedCapacityNoticesAreNamedRatherThanDropped(unittest.TestCase):
         )]
         rendered = page(found)
         self.assertIn("1 train had reduced capacity", rendered)
-        self.assertIn("it is not counted as a delay", rendered)
+        self.assertIn("it is not counted as a disruption", rendered)
         self.assertIn("1 disruption listed", rendered)
 
     def test_a_month_without_any_says_nothing_about_them(self):

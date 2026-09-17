@@ -57,10 +57,10 @@ NO_DATA = "8"
 FUTURE = "9"
 
 BAND_LABEL = {
-    "0": "nothing listed",
-    "1": "1 to 3 listed",
-    "2": "4 to 9 listed",
-    OVER_BAND: "10 or more listed",
+    "0": "nothing",
+    "1": "1 to 3",
+    "2": "4 to 9",
+    OVER_BAND: "10 or more",
     NO_DATA: "no data",
 }
 
@@ -156,9 +156,9 @@ def tiles(disruptions):
     silent = sum(1 for d in disruptions if not (set(d.families) - {UNSTATED}))
     values = [
         (len(disruptions), "disruptions listed"),
-        (named, "named something that went wrong"),
+        (named, "named a cause"),
         (knock_on, "blamed congestion or an earlier service"),
-        (silent, "named no cause at all"),
+        (silent, "named no cause"),
     ]
     return "".join(
         f'<div class="tile"><div class="v">{value}</div>'
@@ -308,7 +308,7 @@ def month_page(ym, disruptions, corpus, months, now, template, css):
     capacity = sum(1 for d in corpus.capacity if d.day.strftime("%Y-%m") == ym)
     capacity_note = (
         f"{capacity} train{'s' if capacity != 1 else ''} had reduced capacity, but "
-        f"{'they are' if capacity != 1 else 'it is'} not counted as a delay."
+        f"{'they are' if capacity != 1 else 'it is'} not counted as a disruption."
         if capacity
         else ""
     )
