@@ -394,3 +394,26 @@ the second bug was missed the first time a reply here claimed hovering worked.
 `TheHoverCaptionActuallyFires` pins both: the script calls what it defines, and
 exactly one `</div>` sits between the bar opening and the caption div, so a
 future edit that pulls them apart again fails a test instead of a reader.
+
+## The day caption stopped naming families - 2026-09-17
+
+A reviewer called the caption "awful" on sight: "16 listed, 5 named planned
+works, 5 no cause at all, 4 something that went wrong, 3 a knock-on from
+another delay" is a sentence built for someone auditing the model, not a
+reader hovering a box. It also invited the exact question it got: the parts
+summed to 17 against a total of 16, which is documented and correct (a
+disruption naming a fault and its own knock-on counts in both families, "The
+day bar" above) but reads as a mistake to anyone who has not read that note.
+
+The caption is now the count alone: "16 disruptions". The breakdown was never
+the only place that information lived - each disruption's own row already
+carries its cause - so nothing is lost, only a sentence that was answering a
+question a box hover does not need to answer. `FAMILY_LABEL` left `render.py`
+with it: nothing else read it.
+
+Two more words changed on the same pass. "Every day of September 2026" became
+"September 2026" - the tabs above it and the banner both already say the
+month, and the heading did not need a fourth restatement in three words.
+"Hover a day in a bar for its detail," which had matched uisce's own hint
+character for character since the last review, was pointed back to plainer
+words: "Hover over a day for details."

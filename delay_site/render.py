@@ -19,8 +19,7 @@ from pathlib import Path
 
 import statusui
 
-from delay_cause import CONSEQUENCE, LABEL, ORIGIN, PROXIMATE, UNSTATED
-from delay_cause.model import PLANNED_FAMILY
+from delay_cause import CONSEQUENCE, LABEL, PROXIMATE, UNSTATED
 from delay_cause.text import readable
 
 from . import model
@@ -73,16 +72,6 @@ EMPTY_LABEL = {
     FUTURE: "still to come",
 }
 
-# What a family means in the page's own words. `origin` is deliberately not
-# called "cause": the consequence families are causes too, in the sense that the
-# notice names them, and the distinction this draws is whether the thing named
-# is a fault or another delay.
-FAMILY_LABEL = {
-    ORIGIN: "something that went wrong",
-    CONSEQUENCE: "a knock-on from another delay",
-    PLANNED_FAMILY: "planned works",
-    UNSTATED: "no cause at all",
-}
 
 month_label = statusui.month_label
 
@@ -110,16 +99,14 @@ def _short(when):
 
 
 def day_caption(row):
-    """What a day cell says. The breakdown may add to more than the total.
+    """What a day box says on hover: a plain count, nothing to parse.
 
-    A disruption naming a fault and the knock-on it caused counts in both
-    families, so the parts are read as what the notices named rather than as a
-    partition of the day, and nothing sums them.
-
-    A notice that named nothing and a notice that said "an operational issue"
-    are one phrase here, not two. They are separate categories and the
-    disruption's own row still tells them apart, but a caption that reads
-    "7 named no cause at all, 1 no cause given" is the page talking to itself.
+    A breakdown by family used to sit here and read as a sentence competing
+    with the row below it for a reader's attention, one a reviewer called
+    "awful" on sight - and it could say more than the total, because one
+    disruption naming a fault and the knock-on it caused counted in both
+    families. The breakdown was never load-bearing: each disruption's own row
+    already carries its cause.
     """
     counts = row["counts"]
     if counts is None:
@@ -127,19 +114,11 @@ def day_caption(row):
     total = row["total"]
     if not total:
         return "nothing listed"
-    merged = Counter()
-    for family, count in counts.items():
-        merged[family or UNSTATED] += count
-    ranked = sorted(merged.items(), key=lambda kv: (-kv[1], kv[0]))
-    # "named" once and elided after it: a caption is a sentence, not a table.
-    first, count = ranked[0]
-    parts = [f"{count} named {FAMILY_LABEL[first]}"]
-    parts += [f"{count} {FAMILY_LABEL[family]}" for family, count in ranked[1:]]
-    return f"{total} listed, " + ", ".join(parts)
+    return f"{total} disruption" + ("" if total == 1 else "s")
 
 
 def day_bar(rows):
-    """The month's day cells, with the family breakdown in each caption."""
+    """The month's day cells, with the day's count in each caption."""
     cells = []
     for row in rows:
         code = FUTURE if row.get("future") else band(row["total"])

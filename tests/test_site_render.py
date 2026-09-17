@@ -62,20 +62,17 @@ class TheDayBands(unittest.TestCase):
     def test_no_data_and_nothing_listed_are_different_cells(self):
         self.assertNotEqual(render.band(None), render.band(0))
 
-    def test_a_caption_names_the_families_and_the_total(self):
+    def test_a_caption_is_a_plain_count(self):
+        # A family breakdown sat here once and read as a sentence competing
+        # with the row below it - a reviewer called it "awful" on sight, and
+        # it could overstate the day besides: one disruption naming a fault
+        # and the knock-on it caused counted in both families.
         row = {"day": "2026-09-10", "counts": {"origin": 3, "consequence": 1}, "total": 4}
-        caption = render.day_caption(row)
-        self.assertIn("4 listed", caption)
-        self.assertIn("3 named something that went wrong", caption)
-        self.assertIn("1 a knock-on from another delay", caption)
+        self.assertEqual(render.day_caption(row), "4 disruptions")
 
-    def test_a_breakdown_adding_to_more_than_the_total_still_reads_the_total(self):
-        # One disruption naming a fault and the knock-on it caused counts in
-        # both families. Summing the breakdown overstated seven days in
-        # September 2026 and painted one of them a band too dark.
-        row = {"day": "2026-09-09", "counts": {"origin": 9, "consequence": 8}, "total": 16}
-        self.assertIn("16 listed", render.day_caption(row))
-        self.assertEqual(render.band(row["total"]), "3")
+    def test_a_single_disruption_is_not_plural(self):
+        row = {"day": "2026-09-10", "counts": {"origin": 1}, "total": 1}
+        self.assertEqual(render.day_caption(row), "1 disruption")
 
 
 class TheMinutesAreNeverAddedUp(unittest.TestCase):
