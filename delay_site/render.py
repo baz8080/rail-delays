@@ -34,23 +34,15 @@ SITE_CSS = TEMPLATES / "site.css"
 # and it has to stay that way: the site is meant to run for years.
 BUDGET_BYTES = 500 * 1024
 
-# How many disruption rows show at once. Not corpus-derived like the day bands:
-# a busy month runs past 150, and no page depth reads as "a lot" the way a wall
-# of 150 cards does. Paged client-side, not server-side into separate pages,
-# because every row is already downloaded inside the month's own budget - this
-# only changes how many are on screen at once, not what is fetched.
+# Client-side, not a server-side page: every row already ships inside the
+# month's own budget, so this only changes what is on screen at once.
 PAGE_SIZE = 10
 
 # Day-cell codes, by how many disruptions were first listed that day. Bands
-# rather than a count: the bar is 31 cells wide and a reader is looking for the
-# bad days, not reading numbers off it. The caption carries the number.
-#
-# The cuts come from the corpus and not from round numbers. Over the 41 days to
-# 2026-09-17 the daily count runs 0 to 25, and split three ways past zero it
-# reads 9 days at 1-3, 14 at 4-9, 12 at 10 or more - close enough to even that
-# a fourth cut would only be splitting the 4-9 band for its own sake. 10 or
-# more is still open-ended rather than "10-29 / 30+": nothing in the corpus has
-# reached 30, and a band nothing has ever painted is a legend entry that lies.
+# rather than a count, since the caption already carries the exact number.
+# Corpus-derived cuts, split roughly evenly past zero (9 days at 1-3, 14 at
+# 4-9, 12 at 10+); the top band stays open-ended because nothing has reached
+# 30 - a "30+" nothing has ever painted would be a legend entry that lies.
 BANDS = ((1, "0"), (4, "1"), (10, "2"))
 OVER_BAND = "3"
 NO_DATA = "8"
@@ -64,16 +56,9 @@ BAND_LABEL = {
     NO_DATA: "no data",
 }
 
-# `--fair` dropped from this run: painted next to `--good` at cell width the two
-# read as one colour, which is what made "nothing" and "1 to 3" indistinguishable.
-# Good, warning, serious, critical is the same four-step run esb's day cells use.
-
-# The two cells that carry no count. A day the rest of the month has not reached
-# yet is not a day the collector missed, and the three sibling sites draw the
-# same two cells the same grey and keep the second out of the key: nobody needs
-# a legend to be told that tomorrow has not happened. The missed day's own words
-# name the collector, not "data" - a reader who has just read "nothing listed"
-# two cells over should not have to parse "no data" as a different claim.
+# Two cells with no count: a day not yet reached is not one the collector
+# missed. NO_DATA names the collector rather than "data" so it doesn't echo
+# "nothing listed" two cells over.
 EMPTY_LABEL = {
     NO_DATA: "the collector missed this day",
     FUTURE: "still to come",
@@ -106,14 +91,11 @@ def _short(when):
 
 
 def day_caption(row):
-    """What a day box says on hover: a plain count, nothing to parse.
+    """What a day box says on hover: a plain count, not a family breakdown.
 
-    A breakdown by family used to sit here and read as a sentence competing
-    with the row below it for a reader's attention, one a reviewer called
-    "awful" on sight - and it could say more than the total, because one
-    disruption naming a fault and the knock-on it caused counted in both
-    families. The breakdown was never load-bearing: each disruption's own row
-    already carries its cause.
+    A breakdown could say more than the total - a disruption naming a fault
+    and its own knock-on counts in both families - and each disruption's own
+    row already carries its cause.
     """
     counts = row["counts"]
     if counts is None:
@@ -144,12 +126,9 @@ def legend():
 def tiles(disruptions):
     """Four counts of the month's disruptions.
 
-    The fourth is not the month's most-named fault, which is what a status tile
-    usually wants to be: that is the first row of the ranked panel eight lines
-    below it. Nothing else on the page counts the notices that named nothing.
-
-    They do not partition the month. A notice naming a fault and the knock-on it
-    caused is in the second and the third.
+    The fourth is not the month's most-named fault - that is the ranked panel
+    below. None of the four partition the month: a fault and its own knock-on
+    count in both the second and the third.
     """
     named = sum(1 for d in disruptions if d.origins)
     knock_on = sum(1 for d in disruptions if CONSEQUENCE in d.families)
@@ -204,10 +183,9 @@ def _chip(cause):
 def shown_causes(causes):
     """The causes a row carries as tags.
 
-    "No cause given" is an answer only when it is the whole answer: beside a
-    mechanical fault it reads as the page contradicting itself. Five disruptions
-    to 2026-09-12 were re-worded between the two and carried both. The reading
-    itself keeps both; this is what the row shows.
+    "No cause given" is shown only when it is the whole answer - beside a
+    real cause it would read as the page contradicting itself, though the
+    reading itself keeps both.
     """
     named = tuple(c for c in causes if c.family != UNSTATED)
     return named or causes
@@ -216,10 +194,9 @@ def shown_causes(causes):
 def case(disruption):
     """One disruption: what it is, what is known about it, then its own words.
 
-    The instant sits inside the phrase it measures rather than floating at the
-    top right, which is the move the esb rows made and for the same reason:
-    "11 Sep, 17:00" alone does not say what happened then, and the `title` that
-    used to explain it is unopenable on a touch screen.
+    The time sits inside the phrase it measures rather than floating at the
+    top right: a bare timestamp does not say what happened then, and the
+    `title` that used to explain it is unopenable on a touch screen.
     """
     chips = "".join(_chip(c) for c in shown_causes(disruption.causes))
     if not chips:
@@ -269,9 +246,8 @@ def tabs(ym, months):
 def paged_cases(disruptions):
     """The month's cases, chunked into `PAGE_SIZE`-row pages.
 
-    Page 1 is the only one not `hidden`, so a reader with no JS - the caption
-    listener does not run this - still gets the newest page rather than nothing;
-    `pageDelays()` below is what moves between the rest.
+    Page 1 renders visible, so a reader with no JS still gets the newest page
+    rather than nothing; `pageDelays()` moves between the rest.
     """
     ordered = sorted(disruptions, key=lambda d: d.first_seen, reverse=True)
     if not ordered:
@@ -297,9 +273,8 @@ def paged_cases(disruptions):
 def month_page(ym, disruptions, corpus, months, now, template, css):
     rows = model.day_counts(corpus.disruptions, ym, corpus.horizon, now)
     cases = paged_cases(disruptions)
-    # Past STALE_AFTER the stamp itself goes red, which is how the sibling
-    # static pages say it. An age in words is only true at build time, and this
-    # page has no clock at read time to correct one.
+    # Past STALE_AFTER the stamp itself goes red - an age in words would only
+    # be true at build time, and this page has no clock at read time to fix it.
     observed = statusui.stamp(corpus.horizon)
     if now - corpus.horizon > model.STALE_AFTER:
         observed = f'<span class="stale">{observed}</span>'

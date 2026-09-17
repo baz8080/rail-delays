@@ -71,10 +71,8 @@
 <!--UI-JS-CAPTION-->
 bindDayCaption();
 
-// Every row is already on the page, inside the month's own byte budget - this
-// only changes how many are on screen at once. `hidden` rather than removing
-// them, so a reader who has searched the page with ctrl-F still finds a row on
-// a page they have not clicked to.
+// `hidden`, not removed: a reader who has searched the page with ctrl-F can
+// still find a row on a page they have not clicked to.
 function pageDelays() {
   document.querySelectorAll(".pager").forEach(function (pager) {
     var pages = pager.parentElement.querySelectorAll(".page");
