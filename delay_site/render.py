@@ -39,7 +39,7 @@ BUDGET_BYTES = 500 * 1024
 # of 150 cards does. Paged client-side, not server-side into separate pages,
 # because every row is already downloaded inside the month's own budget - this
 # only changes how many are on screen at once, not what is fetched.
-PAGE_SIZE = 20
+PAGE_SIZE = 10
 
 # Day-cell codes, by how many disruptions were first listed that day. Bands
 # rather than a count: the bar is 31 cells wide and a reader is looking for the
@@ -270,7 +270,7 @@ def paged_cases(disruptions):
     """The month's cases, chunked into `PAGE_SIZE`-row pages.
 
     Page 1 is the only one not `hidden`, so a reader with no JS - the caption
-    listener does not run this - still gets the newest 20 rather than nothing;
+    listener does not run this - still gets the newest page rather than nothing;
     `pageDelays()` below is what moves between the rest.
     """
     ordered = sorted(disruptions, key=lambda d: d.first_seen, reverse=True)

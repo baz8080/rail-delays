@@ -443,7 +443,7 @@ every row two URLs depending on which page it landed on this month.
 of them shipped in the same file inside the existing budget - nothing new is
 fetched. Page 1 renders visible and the rest `hidden`; a small script
 (`pageDelays()`, beside the existing caption listener) moves the boundary on
-click. A reader with JS disabled still gets the newest 20 rather than nothing,
+click. A reader with JS disabled still gets the newest page rather than nothing,
 which is why the split happens in Python and not by hiding everything and
 waiting for a script to reveal page 1. Verified by dispatching a real click at
 a built page in headless Chromium and reading back which page moved to
