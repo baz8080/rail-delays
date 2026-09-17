@@ -18,7 +18,7 @@
 <div class="wrap">
   <header>
     <h1>Irish Rail Delays</h1>
-    <div class="sub">Disruption notices from Irish Rail's realtime feed, and what each one said went wrong.</div>
+    <div class="sub">Disruption notices from Irish Rail's realtime feed.</div>
     <div class="sub2">Unofficial. Not affiliated with Iarnród Éireann.</div>
   </header>
 
@@ -35,8 +35,8 @@
     <div class="tiles"><!--TILES--></div>
 
     <h3 class="natheading">Every day of <!--MONTH--></h3>
-    <p class="basis">One cell a day, counting the disruptions first listed on it.
-    <span class="hoverhint">Hover a day for what it held.</span></p>
+    <p class="basis">One box a day, counting the disruptions first listed on it.
+    <span class="hoverhint">Hover a day in a bar for its detail.</span></p>
     <div class="bar"><!--BAR--></div>
     <div class="daycap" aria-live="polite"></div>
     <div class="legend"><!--LEGEND--></div>
@@ -53,9 +53,9 @@
   </main>
 
   <footer>
-    <p><b>A notice going up is the only signal there is.</b> Irish Rail publishes no history
-    and no "resolved" field, so a disruption is here from the poll its notice first appeared
-    on, and nothing here says when the trains were running normally again.</p>
+    <p><b>A notice going up is the only signal, and a notice coming down is the only other
+    one.</b> The feed has no "resolved" field: a notice leaving it just means the author took
+    it down, and nothing here says when the trains were running normally again.</p>
 
     <details><summary>What this measures</summary>
     <p>The same feed of service messages the sibling lift site reads, polled every 30 minutes,
@@ -109,8 +109,6 @@
     </details>
 
     <p id="gen"><a href="https://github.com/baz8080/rail-delays">Source code</a> &middot;
-    <a href="https://github.com/baz8080/lifts-data">Collected data</a> &middot;
-    <a href="https://baz8080.github.io/lifts">Lift outages</a> &middot;
     not affiliated with Iarnród Éireann.</p>
   </footer>
 </div>

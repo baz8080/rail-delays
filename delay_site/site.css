@@ -1,15 +1,15 @@
 /* This site's own rules, inlined after statusui's base.css. */
 
 /* day cells, banded by how many disruptions were first listed that day: 0 none,
-   1 one to three, 2 four to eight, 3 nine to sixteen, 4 seventeen or more,
-   8 no data, 9 still to come. `render.BANDS` holds the cuts and the reason they
-   are those. A count, not a severity: the feed carries no magnitude, and a busy
-   day is not a worse day for any one train. */
+   1 one to three, 2 four to nine, 3 ten or more, 8 no data, 9 still to come.
+   `render.BANDS` holds the cuts and the reason they are those. A count, not a
+   severity: the feed carries no magnitude, and a busy day is not a worse day
+   for any one train. `--fair` is skipped: next to `--good` at this width the
+   two read as one colour. */
 .bar i.b0, .legend i.b0 { background: var(--good); }
-.bar i.b1, .legend i.b1 { background: var(--fair); }
-.bar i.b2, .legend i.b2 { background: var(--warning); }
-.bar i.b3, .legend i.b3 { background: var(--serious); }
-.bar i.b4, .legend i.b4 { background: var(--critical); }
+.bar i.b1, .legend i.b1 { background: var(--warning); }
+.bar i.b2, .legend i.b2 { background: var(--serious); }
+.bar i.b3, .legend i.b3 { background: var(--critical); }
 .bar i.b8, .bar i.b9, .legend i.b8 { background: var(--cell-empty); }
 
 .bar { height: 22px; }

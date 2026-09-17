@@ -39,30 +39,37 @@ BUDGET_BYTES = 500 * 1024
 # rather than a count: the bar is 31 cells wide and a reader is looking for the
 # bad days, not reading numbers off it. The caption carries the number.
 #
-# The cuts come from the corpus and not from round numbers. Over the 31 days to
-# 2026-09-11 the daily count runs 1 to 25 with a median of 6, so a bar banded at
-# tens would have been one colour for almost every day and would have said
-# nothing. These four bands split those 31 days roughly evenly.
-BANDS = ((1, "0"), (4, "1"), (9, "2"), (17, "3"))
-OVER_BAND = "4"
+# The cuts come from the corpus and not from round numbers. Over the 41 days to
+# 2026-09-17 the daily count runs 0 to 25, and split three ways past zero it
+# reads 9 days at 1-3, 14 at 4-9, 12 at 10 or more - close enough to even that
+# a fourth cut would only be splitting the 4-9 band for its own sake. 10 or
+# more is still open-ended rather than "10-29 / 30+": nothing in the corpus has
+# reached 30, and a band nothing has ever painted is a legend entry that lies.
+BANDS = ((1, "0"), (4, "1"), (10, "2"))
+OVER_BAND = "3"
 NO_DATA = "8"
 FUTURE = "9"
 
 BAND_LABEL = {
     "0": "nothing listed",
     "1": "1 to 3 listed",
-    "2": "4 to 8 listed",
-    "3": "9 to 16 listed",
-    OVER_BAND: "17 or more listed",
+    "2": "4 to 9 listed",
+    OVER_BAND: "10 or more listed",
     NO_DATA: "no data",
 }
+
+# `--fair` dropped from this run: painted next to `--good` at cell width the two
+# read as one colour, which is what made "nothing" and "1 to 3" indistinguishable.
+# Good, warning, serious, critical is the same four-step run esb's day cells use.
 
 # The two cells that carry no count. A day the rest of the month has not reached
 # yet is not a day the collector missed, and the three sibling sites draw the
 # same two cells the same grey and keep the second out of the key: nobody needs
-# a legend to be told that tomorrow has not happened.
+# a legend to be told that tomorrow has not happened. The missed day's own words
+# name the collector, not "data" - a reader who has just read "nothing listed"
+# two cells over should not have to parse "no data" as a different claim.
 EMPTY_LABEL = {
-    NO_DATA: "no data collected for this day",
+    NO_DATA: "the collector missed this day",
     FUTURE: "still to come",
 }
 
@@ -144,7 +151,7 @@ def day_bar(rows):
 def legend():
     return "".join(
         f'<span><i class="b{code}"></i>{_esc(BAND_LABEL[code])}</span>'
-        for code in ("0", "1", "2", "3", OVER_BAND, NO_DATA)
+        for code in ("0", "1", "2", OVER_BAND, NO_DATA)
     )
 
 

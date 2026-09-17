@@ -303,3 +303,67 @@ The fix is a second step in `lifts-data`, the same three lines pointed here:
 `baz8080/lifts`; it needs the same on `baz8080/rail-delays` before that step can
 work. Both are owner actions in another repository, so they are not done here.
 Until they are, the crons stand and a stale page says so in its own stamp.
+
+## The day bar's colours and words, reviewed - 2026-09-17
+
+A reviewer looking at a build against live data (September 2026, 41 collected
+days at review time) found three real problems, none of them the counting.
+
+**"Nothing" and "1 to 3" read as one colour.** `--good` and `--fair` are both
+dark, moderately saturated greens at the width a day box actually renders, and
+the eye cannot split them apart in a 22px bar. Dropped `--fair` from the run
+entirely rather than picking a lighter shade for it: esb's own day cells solve
+the same problem the same way, skipping straight from `--good` to `--warning`.
+
+**One band fewer, cut where the corpus splits evenly.** Over the 41 days to
+2026-09-17 the daily count is 0 on 6 days and otherwise runs 1 to 25; split
+three ways rather than four it is 9 days at 1-3, 14 at 4-9, 12 at 10 or more,
+which is as even a three-way split as the corpus offers. The top band stays
+open-ended ("10 or more") rather than "10-29" plus a "30+" that has never
+fired: nothing in the corpus has reached 30, and a legend entry nothing has
+ever painted is a legend entry that lies about what the bar can show.
+
+**"Nothing listed" and "no data" read as the same claim.** Both are "no-word"
+sentences about a day, and a reader hovering two adjacent boxes and getting
+"nothing listed" then "no data collected for this day" reasonably asked what
+the difference was. The no-data caption now names the actual mechanism instead
+of repeating "data": "the collector missed this day."
+
+**The hover hint took uisce's exact wording.** "Hover a day for what it held"
+became "Hover a day in a bar for its detail," matching uisce's own hint
+character for character - there was no reason for a third phrasing of the same
+instruction.
+
+**Rejected: printing the count inside each box.** A day box is a few pixels
+wide at 31 to a bar; a two-digit count would either be unreadable or force the
+bar wider than the card, and no sibling site prints digits in its day cells for
+the same reason. The count already reaches the reader through the hover
+caption, which was the point of adding the caption listener in the first
+place.
+
+## More words read back, from a live review - 2026-09-17
+
+The same review pass caught four more with a specific fix each.
+
+**The header repeated the footer.** "and what each one said went wrong" on the
+header's sub line said the same thing the row cards already say, in the first
+sentence a reader hits. Dropped; the sub line now names only what the notices
+are.
+
+**The disclosure's shape didn't match its sibling.** "A notice going up is the
+only signal there is" stood alone; lifts pairs it with what a notice's absence
+means, in one sentence: "A notice going up is the only signal, and a notice
+coming down is the only other one." Taking the pairing without also taking
+lifts' claim that a disruption "ends" when its notice does: this site does not
+track an end at all (see "Nothing says when a disruption ended" above), so the
+second sentence stays "a notice leaving it just means the author took it down,"
+not "an outage ends here."
+
+**Two footer links pointed at a feed nobody asked to read from here.**
+"Collected data" and "Lift outages" left the footer; "Source code" is what a
+reader of an independent site wants next to "not affiliated," and the other
+two repeated what "How this measures" already says in prose.
+
+**"Cell" only ever appears in this family's code and notes, never to a
+reader.** None of uisce, esb or lifts names the day square for a reader either
+- they only say "Hover a day...". "One cell a day" became "One box a day."

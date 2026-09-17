@@ -53,8 +53,8 @@ def prose(rendered):
 
 class TheDayBands(unittest.TestCase):
     def test_the_cuts_are_the_ones_the_corpus_asked_for(self):
-        self.assertEqual([render.band(n) for n in (0, 1, 3, 4, 8, 9, 16, 17, 40)],
-                         ["0", "1", "1", "2", "2", "3", "3", "4", "4"])
+        self.assertEqual([render.band(n) for n in (0, 1, 3, 4, 9, 10, 16, 40)],
+                         ["0", "1", "1", "2", "2", "3", "3", "3"])
 
     def test_a_day_with_no_data_is_its_own_code(self):
         self.assertEqual(render.band(None), render.NO_DATA)
@@ -188,7 +188,7 @@ class ADayTheMonthHasNotReachedYet(unittest.TestCase):
         future = {"day": "2026-09-30", "counts": None, "total": None, "future": True}
         missed = {"day": "2026-08-01", "counts": None, "total": None, "future": False}
         self.assertEqual(render.day_caption(future), "still to come")
-        self.assertEqual(render.day_caption(missed), "no data collected for this day")
+        self.assertEqual(render.day_caption(missed), "the collector missed this day")
 
     def test_the_key_says_nothing_about_it(self):
         # Nobody needs a legend to be told that tomorrow has not happened.
