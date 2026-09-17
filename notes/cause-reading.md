@@ -122,10 +122,13 @@ direction*: say less than the notice, never more.
 **It does not decode a euphemism.** "An incident on the line" is 41 causes and
 says nothing about what happened. "A tragic incident on the line being attended
 by emergency services" is how Irish Rail writes a death on the railway, and the
-reader's label for it is "Incident on the line, not specified". Turning that into
-a word the notice does not use would be an inference on the most sensitive thing
-this feed carries, published on an archive page with no way to correct it. The
-category quotes and the site is expected to print the quote.
+reader's label for it is "Incident on the line". Turning that into a word the
+notice does not use would be an inference on the most sensitive thing this feed
+carries, published on an archive page with no way to correct it. The category
+never gets more specific than that phrase on any of the 41 causes it reads (a
+place or a time sometimes, never a kind of incident), and quotes the notice's
+own words beside the label so the site is expected to print the quote rather
+than the label alone.
 
 **It does not turn a non-answer into an answer.** "An operational issue" is 27
 causes and means the railway is not saying. It is its own category, family

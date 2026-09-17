@@ -109,7 +109,7 @@ class WhatThePageCallsThings(unittest.TestCase):
 
     def test_a_cause_is_printed_in_the_readers_words_and_not_decoded(self):
         rendered = page([sighting("Suspended", "Services suspended following a tragic incident.")])
-        self.assertIn("Incident on the line, not specified", rendered)
+        self.assertIn("Incident on the line", rendered)
         self.assertNotRegex(prose(rendered), r"(?i)\bfatalit|\bdeath\b|\bsuicide\b")
 
     def test_an_operational_issue_is_shown_as_no_cause_given(self):
@@ -245,6 +245,35 @@ class TheTemplateIsFilled(unittest.TestCase):
     def test_no_marker_is_left_behind(self):
         rendered = page([SIGNALLING])
         self.assertEqual(re.findall(r"<!--[A-Z-]+-->", rendered), [])
+
+
+def _many(n):
+    return [sighting(f"+{i}mins delayed", start=f"2026-09-10T{9 + i // 60:02d}:{i % 60:02d}:00")
+            for i in range(n)]
+
+
+class ThePagedDisruptionList(unittest.TestCase):
+    """PAGE_SIZE rows a page, client-side: every row still ships in the same
+    build, `hidden` is what keeps the rest off screen until a click.
+    """
+
+    def test_a_month_at_or_under_the_page_size_has_no_pager(self):
+        rendered = page(_many(render.PAGE_SIZE))
+        self.assertNotIn('class="pager"', rendered)
+        self.assertEqual(rendered.count('class="case"'), render.PAGE_SIZE)
+
+    def test_a_month_over_the_page_size_pages_the_rest(self):
+        rendered = page(_many(render.PAGE_SIZE + 5))
+        self.assertIn('class="pager"', rendered)
+        self.assertEqual(rendered.count('class="case"'), render.PAGE_SIZE + 5)
+        starts_hidden = rendered.count('class="page" hidden')
+        self.assertEqual(starts_hidden, 1, "only the second page starts hidden")
+        self.assertIn("Page 1 of 2", rendered)
+
+    def test_the_script_defines_and_calls_the_pager(self):
+        rendered = page(_many(render.PAGE_SIZE + 1))
+        self.assertIn("function pageDelays()", rendered)
+        self.assertIn("pageDelays();", rendered)
 
 
 class TheHoverCaptionActuallyFires(unittest.TestCase):

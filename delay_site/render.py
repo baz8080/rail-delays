@@ -34,6 +34,13 @@ SITE_CSS = TEMPLATES / "site.css"
 # and it has to stay that way: the site is meant to run for years.
 BUDGET_BYTES = 500 * 1024
 
+# How many disruption rows show at once. Not corpus-derived like the day bands:
+# a busy month runs past 150, and no page depth reads as "a lot" the way a wall
+# of 150 cards does. Paged client-side, not server-side into separate pages,
+# because every row is already downloaded inside the month's own budget - this
+# only changes how many are on screen at once, not what is fetched.
+PAGE_SIZE = 20
+
 # Day-cell codes, by how many disruptions were first listed that day. Bands
 # rather than a count: the bar is 31 cells wide and a reader is looking for the
 # bad days, not reading numbers off it. The caption carries the number.
@@ -259,11 +266,37 @@ def tabs(ym, months):
     return out
 
 
+def paged_cases(disruptions):
+    """The month's cases, chunked into `PAGE_SIZE`-row pages.
+
+    Page 1 is the only one not `hidden`, so a reader with no JS - the caption
+    listener does not run this - still gets the newest 20 rather than nothing;
+    `pageDelays()` below is what moves between the rest.
+    """
+    ordered = sorted(disruptions, key=lambda d: d.first_seen, reverse=True)
+    if not ordered:
+        return '<p class="empty">No disruption notice was listed this month.</p>'
+    pages = [ordered[i : i + PAGE_SIZE] for i in range(0, len(ordered), PAGE_SIZE)]
+    body = "".join(
+        f'<div class="page"{"" if n == 0 else " hidden"} data-page="{n + 1}">'
+        + "".join(case(d) for d in page)
+        + "</div>"
+        for n, page in enumerate(pages)
+    )
+    if len(pages) < 2:
+        return body
+    return (
+        body + '<div class="pager">'
+        '<button type="button" class="prev" disabled>Newer</button>'
+        f'<span class="pagenum">Page 1 of {len(pages)}</span>'
+        '<button type="button" class="next">Older</button>'
+        "</div>"
+    )
+
+
 def month_page(ym, disruptions, corpus, months, now, template, css):
     rows = model.day_counts(corpus.disruptions, ym, corpus.horizon, now)
-    cases = "".join(case(d) for d in sorted(disruptions, key=lambda d: d.first_seen, reverse=True))
-    if not cases:
-        cases = '<p class="empty">No disruption notice was listed this month.</p>'
+    cases = paged_cases(disruptions)
     # Past STALE_AFTER the stamp itself goes red, which is how the sibling
     # static pages say it. An age in words is only true at build time, and this
     # page has no clock at read time to correct one.

@@ -428,3 +428,40 @@ the chip only needs to name the category, the way "Signalling fault" and
 "Level crossing issue" do. `delay_cause.model.LABEL` is the one place the
 string lives - the golden fixture pins category keys, not display text, so
 nothing there needed regenerating.
+
+## The disruption list paged client-side - 2026-09-17
+
+A reviewer scrolling September's 161 rows called it too much detail on one
+page. Server-side pages (like the month archive itself) were the obvious
+alternative and were rejected for the same reason esb and uisce reject a count
+floor on their own full listings: "if a bound is needed again, make it a byte
+budget," and this repository already has one (`BUDGET_BYTES`). Splitting the
+list into `m/2026-09-p2.html` and so on would multiply pages forever and give
+every row two URLs depending on which page it landed on this month.
+
+`PAGE_SIZE` (20) chunks the sorted list into `.page` divs at render time, all
+of them shipped in the same file inside the existing budget - nothing new is
+fetched. Page 1 renders visible and the rest `hidden`; a small script
+(`pageDelays()`, beside the existing caption listener) moves the boundary on
+click. A reader with JS disabled still gets the newest 20 rather than nothing,
+which is why the split happens in Python and not by hiding everything and
+waiting for a script to reveal page 1. Verified by dispatching a real click at
+a built page in headless Chromium and reading back which page moved to
+`hidden` and which did not, the same way the hover fix was checked - a
+"looks right" markup read is not evidence here.
+
+Not corpus-derived like the day bands: 20 is a plain readability choice, and
+says so in the code rather than pretending otherwise.
+
+## Two chips got shorter - 2026-09-17
+
+"Knock-on from an earlier service" and "Passenger issue, including illness"
+both repeated words already sitting next to them in the row (the minutes
+badge, the quoted notice text) and became "Knock-on delay" and "Passenger
+issue". "Incident on the line, not specified" lost its qualifier too, once
+checked against the 41 causes the category reads: none of them names what the
+incident was, only sometimes where or when, so the category was never
+specific and does not need to say so - the quoted notice underneath already
+carries whatever the notice itself commits to. The refusal to decode what
+"incident" is standing in for (`notes/cause-reading.md`, "What the reader
+refuses to say") is unchanged; only the label's own wording moved.

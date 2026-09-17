@@ -116,6 +116,32 @@
 <script>
 <!--UI-JS-CAPTION-->
 bindDayCaption();
+
+// Every row is already on the page, inside the month's own byte budget - this
+// only changes how many are on screen at once. `hidden` rather than removing
+// them, so a reader who has searched the page with ctrl-F still finds a row on
+// a page they have not clicked to.
+function pageDelays() {
+  document.querySelectorAll(".pager").forEach(function (pager) {
+    var pages = pager.parentElement.querySelectorAll(".page");
+    var label = pager.querySelector(".pagenum");
+    var prev = pager.querySelector(".prev");
+    var next = pager.querySelector(".next");
+    var current = 0;
+    var show = function (i) {
+      pages[current].hidden = true;
+      pages[i].hidden = false;
+      current = i;
+      label.textContent = "Page " + (i + 1) + " of " + pages.length;
+      prev.disabled = i === 0;
+      next.disabled = i === pages.length - 1;
+      pager.scrollIntoView({block: "nearest"});
+    };
+    prev.addEventListener("click", function () { show(current - 1); });
+    next.addEventListener("click", function () { show(current + 1); });
+  });
+}
+pageDelays();
 </script>
 </body>
 </html>

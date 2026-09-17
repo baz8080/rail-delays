@@ -21,6 +21,19 @@
 .months a:hover, .months a:focus { background: var(--grid); color: var(--ink); }
 .months a.on { background: var(--grid); color: var(--ink); font-weight: 600; }
 
+.pager {
+  display: flex; align-items: center; justify-content: center; gap: 14px;
+  padding-top: 14px; margin-top: 4px; border-top: 1px solid var(--border);
+}
+.pager button {
+  font: inherit; font-size: 13.5px; color: var(--ink-2); background: none;
+  border: 1px solid var(--border); border-radius: 6px; padding: 5px 12px;
+  cursor: pointer;
+}
+.pager button:hover:not(:disabled), .pager button:focus-visible { background: var(--grid); color: var(--ink); }
+.pager button:disabled { opacity: 0.4; cursor: default; }
+.pagenum { font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+
 /* the ranked origins: name, proportional bar, count */
 .rank { display: grid; grid-template-columns: 1fr 120px 34px; gap: 12px; align-items: center; padding: 7px 0; }
 .rank + .rank { border-top: 1px solid var(--border); }

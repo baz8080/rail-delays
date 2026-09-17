@@ -209,7 +209,7 @@ class WhatTheReaderRefusesToSay(unittest.TestCase):
         cause = one("", "Services are suspended following a tragic incident on the line being "
                         "attended by emergency services.")
         self.assertEqual(cause.category, model.INCIDENT)
-        self.assertEqual(model.LABEL[cause.category], "Incident on the line, not specified")
+        self.assertEqual(model.LABEL[cause.category], "Incident on the line")
         self.assertIn("tragic incident", cause.phrase)
 
     def test_an_operational_issue_is_a_non_answer_and_is_filed_as_one(self):
