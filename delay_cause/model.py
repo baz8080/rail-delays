@@ -13,8 +13,11 @@ Three readings this module refuses to make, all of them in the same direction as
 - **It does not decode a euphemism.** "An incident on the line" is 41 of the 367
   causes read and says nothing about what happened; "a tragic incident ... being
   attended by emergency services" is how Irish Rail writes a death on the
-  railway. Both come back as `incident` with the notice's words attached, and the
-  site is expected to print those words rather than a guess.
+  railway, and "a report of a vulnerable person near/on the line" - added after
+  this count was taken, `notes/cause-reading.md` has the later one - is how it
+  writes a welfare concern. All three come back as `incident` with the notice's
+  words attached, and the site is expected to print those words rather than a
+  guess.
 - **It does not turn a non-answer into an answer.** "An operational issue" is 27
   causes and means the railway is not saying. It is its own category so that a
   chart can show how often that happens, and it is never folded into a cause.
@@ -149,7 +152,7 @@ PATTERNS = (
     (PASSENGER, r"passenger issue|ill passenger|medical emergency|ambulance"),
     (CONGESTION, r"congestion|congestiion"),
     (KNOCK_ON, KNOCK_ON_PATTERN),
-    (INCIDENT, r"incident|emergency services"),
+    (INCIDENT, r"incident|emergency services|vulnerable person"),
     (UNSPECIFIED, r"operational (?:issues?|reasons)"),
 )
 

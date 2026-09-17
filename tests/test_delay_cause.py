@@ -212,6 +212,14 @@ class WhatTheReaderRefusesToSay(unittest.TestCase):
         self.assertEqual(model.LABEL[cause.category], "Incident on the line")
         self.assertIn("tragic incident", cause.phrase)
 
+    def test_a_vulnerable_person_report_is_the_same_refusal(self):
+        # Found after the module docstring's count was taken: a second
+        # euphemism for a safety concern, read the same way as a tragic
+        # incident rather than decoded into its own category.
+        cause = one("", "17:00 Dublin Heuston to Cork (Kent) +45 minutes delayed due to report "
+                        "of a vulnerable person near/on the line earlier.")
+        self.assertEqual(cause.category, model.INCIDENT)
+
     def test_an_operational_issue_is_a_non_answer_and_is_filed_as_one(self):
         cause = one("", "The 09:50 Dublin Connolly to Belfast is operating approximately 14 "
                         "minutes behind schedule due to an operational issue.")

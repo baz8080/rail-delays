@@ -23,6 +23,31 @@
      "earlier": false,
      "family": "origin",
      "marker": "due to",
+     "matched": "mechanical issue",
+     "phrase": "a mechanical issue",
+     "role": "proximate"
+    }
+   ],
+   "head": "+10 minutes delayed - Not stopping at Clongriffin - Reduced capacity",
+   "text": "07:05 Drogheda (MacBride) to Bray (Daly) departed +10 minutes delayed and operating with reduced capacity due to a mechanical issue. This service will not stop at Clongriffin this morning. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [],
+   "head": "+10-15mins delays due to a points issue in Connolly",
+   "text": "Service through Connolly can expect delays of up to +10-15mins due to a points issue at Platform 5. Staff are working to rectify this matter. Update to follow.",
+   "unread": [
+    "a points issue in Connolly",
+    "a points issue at Platform 5. Staff are working to rectify this matter"
+   ]
+  },
+  {
+   "causes": [
+    {
+     "category": "technical",
+     "earlier": false,
+     "family": "origin",
+     "marker": "due to",
      "matched": "technical issue",
      "phrase": "a technical issue",
      "role": "proximate"
@@ -512,6 +537,22 @@
   {
    "causes": [
     {
+     "category": "passenger",
+     "earlier": false,
+     "family": "origin",
+     "marker": "due to",
+     "matched": "passenger issue",
+     "phrase": "a passenger issue",
+     "role": "proximate"
+    }
+   ],
+   "head": "+46mins delayed from Edgeworthstown",
+   "text": "06:40 Sligo/Connolly departed Edgeworthstown +46mins delayed due to a passenger issue.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
      "category": "vehicle_strike",
      "earlier": true,
      "family": "origin",
@@ -593,6 +634,38 @@
    ],
    "head": "Additional Stops",
    "text": "06:05 Drogheda/Connolly will serve all stations Malahide-Connolly due to the 06:50  Malahide/Greystones being cancelled",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
+     "category": "unspecified",
+     "earlier": false,
+     "family": "unstated",
+     "marker": "due to",
+     "matched": "operational issue",
+     "phrase": "an operational issue",
+     "role": "proximate"
+    }
+   ],
+   "head": "Additional stop at 08:26 Clongriffin.",
+   "text": "Due to an operational issue, the 07:36 Drogheda (MacBride) to Dublin Pearse will call additionally at Clongriffin. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
+     "category": "unspecified",
+     "earlier": false,
+     "family": "unstated",
+     "marker": "due to",
+     "matched": "operational issue",
+     "phrase": "an operational issue",
+     "role": "proximate"
+    }
+   ],
+   "head": "Additional stops at Clontarf Road.",
+   "text": "Due to an operational issue, the 08:40 Dublin Connolly to Drogheda (MacBride) will call additionally at Clontarf Road. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
    "unread": []
   },
   {
@@ -1114,6 +1187,44 @@
    "unread": []
   },
   {
+   "causes": [
+    {
+     "category": "unspecified",
+     "earlier": false,
+     "family": "unstated",
+     "marker": "due to",
+     "matched": "operational reasons",
+     "phrase": "operational reasons",
+     "role": "proximate"
+    }
+   ],
+   "head": "Customer Notice: This train has reduced capacity",
+   "text": "Due to operational reasons, this train will operate with reduced capacity. Iarnród Éireann Irish Rail apologise for any inconvenience caused.<br>",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
+     "category": "unspecified",
+     "earlier": false,
+     "family": "unstated",
+     "marker": "due to",
+     "matched": "operational issue",
+     "phrase": "an operational issue",
+     "role": "proximate"
+    }
+   ],
+   "head": "Customer Notice: Unassigned seating, no Enterprise Plus and limited Catering",
+   "text": "Due to an operational issue, this service will operate with unassigned seating, no Enterprise Plus and limited Catering.  Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [],
+   "head": "DART: +20/30 minutes on some services.",
+   "text": "DART: +20/30 minutes on some services. <br><br>The Leap card you use on Iarnród Éireann can be used on all TFI public transport services, including Dublin Bus and Go-Ahead Ireland.",
+   "unread": []
+  },
+  {
    "causes": [],
    "head": "Dalkey - Lift out of order",
    "text": "The lift at platform 2 is out of service. Iarnród Éireann Irish Rail apologies for the inconvenience caused.",
@@ -1133,6 +1244,22 @@
    ],
    "head": "Delay at Dundalk",
    "text": "19.00 Belfast/Connolly will terminate at Dundalk due to an earlier train failure. An additional service will depart from Dundalk-Connolly with an expected delay of up to +30mins as a result.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
+     "category": "planned",
+     "earlier": false,
+     "family": "planned",
+     "marker": "due to",
+     "matched": "engineering works",
+     "phrase": "delayed overnight engineering works",
+     "role": "proximate"
+    }
+   ],
+   "head": "Delay expected.  Due to delayed overnight engineering works.",
+   "text": "Due to delayed overnight engineering works. 05:45 Greystones to Dublin Connolly is expected to operate delayed this morning. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
    "unread": []
   },
   {
@@ -1624,8 +1751,56 @@
      "role": "proximate"
     }
    ],
+   "head": "Departed +10 minutes delayed and with reduced capacity -a mechanical issue",
+   "text": "07:05 Drogheda (MacBride) to Bray (Daly) departed +10 minutes delayed and operating with reduced capacity due to a mechanical issue. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
+     "category": "unspecified",
+     "earlier": false,
+     "family": "unstated",
+     "marker": "due to",
+     "matched": "operational issue",
+     "phrase": "an operational issue",
+     "role": "proximate"
+    }
+   ],
+   "head": "Departed Belfast delayed and expected +25 minutes - Due to an operational issue.",
+   "text": "12:00 Belfast to Dublin Connolly departed delayed and expected +25 minutes delayed due to an operational issue. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
+     "category": "technical",
+     "earlier": false,
+     "family": "origin",
+     "marker": "due to",
+     "matched": "mechanical issue",
+     "phrase": "a mechanical issue",
+     "role": "proximate"
+    }
+   ],
    "head": "Departed Connolly +72 minutes delayed due to a mechanical issue.",
    "text": "Due to a mechanical issue, the 16:50 Dublin Connolly to Belfast is expected to depart Dublin Connolly +72 minutes behind schedule. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
+     "category": "technical",
+     "earlier": false,
+     "family": "origin",
+     "marker": "due to",
+     "matched": "mechanical issue",
+     "phrase": "a mechanical issue",
+     "role": "proximate"
+    }
+   ],
+   "head": "Departed Pearse +14 minutes delayed due to a mechanical issue.",
+   "text": "Due to a mechanical issue, the 09:10 Dublin Pearse to Maynooth departed Dublin Pearse +14 minutes delayed. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
    "unread": []
   },
   {
@@ -1996,6 +2171,12 @@
   },
   {
    "causes": [],
+   "head": "Killiney - Lift out of service",
+   "text": "The lift on platform 2 is out of service. Iarnród Éireann apologise for the inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [],
    "head": "Laytown - Lift out of order",
    "text": "Lift at platform 2 is currently out of service. Iarnród Éireann Irish Rail apologise for the inconvenience caused.",
    "unread": []
@@ -2144,6 +2325,54 @@
    "causes": [],
    "head": "Park West and Cherry Orchard - Lift out of order",
    "text": "The lift on platform 2 and 3 is out of service. Iarnród Éireann Irish Rail apologise for the inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
+     "category": "technical",
+     "earlier": false,
+     "family": "origin",
+     "marker": "due to",
+     "matched": "mechanical issue",
+     "phrase": "a mechanical issue",
+     "role": "proximate"
+    }
+   ],
+   "head": "Partial CANCELLATION - Starting from platform 3. 08:20 Howth Junction and Donaghmede to Bray (Daly).",
+   "text": "Partial CANCELLATION - 08:11 Malahide to Bray (Daly) will operate Howth Junction and Donaghmede to Bray (Daly) and with reduced capacity due to a mechanical issue.  Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
+     "category": "knock_on",
+     "earlier": false,
+     "family": "consequence",
+     "marker": "due to",
+     "matched": "late arrival",
+     "phrase": "the late arrival of an incoming service",
+     "role": "proximate"
+    }
+   ],
+   "head": "Partial CANCELLATION - This service will operate  Bray (Daly) to Howth.",
+   "text": "Partial CANCELLATION - 09:24 Greystones to Howth will operate Bray (Daly) to Howth due to the late arrival of an incoming service.  Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
+     "category": "technical",
+     "earlier": false,
+     "family": "origin",
+     "marker": "due to",
+     "matched": "mechanical issue",
+     "phrase": "a mechanical issue",
+     "role": "proximate"
+    }
+   ],
+   "head": "Partial CANCELLATION - This service will operate  Clongriffin to Bray (Daly).",
+   "text": "Partial CANCELLATION - 08:11 Malahide to Bray (Daly) will operate Clongriffin to Bray (Daly) and with reduced capacity due to a mechanical issue.  Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
    "unread": []
   },
   {
@@ -2479,6 +2708,22 @@
    "unread": []
   },
   {
+   "causes": [
+    {
+     "category": "planned",
+     "earlier": false,
+     "family": "planned",
+     "marker": "due to",
+     "matched": "planned maintenance",
+     "phrase": "planned maintenance",
+     "role": "proximate"
+    }
+   ],
+   "head": "Salthill and Monkstown - Lift out of Service",
+   "text": "The Lifts on platforms 1 and 2 are currently out of service due to planned maintenance. Iarnród Éireann apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
    "causes": [],
    "head": "Seapoint - Lift Out of order",
    "text": "The lift on platform 2 is currently out of order. Iarnród Éireann Irish Rail apologise for any inconvenience caused",
@@ -2667,6 +2912,38 @@
      "earlier": false,
      "family": "origin",
      "marker": "due to",
+     "matched": "mechanical issue",
+     "phrase": "a mechanical issue",
+     "role": "proximate"
+    }
+   ],
+   "head": "Service CANCELLED",
+   "text": "14:04 Malahide to Bray (Daly) has been cancelled due to a mechanical issue. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
+     "category": "technical",
+     "earlier": false,
+     "family": "origin",
+     "marker": "due to",
+     "matched": "mechanical issue",
+     "phrase": "a mechanical issue on the train planned to operate",
+     "role": "proximate"
+    }
+   ],
+   "head": "Service CANCELLED",
+   "text": "14:35 Howth to Bray (Daly) has been cancelled due to a mechanical issue on the train planned to operate. The Leap card you use on Iarnród Éireann can be used on all TFI public transport services, including Dublin Bus and Go-Ahead Ireland. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
+     "category": "technical",
+     "earlier": false,
+     "family": "origin",
+     "marker": "due to",
      "matched": "broken down train",
      "phrase": "a broken down train",
      "role": "proximate"
@@ -2743,6 +3020,22 @@
   {
    "causes": [
     {
+     "category": "technical",
+     "earlier": false,
+     "family": "origin",
+     "marker": "due to",
+     "matched": "mechanical issue",
+     "phrase": "a mechanical issue on the train scheduled to operate",
+     "role": "proximate"
+    }
+   ],
+   "head": "Service CANCELLED",
+   "text": "19:25 Bray (Daly) to Dublin Connolly has been cancelled due to a mechanical issue on the train scheduled to operate. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
      "category": "knock_on",
      "earlier": false,
      "family": "consequence",
@@ -2754,6 +3047,22 @@
    ],
    "head": "Service CANCELLED",
    "text": "19:25 Maynooth to Dublin Connolly has been cancelled due to the late arrival of an incoming service. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
+     "category": "technical",
+     "earlier": false,
+     "family": "origin",
+     "marker": "due to",
+     "matched": "technical issue",
+     "phrase": "a technical issue on the DART scheduled to operate",
+     "role": "proximate"
+    }
+   ],
+   "head": "Service CANCELLED - Technical issue on the DART scheduled to operate.",
+   "text": "09:13 Howth to Bray (Daly) has been cancelled due to a technical issue on the DART scheduled to operate. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
    "unread": []
   },
   {
@@ -3355,6 +3664,38 @@
    "causes": [
     {
      "category": "technical",
+     "earlier": true,
+     "family": "origin",
+     "marker": "due to",
+     "matched": "broken down train",
+     "phrase": "a broken down train on the line earlier",
+     "role": "proximate"
+    }
+   ],
+   "head": "Service delayed  expected +10/15 minutes - Due to a broken down train on the line earlier.",
+   "text": "08:40 Dublin Connolly to Drogheda (MacBride) 10/15 minutes delayed due to a broken down train. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
+     "category": "technical",
+     "earlier": true,
+     "family": "origin",
+     "marker": "due to",
+     "matched": "broken down train",
+     "phrase": "a broken down train on the line earlier",
+     "role": "proximate"
+    }
+   ],
+   "head": "Service delayed +10 minutes - Due to a broken down train on the line earlier.",
+   "text": "08:52 Dublin Connolly to Drogheda (MacBride) +10 minutes delayed due to a broken down train. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
+     "category": "technical",
      "earlier": false,
      "family": "origin",
      "marker": "due to",
@@ -3397,6 +3738,38 @@
    ],
    "head": "Service delayed +10 minutes - Due to a technical issue.",
    "text": "The 06:12 Longford to Dublin Pearse is operating approximately +10 minutes behind schedule due to a technical issue. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
+     "category": "technical",
+     "earlier": true,
+     "family": "origin",
+     "marker": "due to",
+     "matched": "broken down train",
+     "phrase": "a broken down train on the line earlier",
+     "role": "proximate"
+    }
+   ],
+   "head": "Service delayed +10/15 minutes - Due to a broken down train on the line earlier.",
+   "text": "08:50 Dublin Connolly to Belfast +10/15 minutes delayed due to a broken down train. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
+     "category": "technical",
+     "earlier": false,
+     "family": "origin",
+     "marker": "due to",
+     "matched": "mechanical issue",
+     "phrase": "a mechanical issue",
+     "role": "proximate"
+    }
+   ],
+   "head": "Service delayed +12 minutes - Due to a mechanical issue.",
+   "text": "13:50 Dublin Connolly to Belfast +12 minutes delayed due to a mechanical issue. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
    "unread": []
   },
   {
@@ -3476,7 +3849,39 @@
     }
    ],
    "head": "Service delayed +15 minutes - Due to an operational issue.",
+   "text": "05:40 Sligo (MacDiarmada) to Dublin Connolly +15 minutes delayed due to an operational issue. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
+     "category": "unspecified",
+     "earlier": false,
+     "family": "unstated",
+     "marker": "due to",
+     "matched": "operational issue",
+     "phrase": "an operational issue",
+     "role": "proximate"
+    }
+   ],
+   "head": "Service delayed +15 minutes - Due to an operational issue.",
    "text": "The 14:00 Waterford (Plunkett) to Dublin Heuston is operating approximately +15 minutes behind schedule due to an operational issue. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
+     "category": "planned",
+     "earlier": false,
+     "family": "planned",
+     "marker": "due to",
+     "matched": "engineering works",
+     "phrase": "delayed delayed overnight engineering works between Limerick Junction and Charleville",
+     "role": "proximate"
+    }
+   ],
+   "head": "Service delayed +15 minutes.",
+   "text": "06:40 Limerick (Colbert) to Dublin Heuston +15 minutes delayed due to delayed delayed overnight engineering works between Limerick Junction and Charleville. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
    "unread": []
   },
   {
@@ -3514,6 +3919,22 @@
   {
    "causes": [
     {
+     "category": "incident",
+     "earlier": false,
+     "family": "origin",
+     "marker": "due to",
+     "matched": "incident",
+     "phrase": "an incident on the line",
+     "role": "proximate"
+    }
+   ],
+   "head": "Service delayed +18 minutes - Due to an incident on the line.",
+   "text": "21:05 Dublin Heuston to Portlaoise +18 minutes delayed due to an incident on the line. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
      "category": "signalling",
      "earlier": true,
      "family": "origin",
@@ -3530,6 +3951,70 @@
   {
    "causes": [
     {
+     "category": "planned",
+     "earlier": false,
+     "family": "planned",
+     "marker": "due to",
+     "matched": "engineering works",
+     "phrase": "delayed delayed overnight engineering works between Limerick Junction and Charleville",
+     "role": "proximate"
+    }
+   ],
+   "head": "Service delayed +20 minutes",
+   "text": "06:15 Cork (Kent) to Dublin Heuston +20 minutes delayed due to delayed delayed overnight engineering works between Limerick Junction and Charleville. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
+     "category": "planned",
+     "earlier": false,
+     "family": "planned",
+     "marker": "due to",
+     "matched": "engineering works",
+     "phrase": "delayed overnight engineering works between Limerick Junction and Charleville",
+     "role": "proximate"
+    }
+   ],
+   "head": "Service delayed +20 minutes",
+   "text": "06:15 Cork (Kent) to Dublin Heuston +20 minutes delayed due to delayed overnight engineering works between Limerick Junction and Charleville. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
+     "category": "incident",
+     "earlier": true,
+     "family": "origin",
+     "marker": "due to",
+     "matched": "incident",
+     "phrase": "an incident on the line earlier",
+     "role": "proximate"
+    }
+   ],
+   "head": "Service delayed +20 minutes - Due to an incident on the line earlier.",
+   "text": "18:00 Dublin Heuston to Cork (Kent) +20 minutes delayed due to an incident on the line earlier near Newbridge. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
+     "category": "incident",
+     "earlier": true,
+     "family": "origin",
+     "marker": "due to",
+     "matched": "incident",
+     "phrase": "an incident on the line earlier",
+     "role": "proximate"
+    }
+   ],
+   "head": "Service delayed +20 minutes - Due to an incident on the line earlier.",
+   "text": "19:00 Dublin Heuston to Cork (Kent) +20 minutes delayed due to an incident on the line earlier. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
      "category": "unspecified",
      "earlier": false,
      "family": "unstated",
@@ -3541,6 +4026,70 @@
    ],
    "head": "Service delayed +20 minutes - Due to an operational issue.",
    "text": "The 14:00 Waterford (Plunkett) to Dublin Heuston is operating approximately +20 minutes behind schedule due to an operational issue. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
+     "category": "planned",
+     "earlier": false,
+     "family": "planned",
+     "marker": "due to",
+     "matched": "engineering works",
+     "phrase": "delayed delayed overnight engineering works between Limerick Junction and Charleville",
+     "role": "proximate"
+    }
+   ],
+   "head": "Service delayed +20 minutes.",
+   "text": "06:40 Limerick (Colbert) to Dublin Heuston +20 minutes delayed due to delayed delayed overnight engineering works between Limerick Junction and Charleville. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
+     "category": "knock_on",
+     "earlier": false,
+     "family": "consequence",
+     "marker": "due to",
+     "matched": "late arrival",
+     "phrase": "the late arrival of an incoming service",
+     "role": "proximate"
+    }
+   ],
+   "head": "Service delayed +22 minutes - Due to the late arrival of an incoming service.",
+   "text": "07:35 Dublin Heuston to Galway (Ceannt) +22 minutes delayed due to the late arrival of an incoming service. The connection 09:15 Athlone to Westport will be held to allow for connection. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
+     "category": "knock_on",
+     "earlier": false,
+     "family": "consequence",
+     "marker": "due to",
+     "matched": "late arrival",
+     "phrase": "the late arrival of an incoming service",
+     "role": "proximate"
+    }
+   ],
+   "head": "Service delayed +22 minutes - Due to the late arrival of an incoming service.",
+   "text": "08:12 Portlaoise to Dublin Heuston +22 minutes delayed due to the late arrival of an incoming service. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
+     "category": "knock_on",
+     "earlier": false,
+     "family": "consequence",
+     "marker": "due to",
+     "matched": "late arrival",
+     "phrase": "the late arrival of an incoming service",
+     "role": "proximate"
+    }
+   ],
+   "head": "Service delayed +23 minutes - Due to the late arrival of an incoming service.",
+   "text": "10:10 Galway (Ceannt) to Dublin Heuston +23 minutes delayed due to the late arrival of an incoming service. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
    "unread": []
   },
   {
@@ -3594,6 +4143,38 @@
   {
    "causes": [
     {
+     "category": "incident",
+     "earlier": true,
+     "family": "origin",
+     "marker": "due to",
+     "matched": "incident",
+     "phrase": "an incident on the line earlier",
+     "role": "proximate"
+    }
+   ],
+   "head": "Service delayed +25 minutes - Due to an incident on the line earlier.",
+   "text": "17:35 Dublin Heuston to Waterford (Plunkett) +25 minutes delayed due to an incident on the line earlier. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
+     "category": "incident",
+     "earlier": true,
+     "family": "origin",
+     "marker": "due to",
+     "matched": "vulnerable person",
+     "phrase": "report of a vulnerable person near/on the line earlier",
+     "role": "proximate"
+    }
+   ],
+   "head": "Service delayed +25 minutes - Due to report of a vulnerable person near/on the line earlier.",
+   "text": "17:30 Dublin Heuston to Galway (Ceannt) +25 minutes delayed due to report of a vulnerable person near/on the line earlier. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
      "category": "technical",
      "earlier": false,
      "family": "origin",
@@ -3633,6 +4214,38 @@
      "matched": "late arrival",
      "phrase": "the late arrival of an incoming service",
      "role": "proximate"
+    }
+   ],
+   "head": "Service delayed +27 minutes - Due to the late arrival of an incoming service.",
+   "text": "19:25 Galway (Ceannt) to Dublin Heuston +27 minutes delayed due to the late arrival of an incoming service. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
+     "category": "unspecified",
+     "earlier": false,
+     "family": "unstated",
+     "marker": "due to",
+     "matched": "operational issue",
+     "phrase": "an operational issue",
+     "role": "proximate"
+    }
+   ],
+   "head": "Service delayed +28 minutes - Due to an operational issue.",
+   "text": "09:25 Dublin Heuston to Cork (Kent) +28 minutes delayed due to an operational issue. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
+     "category": "knock_on",
+     "earlier": false,
+     "family": "consequence",
+     "marker": "due to",
+     "matched": "late arrival",
+     "phrase": "the late arrival of an incoming service",
+     "role": "proximate"
     },
     {
      "category": "incident",
@@ -3646,6 +4259,38 @@
    ],
    "head": "Service delayed +28 minutes - Due to the late arrival of an incoming service.",
    "text": "11:50 Dublin Connolly to Belfast departed +28 minutes delayed due to the late arrival of an incoming service following an incident on the line. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
+     "category": "incident",
+     "earlier": true,
+     "family": "origin",
+     "marker": "due to",
+     "matched": "incident",
+     "phrase": "an incident on the line earlier",
+     "role": "proximate"
+    }
+   ],
+   "head": "Service delayed +30 minutes - Due to an incident on the line earlier.",
+   "text": "20:33 Portlaoise to Dublin Heuston +30 minutes delayed due to an incident on the line earlier. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
+     "category": "incident",
+     "earlier": true,
+     "family": "origin",
+     "marker": "due to",
+     "matched": "vulnerable person",
+     "phrase": "report of a vulnerable person near/on the line earlier",
+     "role": "proximate"
+    }
+   ],
+   "head": "Service delayed +30 minutes - Due to report of a vulnerable person near/on the line earlier.",
+   "text": "17:25 Dublin Heuston to Limerick (Colbert) +30 minutes delayed due to report of a vulnerable person near/on the line earlier. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
    "unread": []
   },
   {
@@ -3667,6 +4312,22 @@
   {
    "causes": [
     {
+     "category": "incident",
+     "earlier": true,
+     "family": "origin",
+     "marker": "due to",
+     "matched": "vulnerable person",
+     "phrase": "report of a vulnerable person near/on the line earlier",
+     "role": "proximate"
+    }
+   ],
+   "head": "Service delayed +35 minutes - Due to report of a vulnerable person near/on the line earlier.",
+   "text": "17:30 Dublin Heuston to Galway (Ceannt) +35 minutes delayed due to report of a vulnerable person near/on the line earlier. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
      "category": "knock_on",
      "earlier": false,
      "family": "consequence",
@@ -3683,6 +4344,54 @@
   {
    "causes": [
     {
+     "category": "passenger",
+     "earlier": false,
+     "family": "origin",
+     "marker": "due to",
+     "matched": "ill passenger",
+     "phrase": "an ill passenger onboard",
+     "role": "proximate"
+    }
+   ],
+   "head": "Service delayed +45 minutes - Due to an ill passenger onboard.",
+   "text": "20:20 Dublin Heuston to Waterford (Plunkett) +45 minutes delayed due to an ill passenger onboard. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
+     "category": "incident",
+     "earlier": true,
+     "family": "origin",
+     "marker": "due to",
+     "matched": "vulnerable person",
+     "phrase": "report of a vulnerable person near/on the line earlier",
+     "role": "proximate"
+    }
+   ],
+   "head": "Service delayed +45 minutes - Due to report of a vulnerable person near/on the line earlier.",
+   "text": "17:00 Dublin Heuston to Cork (Kent) +45 minutes delayed due to report of a vulnerable person near/on the line earlier. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
+     "category": "incident",
+     "earlier": true,
+     "family": "origin",
+     "marker": "due to",
+     "matched": "vulnerable person",
+     "phrase": "report of a vulnerable person near/on the line earlier",
+     "role": "proximate"
+    }
+   ],
+   "head": "Service delayed +45 minutes - Due to report of a vulnerable person near/on the line earlier.",
+   "text": "17:05 Dublin Heuston to Tralee (Casement) +45 minutes delayed due to report of a vulnerable person near/on the line earlier near Kildare. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
      "category": "congestion",
      "earlier": false,
      "family": "consequence",
@@ -3694,6 +4403,86 @@
    ],
    "head": "Service delayed +5/10 minutes - Due to congestion on the line.",
    "text": "07:54 Dublin Pearse to Drogheda (MacBride) expected +5/10 minutes delayed due to congestion on the line. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
+     "category": "incident",
+     "earlier": true,
+     "family": "origin",
+     "marker": "due to",
+     "matched": "vulnerable person",
+     "phrase": "report of a vulnerable person near/on the line earlier",
+     "role": "proximate"
+    }
+   ],
+   "head": "Service delayed +50 minutes - Due to report of a vulnerable person near/on the line earlier.",
+   "text": "16:40 Dublin Heuston to Waterford (Plunkett) +50 minutes delayed due to report of a vulnerable person near/on the line earlier near Newbridge. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
+     "category": "incident",
+     "earlier": true,
+     "family": "origin",
+     "marker": "due to",
+     "matched": "incident",
+     "phrase": "an incident on the line earlier",
+     "role": "proximate"
+    }
+   ],
+   "head": "Service delayed +60 minutes - Due to an incident on the line earlier.",
+   "text": "16:25 Dublin Heuston to Limerick (Colbert) +60 minutes delayed due to an incident on the line earlier. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
+     "category": "incident",
+     "earlier": true,
+     "family": "origin",
+     "marker": "due to",
+     "matched": "vulnerable person",
+     "phrase": "report of a vulnerable person near/on the line earlier",
+     "role": "proximate"
+    }
+   ],
+   "head": "Service delayed +60 minutes - Due to report of a vulnerable person near/on the line earlier.",
+   "text": "16:20 Dublin Heuston to Portlaoise +60 minutes delayed due to report of a vulnerable person near/on the line earlier. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
+     "category": "incident",
+     "earlier": true,
+     "family": "origin",
+     "marker": "due to",
+     "matched": "vulnerable person",
+     "phrase": "report of a vulnerable person near/on the line earlier",
+     "role": "proximate"
+    }
+   ],
+   "head": "Service delayed +60 minutes - Due to report of a vulnerable person near/on the line earlier.",
+   "text": "16:30 Dublin Heuston to Galway (Ceannt) +60 minutes delayed due to report of a vulnerable person near/on the line earlier. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
+     "category": "incident",
+     "earlier": true,
+     "family": "origin",
+     "marker": "due to",
+     "matched": "vulnerable person",
+     "phrase": "report of a vulnerable person near/on the line earlier",
+     "role": "proximate"
+    }
+   ],
+   "head": "Service delayed +65 minutes - Due to report of a vulnerable person near/on the line earlier.",
+   "text": "16:25 Portlaoise to Dublin Heuston +65 minutes delayed due to report of a vulnerable person near/on the line. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
    "unread": []
   },
   {
@@ -3806,6 +4595,38 @@
    ],
    "head": "Service delayed 13 minutes - Due to congestion on the line.",
    "text": "The 07:05 Drogheda (MacBride) to Bray (Daly) is operating approximately 13 minutes behind schedule due to congestion on the line. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
+     "category": "technical",
+     "earlier": false,
+     "family": "origin",
+     "marker": "due to",
+     "matched": "mechanical issue",
+     "phrase": "a mechanical issue",
+     "role": "proximate"
+    }
+   ],
+   "head": "Service delayed 14 minutes - Due to a mechanical issue.",
+   "text": "16:40 Dublin Heuston to Waterford (Plunkett) 14 minutes delayed due to a mechanical issue. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
+     "category": "passenger",
+     "earlier": false,
+     "family": "origin",
+     "marker": "due to",
+     "matched": "ill passenger",
+     "phrase": "an ill passenger onboard",
+     "role": "proximate"
+    }
+   ],
+   "head": "Service delayed 14 minutes - Due to an ill passenger onboard.",
+   "text": "16:40 Dublin Heuston to Waterford (Plunkett) 14 minutes delayed due to an ill passenger onboard. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
    "unread": []
   },
   {
@@ -3966,6 +4787,22 @@
    ],
    "head": "Service delayed 38 minutes - Due to an ill passenger onboard.",
    "text": "The 15:09 Grand Canal Dock to Maynooth is operating approximately 38 minutes behind schedule due to an ill passenger onboard. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
+     "category": "technical",
+     "earlier": false,
+     "family": "origin",
+     "marker": "due to",
+     "matched": "mechanical issue",
+     "phrase": "a mechanical issue",
+     "role": "proximate"
+    }
+   ],
+   "head": "Service delayed 40 minutes - Due to a mechanical issue.",
+   "text": "18:25 Dublin Heuston to Portlaoise 40 minutes delayed due to a mechanical issue. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
    "unread": []
   },
   {
@@ -4174,6 +5011,22 @@
      "role": "proximate"
     }
    ],
+   "head": "Service expected +10/15 minutes delayed departing due to the late arrival of an incoming service.",
+   "text": "Due to the late arrival of an incoming service, the 10:00 Howth to Greystones is expected to depart Howth +10/15 minutes delayed. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
+     "category": "knock_on",
+     "earlier": false,
+     "family": "consequence",
+     "marker": "due to",
+     "matched": "late arrival",
+     "phrase": "the late arrival of an incoming service",
+     "role": "proximate"
+    }
+   ],
    "head": "Service expected +15 minutes delayed departing due to the late arrival of an incoming service.",
    "text": "Due to the late arrival of an incoming service, the 19:39 Maynooth to Grand Canal Dock is expected to depart Maynooth +15 minutes behind schedule. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
    "unread": []
@@ -4192,6 +5045,38 @@
    ],
    "head": "Service expected +20 minutes delayed departing due to the late arrival of an incoming service.",
    "text": "Due to the late arrival of an incoming service, the 18:45 Dublin Connolly to Maynooth is expected to depart Dublin Connolly +20 minutes behind schedule. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
+     "category": "technical",
+     "earlier": false,
+     "family": "origin",
+     "marker": "due to",
+     "matched": "mechanical issue",
+     "phrase": "a mechanical issue on the train",
+     "role": "proximate"
+    }
+   ],
+   "head": "Service expected +25 minutes - Due to a mechanical issue on the train.",
+   "text": "18:00 Belfast to Dublin Connolly +25 minutes delayed due to a mechanical issue. A replacement train will operate this service with reduced capacity. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
+     "category": "technical",
+     "earlier": false,
+     "family": "origin",
+     "marker": "due to",
+     "matched": "mechanical issue",
+     "phrase": "a mechanical issue on the train",
+     "role": "proximate"
+    }
+   ],
+   "head": "Service expected +25 minutes - Due to a mechanical issue on the train.",
+   "text": "18:00 Belfast to Dublin Connolly expected +25 minutes delayed due to a mechanical issue. A replacement train will operate this service with reduced capacity. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
    "unread": []
   },
   {
@@ -4256,6 +5141,22 @@
    ],
    "head": "Service expected +60/65 minutes delayed departing due to a mechanical issue.",
    "text": "Due to a mechanical issue, the 16:50 Dublin Connolly to Belfast is expected to depart Dublin Connolly +60/65 minutes behind schedule. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
+     "category": "technical",
+     "earlier": false,
+     "family": "origin",
+     "marker": "due to",
+     "matched": "mechanical issue",
+     "phrase": "a mechanical issue",
+     "role": "proximate"
+    }
+   ],
+   "head": "Service expected 25 minutes delayed departing due to a mechanical issue.",
+   "text": "Due to a mechanical issue, the 18:25 Dublin Heuston to Portlaoise is expected to depart Dublin Heuston 25 minutes delayed. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
    "unread": []
   },
   {
@@ -4377,6 +5278,38 @@
    ],
    "head": "Services Suspended due to a vehicle striking Serpentine Level Crossing",
    "text": "Services are currently suspended between Lansdowne Rd station and Sandymount station until further notice due to a vehicle striking Serpentine level crossing. Staff are en route. Update to follow.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
+     "category": "incident",
+     "earlier": true,
+     "family": "origin",
+     "marker": "due to",
+     "matched": "vulnerable person",
+     "phrase": "a report of a vulnerable person near/on the line earlier",
+     "role": "proximate"
+    }
+   ],
+   "head": "Services have resume between Dublin Heuston and Portarlington +60 minute delays.",
+   "text": "This line between Heuston and Portarlington has reopened. The line was closed due to a report of a vulnerable person near/on the line earlier. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
+     "category": "incident",
+     "earlier": true,
+     "family": "origin",
+     "marker": "due to",
+     "matched": "vulnerable person",
+     "phrase": "a report of a vulnerable person near/on the line earlier",
+     "role": "proximate"
+    }
+   ],
+   "head": "Services have resume between Dublin Heuston and Portarlington 20-40 minute delays expected.",
+   "text": "This line between Heuston and Portarlington has reopened. The line was closed due to a report of a vulnerable person near/on the line earlier. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
    "unread": []
   },
   {
@@ -4591,6 +5524,22 @@
   {
    "causes": [
     {
+     "category": "planned",
+     "earlier": false,
+     "family": "planned",
+     "marker": "due to",
+     "matched": "engineering works",
+     "phrase": "delayed overnight engineering works",
+     "role": "proximate"
+    }
+   ],
+   "head": "Services suspended between Greystones and Bray (Daly).",
+   "text": "Due to delayed overnight engineering works. Services are suspended between Greystones and Bray (Daly). Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
      "category": "vehicle_strike",
      "earlier": false,
      "family": "origin",
@@ -4703,6 +5652,22 @@
   {
    "causes": [
     {
+     "category": "incident",
+     "earlier": false,
+     "family": "origin",
+     "marker": "due to",
+     "matched": "vulnerable person",
+     "phrase": "a report of a vulnerable person near/on the line",
+     "role": "proximate"
+    }
+   ],
+   "head": "Services suspended between Sallins and Newbridge.",
+   "text": "Due to a report of a vulnerable person near/on the line, services are suspended between Sallins and Newbridge. Trains are being held at stations along the route between Heuston and Sallins. Update to follow. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
      "category": "level_crossing",
      "earlier": false,
      "family": "origin",
@@ -4714,6 +5679,22 @@
    ],
    "head": "Services suspended through Sutton Station",
    "text": "Due to a Level Crossing issue, no services are operating through Sutton Station at the moment. Staff are en route to the site. Update to follow. Apologies for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
+     "category": "planned",
+     "earlier": false,
+     "family": "planned",
+     "marker": "due to",
+     "matched": "engineering works",
+     "phrase": "delayed overnight engineering works",
+     "role": "proximate"
+    }
+   ],
+   "head": "Services to resuming between Greystones and Bray (Daly) at 07:00hrs.",
+   "text": "Due to delayed overnight engineering works. Services were suspended between Greystones and Bray (Daly). Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
    "unread": []
   },
   {
@@ -4864,6 +5845,28 @@
   },
   {
    "causes": [],
+   "head": "Start from Bray (Daly).",
+   "text": "06:54 Greystones to Malahide will start from Bray (Daly). Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
+     "category": "planned",
+     "earlier": false,
+     "family": "planned",
+     "marker": "due to",
+     "matched": "engineering works",
+     "phrase": "delayed overnight engineering works",
+     "role": "proximate"
+    }
+   ],
+   "head": "Start from Bray (Daly).",
+   "text": "Due to delayed overnight engineering works, the 06:24 Greystones to Howth will start from Bray (Daly). Leapcard valid on TFI operators for travel  Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [],
    "head": "Start from Connolly Platform 7",
    "text": "17:59 Grand Canal Dock to Dundalk will commence from Connolly Platform 7 this evening. <br>Passengers are advised to board the next Northbound DART from Grand Canal Dock to arrive at Connolly. Apologies for any inconvenience caused.<br>",
    "unread": []
@@ -4949,9 +5952,41 @@
    "unread": []
   },
   {
+   "causes": [
+    {
+     "category": "technical",
+     "earlier": false,
+     "family": "origin",
+     "marker": "due to",
+     "matched": "mechanical issue",
+     "phrase": "a mechanical issue",
+     "role": "proximate"
+    }
+   ],
+   "head": "Start from Dublin Connolly.",
+   "text": "Due to a mechanical issue, the 15:05 Bray (Daly) to Malahide will start from Dublin Connolly. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
    "causes": [],
    "head": "Start from Dublin Connolly.",
    "text": "The 15:19 service from Grand Canal Dock to Drogheda (MacBride) will start from Dublin Connolly. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
+     "category": "knock_on",
+     "earlier": false,
+     "family": "consequence",
+     "marker": "due to",
+     "matched": "late arrival",
+     "phrase": "the late arrival of an incoming service",
+     "role": "proximate"
+    }
+   ],
+   "head": "Start from Howth Junction and Donaghmede.",
+   "text": "Due to the late arrival of an incoming service, the 13:55 Howth to Greystones will start from Howth Junction and Donaghmede. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
    "unread": []
   },
   {
@@ -5109,6 +6144,12 @@
    "causes": [],
    "head": "Station - Lift out of order",
    "text": "The lift both platforms are currently out of service. Iarnród Éireann apologise for the inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [],
+   "head": "Station - Lift out of order",
+   "text": "The lift on platform 1 is currently out of service. Iarnród Éireann apologise for the inconvenience caused.",
    "unread": []
   },
   {
@@ -5364,6 +6405,22 @@
    "unread": []
   },
   {
+   "causes": [
+    {
+     "category": "technical",
+     "earlier": false,
+     "family": "origin",
+     "marker": "due to",
+     "matched": "technical issue",
+     "phrase": "a technical issue",
+     "role": "proximate"
+    }
+   ],
+   "head": "Terminating at Connolly",
+   "text": "12:46 Howth/Dun Loaghaire will terminate at Connolly due to a technical issue.",
+   "unread": []
+  },
+  {
    "causes": [],
    "head": "Terminating at Connolly",
    "text": "16:43 Drogheda to Grand Canal Dock will terminate at Connolly this evening. Apologies for any inconvenience caused.",
@@ -5606,6 +6663,22 @@
   {
    "causes": [
     {
+     "category": "technical",
+     "earlier": true,
+     "family": "origin",
+     "marker": "due to",
+     "matched": "broken down train",
+     "phrase": "a broken down train earlier",
+     "role": "proximate"
+    }
+   ],
+   "head": "This service will not stop between Kilbarrack/Dublin Connolly.",
+   "text": "14:24 Malahide to Greystones will not stop between Kilbarrack/Dublin Connolly. This service is delayed due to a broken down train earlier and will run nonstop between Kilbarrack and Dublin Connolly to aid service recovery and ease congestion on the network.  Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
      "category": "unspecified",
      "earlier": false,
      "family": "unstated",
@@ -5644,6 +6717,22 @@
   {
    "causes": [
     {
+     "category": "congestion",
+     "earlier": false,
+     "family": "consequence",
+     "marker": "due to",
+     "matched": "congestion",
+     "phrase": "congestion on the line",
+     "role": "proximate"
+    }
+   ],
+   "head": "This service will terminate at Bray (Daly) due to congestion on the line.",
+   "text": "Due to congestion on the line, the 07:51 Malahide to Greystones  will terminate at Bray (Daly). Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
      "category": "technical",
      "earlier": false,
      "family": "origin",
@@ -5655,6 +6744,22 @@
    ],
    "head": "This service will terminate at Dublin Connolly due to a mechanical issue.",
    "text": "Customers are advised that due to a mechanical issue, the 11:35 service from Bray (Daly) to Howth will terminate at Dublin Connolly. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
+     "category": "technical",
+     "earlier": false,
+     "family": "origin",
+     "marker": "due to",
+     "matched": "mechanical issue",
+     "phrase": "a mechanical issue",
+     "role": "proximate"
+    }
+   ],
+   "head": "This service will terminate at Dublin Connolly due to a mechanical issue.",
+   "text": "Due to a mechanical issue, the 13:15 Howth to Bray (Daly) will terminate at Dublin Connolly. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
    "unread": []
   },
   {
@@ -5719,6 +6824,22 @@
    ],
    "head": "This service will terminate at Dublin Connolly due to a technical issue.",
    "text": "Customers are advised that due to a technical issue, the 10:55 service from Bray (Daly) to Howth will terminate at Dublin Connolly. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
+     "category": "technical",
+     "earlier": false,
+     "family": "origin",
+     "marker": "due to",
+     "matched": "technical issue",
+     "phrase": "a technical issue",
+     "role": "proximate"
+    }
+   ],
+   "head": "This service will terminate at Dublin Connolly due to a technical issue.",
+   "text": "Due to a technical issue, the 07:45 Bray (Daly) to Howth  will terminate at Dublin Connolly. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
    "unread": []
   },
   {
@@ -5918,6 +7039,22 @@
   {
    "causes": [
     {
+     "category": "passenger",
+     "earlier": false,
+     "family": "origin",
+     "marker": "",
+     "matched": "ambulance",
+     "phrase": "Train held at Kishoge, awaiting an ambulance",
+     "role": "proximate"
+    }
+   ],
+   "head": "Train held at Kishoge, awaiting an ambulance.",
+   "text": "20:20 Dublin Heuston to Waterford (Plunkett) is delayed, awaiting an ambulance at Kishoge. Update to follow.  Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
      "category": "level_crossing",
      "earlier": false,
      "family": "origin",
@@ -6063,8 +7200,30 @@
   },
   {
    "causes": [],
+   "head": "Waterford (Plunkett) CAR PARK FULL.",
+   "text": "Waterford (Plunkett) Station car park was reported full at 10:30hrs. Alternative parking is available on merchant's quay. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
+   "unread": []
+  },
+  {
+   "causes": [],
    "head": "Will Serve Newbridge",
    "text": "17.37 Heuston/Waterford will serve Newbridge this evening as services remain suspended between Portarlington and Tullamore.",
+   "unread": []
+  },
+  {
+   "causes": [
+    {
+     "category": "technical",
+     "earlier": true,
+     "family": "origin",
+     "marker": "due to",
+     "matched": "broken down train",
+     "phrase": "a broken down train earlier",
+     "role": "proximate"
+    }
+   ],
+   "head": "Will call at all stops between Malahide and Connolly.",
+   "text": "Due to a broken down train earlier, the 13:43 Drogheda (MacBride) to Dublin Connolly will call additionally at all stops between Malahide and Conolly. Iarnród Éireann Irish Rail apologise for any inconvenience caused.",
    "unread": []
   },
   {
