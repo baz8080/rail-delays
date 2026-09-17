@@ -122,10 +122,13 @@ direction*: say less than the notice, never more.
 **It does not decode a euphemism.** "An incident on the line" is 41 causes and
 says nothing about what happened. "A tragic incident on the line being attended
 by emergency services" is how Irish Rail writes a death on the railway, and the
-reader's label for it is "Incident on the line, not specified". Turning that into
-a word the notice does not use would be an inference on the most sensitive thing
-this feed carries, published on an archive page with no way to correct it. The
-category quotes and the site is expected to print the quote.
+reader's label for it is "Incident on the line". Turning that into a word the
+notice does not use would be an inference on the most sensitive thing this feed
+carries, published on an archive page with no way to correct it. The category
+never gets more specific than that phrase on any of the 41 causes it reads (a
+place or a time sometimes, never a kind of incident), and quotes the notice's
+own words beside the label so the site is expected to print the quote rather
+than the label alone.
 
 **It does not turn a non-answer into an answer.** "An operational issue" is 27
 causes and means the railway is not saying. It is its own category, family
@@ -208,5 +211,44 @@ wrong by roughly the number of trains per fault.
 subject: the feed names a service only when something is wrong with it, there is
 no roll of scheduled services, so counts and minutes are publishable and "% of
 trains delayed" and "on-time performance" are not. The prototype said this in its
-footer and it should survive into the site's own words, the way
-`notes/site.md` § *The grade is availability* did.
+footer; the site's own words carried it for a while too, until a live review on
+2026-09-17 dropped the whole disclosure as duplicating this file (`notes/site.md`
+§ *"What this cannot tell you" left the page too*). The decision is unchanged -
+nothing published is a percentage - only the on-page explanation moved here.
+
+## A euphemism found after the count above was taken
+
+The 41-`incident` count in this module's own docstring is dated 2026-09-11, and
+a live review six days later, reading the corpus through 2026-09-17, found a
+second euphemism the same principle already covered: **"a report of a vulnerable
+person near/on the line."** 15 clauses across the growing corpus, all introduced
+by "due to" and all previously falling through to no cause read at all, because
+no pattern named this specific phrase - not "unspecified" (which would at least
+have said the feed stated something), but genuinely unread, the way `unread`
+lists it: a marker found, a clause isolated, nothing in `PATTERNS` claiming it.
+
+This is Irish Rail's phrasing for a welfare concern near the line, the way "a
+tragic incident ... being attended by emergency services" is its phrasing for a
+death. Both are the railway declining to say what happened while still saying
+something happened, which is exactly what `incident` exists to hold without
+decoding it further. Added to `INCIDENT`'s pattern rather than given its own
+category: a new category would be deciding what the phrase means, and folding it
+into the one category built for "says something is wrong, refuses to say what"
+decides nothing the phrase does not already say itself.
+
+**Found alongside it, and left alone:** "a points issue" (2 clauses -
+'a points issue in Connolly', 'a points issue at Platform 5'). A real, specific
+infrastructure fault - failed track-switching equipment - and unlike the
+vulnerable-person wording, decoding it would not be euphemism-preservation, it
+would be a plain new category. Two clauses is not the evidence this file asks
+for anywhere else (`unspecified` needed 27, `level_crossing` needed 6, the
+thinnest category here); revisit if it recurs, the way "reduced capacity" was
+revisited at 130.
+
+**Everything else that reads as no cause at all is exactly that.** Sampling the
+86 notices `unread` lists as stating no cause at all: lift and escalator
+outages (already the sibling site's, not read as failures to name a cause
+here), route changes ("will terminate at Connolly", "starting from Bray
+platform 7"), bus transfers, and live test alerts. None of them introduce a
+clause with "due to" or its siblings; they are not a hidden cause missing a
+pattern, they are notices that were never about a cause.

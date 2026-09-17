@@ -1,24 +1,18 @@
 /* This site's own rules, inlined after statusui's base.css. */
 
 /* day cells, banded by how many disruptions were first listed that day: 0 none,
-   1 one to three, 2 four to eight, 3 nine to sixteen, 4 seventeen or more,
-   8 no data. `render.BANDS` holds the cuts and the reason they are those. A
-   count, not a severity: the feed carries no magnitude, and a busy day is not a
-   worse day for any one train. */
+   1 one to three, 2 four to nine, 3 ten or more, 8 no data, 9 still to come.
+   `render.BANDS` holds the cuts and the reason they are those. A count, not a
+   severity: the feed carries no magnitude, and a busy day is not a worse day
+   for any one train. `--fair` is skipped: next to `--good` at this width the
+   two read as one colour. */
 .bar i.b0, .legend i.b0 { background: var(--good); }
-.bar i.b1, .legend i.b1 { background: var(--fair); }
-.bar i.b2, .legend i.b2 { background: var(--warning); }
-.bar i.b3, .legend i.b3 { background: var(--serious); }
-.bar i.b4, .legend i.b4 { background: var(--critical); }
-.bar i.b8, .legend i.b8 { background: var(--cell-empty); }
+.bar i.b1, .legend i.b1 { background: var(--warning); }
+.bar i.b2, .legend i.b2 { background: var(--serious); }
+.bar i.b3, .legend i.b3 { background: var(--critical); }
+.bar i.b8, .bar i.b9, .legend i.b8 { background: var(--cell-empty); }
 
 .bar { height: 22px; }
-
-.stale {
-  margin: -8px 0 16px; padding: 9px 14px; border-radius: 8px; font-size: 13px;
-  background: color-mix(in srgb, var(--warning) 14%, transparent);
-  border: 1px solid color-mix(in srgb, var(--warning) 40%, transparent);
-}
 
 .months a {
   color: var(--ink-2); font-size: 13.5px; padding: 5px 12px; border-radius: 6px;
@@ -26,6 +20,19 @@
 }
 .months a:hover, .months a:focus { background: var(--grid); color: var(--ink); }
 .months a.on { background: var(--grid); color: var(--ink); font-weight: 600; }
+
+.pager {
+  display: flex; align-items: center; justify-content: center; gap: 14px;
+  padding-top: 14px; margin-top: 4px; border-top: 1px solid var(--border);
+}
+.pager button {
+  font: inherit; font-size: 13.5px; color: var(--ink-2); background: none;
+  border: 1px solid var(--border); border-radius: 6px; padding: 5px 12px;
+  cursor: pointer;
+}
+.pager button:hover:not(:disabled), .pager button:focus-visible { background: var(--grid); color: var(--ink); }
+.pager button:disabled { opacity: 0.4; cursor: default; }
+.pagenum { font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
 
 /* the ranked origins: name, proportional bar, count */
 .rank { display: grid; grid-template-columns: 1fr 120px 34px; gap: 12px; align-items: center; padding: 7px 0; }
@@ -52,12 +59,10 @@
 .chip-planned { background: color-mix(in srgb, var(--maint) 15%, transparent); color: var(--maint); }
 .chip-unstated, .chip-none { background: var(--grid); color: var(--muted); }
 
-.case .top { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
-.case .when { color: var(--muted); font-size: 12.5px; margin-left: auto; font-variant-numeric: tabular-nums; }
-.case .min { font-weight: 650; font-size: 13px; }
-.case .sum { font-weight: 600; font-size: 14px; margin-top: 5px; }
+/* .where, .when and .sum are base.css's; only the notice's own words are this
+   site's, and the head is set apart from the body because Irish Rail writes the
+   two separately and the body is not always a superset of the head. */
 .case .txt { color: var(--ink-2); font-size: 12.5px; margin-top: 3px; }
 .case .txt.head { color: var(--muted); font-style: italic; }
-.case .tl { margin-top: 6px; font-size: 12px; color: var(--muted); }
 
 .quiet { color: var(--muted); font-size: 13px; padding: 9px 4px; }

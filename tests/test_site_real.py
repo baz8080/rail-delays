@@ -69,7 +69,6 @@ class TheRealCorpus(unittest.TestCase):
         for disruption in self.corpus.disruptions:
             for cause in disruption.causes:
                 self.assertIn(cause.category, CATEGORIES)
-                self.assertIn(cause.family, render.FAMILY_LABEL)
 
     def test_the_day_bands_still_spread_the_month(self):
         # Bands cut from the corpus in September 2026. If a later month puts

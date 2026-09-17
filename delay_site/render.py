@@ -19,8 +19,7 @@ from pathlib import Path
 
 import statusui
 
-from delay_cause import CONSEQUENCE, LABEL, ORIGIN, PROXIMATE, UNSTATED
-from delay_cause.model import PLANNED_FAMILY
+from delay_cause import CONSEQUENCE, LABEL, PROXIMATE, UNSTATED
 from delay_cause.text import readable
 
 from . import model
@@ -31,41 +30,33 @@ TEMPLATES = Path(__file__).parent
 SITE_HTML = TEMPLATES / "site.html"
 SITE_CSS = TEMPLATES / "site.css"
 
-# What a reader downloads before touching anything. One month of the archive,
-# and it has to stay that way: the site is meant to run for years.
+# The site is meant to run for years, and the archive only grows.
 BUDGET_BYTES = 500 * 1024
 
-# Day-cell codes, by how many disruptions were first listed that day. Bands
-# rather than a count: the bar is 31 cells wide and a reader is looking for the
-# bad days, not reading numbers off it. The caption carries the number.
-#
-# The cuts come from the corpus and not from round numbers. Over the 31 days to
-# 2026-09-11 the daily count runs 1 to 25 with a median of 6, so a bar banded at
-# tens would have been one colour for almost every day and would have said
-# nothing. These four bands split those 31 days roughly evenly.
-BANDS = ((1, "0"), (4, "1"), (9, "2"), (17, "3"))
-OVER_BAND = "4"
+PAGE_SIZE = 10
+
+# Corpus-derived cuts (9 days at 1-3, 14 at 4-9, 12 at 10+). Open-ended top
+# band: nothing has reached 30, so "30+" would be a legend entry that never paints.
+BANDS = ((1, "0"), (4, "1"), (10, "2"))
+OVER_BAND = "3"
 NO_DATA = "8"
+FUTURE = "9"
 
 BAND_LABEL = {
-    "0": "nothing listed",
-    "1": "1 to 3 listed",
-    "2": "4 to 8 listed",
-    "3": "9 to 16 listed",
-    OVER_BAND: "17 or more listed",
+    "0": "nothing",
+    "1": "1 to 3",
+    "2": "4 to 9",
+    OVER_BAND: "10 or more",
     NO_DATA: "no data",
 }
 
-# What a family means in the page's own words. `origin` is deliberately not
-# called "cause": the consequence families are causes too, in the sense that the
-# notice names them, and the distinction this draws is whether the thing named
-# is a fault or another delay.
-FAMILY_LABEL = {
-    ORIGIN: "something went wrong",
-    CONSEQUENCE: "knock-on from another delay",
-    PLANNED_FAMILY: "planned works",
-    UNSTATED: "no cause given",
+# NO_DATA names the collector, not "data", so it doesn't echo "nothing
+# listed" two cells over.
+EMPTY_LABEL = {
+    NO_DATA: "the collector missed this day",
+    FUTURE: "still to come",
 }
+
 
 month_label = statusui.month_label
 
@@ -93,30 +84,21 @@ def _short(when):
 
 
 def day_caption(row):
-    """What a day cell says. The breakdown may add to more than the total.
-
-    A disruption naming a fault and the knock-on it caused counts in both
-    families, so the parts are introduced as what the notices named rather than
-    as a partition of the day.
-    """
+    """A plain count, not a family breakdown - a fault and its own knock-on
+    would count in both and could say more than the total."""
     counts = row["counts"]
     if counts is None:
-        return BAND_LABEL[NO_DATA]
+        return EMPTY_LABEL[FUTURE if row.get("future") else NO_DATA]
     total = row["total"]
     if not total:
         return "nothing listed"
-    parts = [
-        f"{count} {FAMILY_LABEL[family]}" if family else f"{count} named no cause at all"
-        for family, count in sorted(counts.items(), key=lambda kv: (-kv[1], str(kv[0])))
-    ]
-    return f"{total} listed, naming " + ", ".join(parts)
+    return f"{total} disruption" + ("" if total == 1 else "s")
 
 
 def day_bar(rows):
-    """The month's day cells, with the family breakdown in each caption."""
     cells = []
     for row in rows:
-        code = band(row["total"])
+        code = FUTURE if row.get("future") else band(row["total"])
         cap = f"{statusui.fmt_day(row['day'])}: {day_caption(row)}"
         cells.append(f'<i class="b{code}" data-cap="{_esc(cap)}"></i>')
     return "".join(cells)
@@ -125,35 +107,33 @@ def day_bar(rows):
 def legend():
     return "".join(
         f'<span><i class="b{code}"></i>{_esc(BAND_LABEL[code])}</span>'
-        for code in ("0", "1", "2", "3", OVER_BAND, NO_DATA)
+        for code in ("0", "1", "2", OVER_BAND, NO_DATA)
     )
 
 
 def tiles(disruptions):
+    """The fourth counts disruptions naming no cause, not the month's
+    most-named fault (that's the ranked panel below). None of the four
+    partition the month - a fault and its own knock-on count in both the
+    second and third."""
     named = sum(1 for d in disruptions if d.origins)
     knock_on = sum(1 for d in disruptions if CONSEQUENCE in d.families)
-    counted = Counter(c.category for d in disruptions for c in d.origins)
-    top = counted.most_common(1)
+    silent = sum(1 for d in disruptions if not (set(d.families) - {UNSTATED}))
     values = [
-        (str(len(disruptions)), "disruptions listed", False),
-        (str(named), "named something that went wrong", False),
-        (str(knock_on), "blamed another delay", False),
-        (
-            LABEL[top[0][0]] if top else "Nothing",
-            f"most named ({top[0][1]} of them)" if top else "no fault named this month",
-            True,
-        ),
+        (len(disruptions), "disruptions listed"),
+        (named, "named a cause"),
+        (knock_on, "blamed congestion or an earlier service"),
+        (silent, "named no cause"),
     ]
-    cards = "".join(
-        f'<div class="tile"><div class="v{" txt" if is_text else ""}">{_esc(value)}</div>'
+    return "".join(
+        f'<div class="tile"><div class="v">{value}</div>'
         f'<div class="k">{_esc(key)}</div></div>'
-        for value, key, is_text in values
+        for value, key in values
     )
-    return cards
 
 
 def routes_named(disruptions):
-    return len({d.route for d in disruptions if d.route != "Not stated"})
+    return len({d.route for d in disruptions if d.route != model.UNNAMED_ROUTE})
 
 
 def origins_panel(disruptions):
@@ -186,33 +166,43 @@ def _chip(cause):
     return f'<span class="chip chip-{cause.family}">{lead}{_esc(LABEL[cause.category])}</span>'
 
 
+def shown_causes(causes):
+    """`No cause given` shows only when it's the whole answer - beside a
+    real cause it would contradict the page."""
+    named = tuple(c for c in causes if c.family != UNSTATED)
+    return named or causes
+
+
 def case(disruption):
-    chips = "".join(_chip(c) for c in disruption.causes)
+    """The time sits inside the phrase it measures rather than floating at
+    the top right: a bare timestamp doesn't say what happened then, and a
+    `title` tooltip is unopenable on a touch screen."""
+    chips = "".join(_chip(c) for c in shown_causes(disruption.causes))
     if not chips:
-        chips = '<span class="chip chip-none">No cause stated</span>'
+        chips = '<span class="chip chip-none">No cause given</span>'
     minutes = (
-        f'<span class="min">at least +{disruption.minutes} min</span>'
+        f'<span class="when">at least {disruption.minutes} '
+        f'{"minute" if disruption.minutes == 1 else "minutes"} late</span>'
         if disruption.minutes is not None
         else ""
     )
-    updates = ""
+    bits = [f"first listed {statusui.when(_short(disruption.first_seen))}"]
     if len(disruption.updates) > 1:
         times = len(disruption.updates) - 1
-        updates = (
-            f'<div class="tl">Re-worded {times} time{"s" if times != 1 else ""} while it was '
-            f"listed, last at {_esc(statusui.when(_short(disruption.updates[-1][0])))}.</div>"
+        last = statusui.when(_short(disruption.updates[-1][0]))
+        bits.append(
+            f"re-worded once while it was listed, at {last}"
+            if times == 1
+            else f"re-worded {times} times while it was listed, last at {last}"
         )
     return (
         '<div class="case">'
         '<div class="top">'
-        f"{chips}{minutes}"
-        f'<span class="when" title="First listed, Dublin time">'
-        f"{_esc(statusui.when(_short(disruption.first_seen)))}</span>"
+        f'<span class="where">{_esc(disruption.route)}</span>{chips}{minutes}'
         "</div>"
-        f'<div class="sum">{_esc(disruption.route)}</div>'
+        f'<div class="sum">{_esc(" · ".join(bits))}</div>'
         f'<div class="txt head">{_esc(readable(disruption.head))}</div>'
         f'<div class="txt">{_esc(readable(disruption.text))}</div>'
-        f"{updates}"
         "</div>"
     )
 
@@ -232,42 +222,61 @@ def tabs(ym, months):
     return out
 
 
-def month_page(ym, disruptions, corpus, months, now, template, css):
-    rows = model.day_counts(corpus.disruptions, ym, corpus.horizon)
-    cases = "".join(case(d) for d in sorted(disruptions, key=lambda d: d.first_seen, reverse=True))
-    if not cases:
-        cases = '<p class="empty">No disruption notice was listed this month.</p>'
-    age = now - corpus.horizon
-    stale = (
-        '<p class="stale">The newest data here is '
-        f"{statusui.hours(age.total_seconds() / 3600)} old.</p>"
-        if age > model.STALE_AFTER
-        else ""
+def paged_cases(disruptions):
+    """Page 1 renders visible, so a reader with no JS still gets the newest
+    page; `pageDelays()` moves between the rest."""
+    ordered = sorted(disruptions, key=lambda d: d.first_seen, reverse=True)
+    if not ordered:
+        return '<p class="empty">No disruption notice was listed this month.</p>'
+    pages = [ordered[i : i + PAGE_SIZE] for i in range(0, len(ordered), PAGE_SIZE)]
+    body = "".join(
+        f'<div class="page"{"" if n == 0 else " hidden"} data-page="{n + 1}">'
+        + "".join(case(d) for d in page)
+        + "</div>"
+        for n, page in enumerate(pages)
     )
+    if len(pages) < 2:
+        return body
+    return (
+        body + '<div class="pager">'
+        '<button type="button" class="prev" disabled>Newer</button>'
+        f'<span class="pagenum">Page 1 of {len(pages)}</span>'
+        '<button type="button" class="next">Older</button>'
+        "</div>"
+    )
+
+
+def month_page(ym, disruptions, corpus, months, now, template, css):
+    rows = model.day_counts(corpus.disruptions, ym, corpus.horizon, now)
+    cases = paged_cases(disruptions)
+    # Red past STALE_AFTER: an age in words would only be true at build time.
+    observed = statusui.stamp(corpus.horizon)
+    if now - corpus.horizon > model.STALE_AFTER:
+        observed = f'<span class="stale">{observed}</span>'
     routes = routes_named(disruptions)
     count = len(disruptions)
     capacity = sum(1 for d in corpus.capacity if d.day.strftime("%Y-%m") == ym)
     capacity_note = (
-        f"Irish Rail also listed {capacity} train{'s' if capacity != 1 else ''} as having "
-        "reduced capacity this month, which is about the seating rather than about a train "
-        "running late. Those are not counted anywhere on this page."
+        f"{capacity} train{'s' if capacity != 1 else ''} had reduced capacity, but "
+        f"{'they are' if capacity != 1 else 'it is'} not counted as a disruption."
         if capacity
         else ""
     )
+    # A finished month gets a final figure, not "so far".
+    so_far = " so far" if ym == _dublin(corpus.horizon).strftime("%Y-%m") else ""
     headline = (
-        f"{month_label(ym)}: {count} disruption{'s' if count != 1 else ''} listed"
+        f"<b>{_esc(month_label(ym) + so_far)}:</b> "
+        f"{count} disruption{'s' if count != 1 else ''} listed"
         + (f" across {routes} route{'s' if routes != 1 else ''}" if routes else "")
     )
-    start_day = model.COLLECTION_START.astimezone(model.DUBLIN).date().isoformat()
     return statusui.assemble(
         template,
         {
             "SITE-CSS": css,
             "CANONICAL": f"{BASE_URL}/" if ym == months[-1] else f"{BASE_URL}/m/{ym}.html",
             "MONTH": _esc(month_label(ym)),
-            "STALE": stale,
-            "HEADLINE": _esc(headline),
-            "META": f"Collected to {statusui.stamp(corpus.horizon)}",
+            "HEADLINE": headline,
+            "META": f"Data to {observed}",
             "TABS": tabs(ym, months),
             "TILES": tiles(disruptions),
             "BAR": day_bar(rows),
@@ -275,8 +284,6 @@ def month_page(ym, disruptions, corpus, months, now, template, css):
             "ORIGINS": origins_panel(disruptions),
             "CASES": cases,
             "CAPACITY": _esc(capacity_note),
-            "START": _esc(statusui.fmt_day(start_day)),
-            "BUILT": statusui.stamp(now),
         },
     )
 

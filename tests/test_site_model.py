@@ -86,7 +86,7 @@ class ARouteThatEmptiesOutIsStillTheSameDisruption(unittest.TestCase):
 
     def test_a_notice_that_never_carried_a_route_says_so(self):
         found = [sighting("Delays expected", origin=None, destination=None)]
-        self.assertEqual(model.group(found)[0].route, "Not stated")
+        self.assertEqual(model.group(found)[0].route, model.UNNAMED_ROUTE)
 
 
 class WhatTheSiteIsAbout(unittest.TestCase):
@@ -214,6 +214,24 @@ class TheDayRows(unittest.TestCase):
         rows = model.day_counts((), "2026-08", at(12, 0, day=31, month=8))
         self.assertIsNone(next(r for r in rows if r["day"] == "2026-08-01")["counts"])
         self.assertEqual(next(r for r in rows if r["day"] == "2026-08-09")["counts"], {})
+
+
+class TheDaysOfAMonth(unittest.TestCase):
+    def test_a_day_past_the_clock_is_marked_still_to_come(self):
+        rows = {r["day"]: r for r in model.day_counts([], "2026-09", at(17), now=at(17))}
+        self.assertTrue(rows["2026-09-30"]["future"])
+        self.assertIsNone(rows["2026-09-30"]["counts"])
+
+    def test_a_day_the_collector_never_reached_is_not(self):
+        # Before the first poll, and inside a month the clock has passed: no
+        # data, which is a different fact from a day that has not happened.
+        rows = {r["day"]: r for r in model.day_counts([], "2026-08", at(17), now=at(17))}
+        self.assertFalse(rows["2026-08-01"]["future"])
+        self.assertIsNone(rows["2026-08-01"]["counts"])
+
+    def test_without_a_clock_nothing_is_in_the_future(self):
+        rows = model.day_counts([], "2026-09", at(17))
+        self.assertEqual([r for r in rows if r["future"]], [])
 
 
 if __name__ == "__main__":

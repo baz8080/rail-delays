@@ -1,10 +1,12 @@
 name: Build site
 
 on:
-  # lifts-data can dispatch this on every push, the way it dispatches the lift
-  # site's build. The crons are the fallback for a dispatch that never arrives,
-  # and they are late by design: scheduled runs here land hours after their cron
-  # time, so they cannot be aimed at a window.
+  # Nothing dispatches this yet. lifts-data's build-site.yml asks for the lift
+  # site's build and only that one, so until a second step there names this
+  # workflow these two crons are the whole cadence, and they are late by design:
+  # scheduled runs land hours after their cron time and some do not land at all
+  # (none fired on 2026-09-12). What keeps the sibling sites current is the
+  # dispatch, not the cron. `notes/site.md` has what the second step needs.
   schedule:
     - cron: '20 7 * * *'
     - cron: '20 14 * * *'
