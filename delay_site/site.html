@@ -37,9 +37,11 @@
     <h3 class="natheading">Every day of <!--MONTH--></h3>
     <p class="basis">One box a day, counting the disruptions first listed on it.
     <span class="hoverhint">Hover a day in a bar for its detail.</span></p>
-    <div class="bar"><!--BAR--></div>
-    <div class="daycap" aria-live="polite"></div>
-    <div class="legend"><!--LEGEND--></div>
+    <div class="card">
+      <div class="bar"><!--BAR--></div>
+      <div class="daycap" aria-live="polite"></div>
+      <div class="legend"><!--LEGEND--></div>
+    </div>
 
     <h3 class="natheading">What the notices named</h3>
     <p class="basis">What each notice said went wrong, in its own words. A notice blaming
@@ -114,6 +116,7 @@
 </div>
 <script>
 <!--UI-JS-CAPTION-->
+bindDayCaption();
 </script>
 </body>
 </html>

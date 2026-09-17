@@ -367,3 +367,30 @@ two repeated what "How this measures" already says in prose.
 **"Cell" only ever appears in this family's code and notes, never to a
 reader.** None of uisce, esb or lifts names the day square for a reader either
 - they only say "Hover a day...". "One cell a day" became "One box a day."
+
+## Hovering did nothing - 2026-09-17
+
+A reviewer hovered a day box on the live preview and got nothing. Two separate
+bugs, not one:
+
+**`bindDayCaption()` was never called.** `caption.js` only defines the
+function; something has to invoke it. esb, lifts and uisce all call it at the
+bottom of their own script tag. This page inlined the script and stopped
+there, so the listener was never attached - not since the caption feature was
+added, on any build this site has ever shipped.
+
+**The bar and its caption had no shared host.** `bindDayCaption`'s handler
+does `cell.closest(".row, .card")` to find the day box's own `.daycap`, the
+same way lifts wraps a month's bar and its caption in one `<div class="card">`.
+Here the bar, the caption line and the legend sat as bare siblings of `<main>`,
+so `closest` found nothing and the assignment silently did nothing even once
+the call was added.
+
+Fixed both: `bindDayCaption();` runs after the inlined script, and the bar,
+`.daycap` and legend are wrapped in one `<div class="card">`. Verified by
+dispatching a synthetic `pointerover` at a built page in headless Chromium and
+reading the `.daycap` text back, not by re-reading the markup - which is how
+the second bug was missed the first time a reply here claimed hovering worked.
+`TheHoverCaptionActuallyFires` pins both: the script calls what it defines, and
+exactly one `</div>` sits between the bar opening and the caption div, so a
+future edit that pulls them apart again fails a test instead of a reader.

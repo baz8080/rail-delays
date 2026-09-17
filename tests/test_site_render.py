@@ -250,5 +250,27 @@ class TheTemplateIsFilled(unittest.TestCase):
         self.assertEqual(re.findall(r"<!--[A-Z-]+-->", rendered), [])
 
 
+class TheHoverCaptionActuallyFires(unittest.TestCase):
+    """caption.js defines `bindDayCaption` and does nothing else - a page that
+    inlines the script but never calls it renders a bar that looks interactive
+    and is not. `closest(".row, .card")` is how the listener finds the day
+    cell's own `.daycap`, so the two need a shared ancestor of one of those
+    classes or the call finds no host and fills nothing.
+    """
+
+    def test_the_script_calls_what_it_defines(self):
+        self.assertIn("bindDayCaption();", page([SIGNALLING]))
+
+    def test_the_bar_and_its_caption_share_a_card_or_row(self):
+        rendered = page([SIGNALLING])
+        section = rendered.split('<div class="bar">')[0].rsplit("<div", 1)[1]
+        self.assertIn('class="card"', section)
+        # Exactly one close between them: the bar's own. A second would close
+        # the card too, and the caption would be looking for a host with no
+        # `.daycap` in it.
+        between = rendered.split('<div class="bar">')[1].split('<div class="daycap"')[0]
+        self.assertEqual(between.count("</div>"), 1)
+
+
 if __name__ == "__main__":
     unittest.main()
