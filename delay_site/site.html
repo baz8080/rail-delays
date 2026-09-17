@@ -71,8 +71,7 @@
 <!--UI-JS-CAPTION-->
 bindDayCaption();
 
-// `hidden`, not removed: a reader who has searched the page with ctrl-F can
-// still find a row on a page they have not clicked to.
+// `hidden`, not removed, so ctrl-F still finds a row on an unclicked page.
 function pageDelays() {
   document.querySelectorAll(".pager").forEach(function (pager) {
     var pages = pager.parentElement.querySelectorAll(".page");

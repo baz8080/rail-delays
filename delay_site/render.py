@@ -30,19 +30,13 @@ TEMPLATES = Path(__file__).parent
 SITE_HTML = TEMPLATES / "site.html"
 SITE_CSS = TEMPLATES / "site.css"
 
-# What a reader downloads before touching anything. One month of the archive,
-# and it has to stay that way: the site is meant to run for years.
+# The site is meant to run for years, and the archive only grows.
 BUDGET_BYTES = 500 * 1024
 
-# Client-side, not a server-side page: every row already ships inside the
-# month's own budget, so this only changes what is on screen at once.
 PAGE_SIZE = 10
 
-# Day-cell codes, by how many disruptions were first listed that day. Bands
-# rather than a count, since the caption already carries the exact number.
-# Corpus-derived cuts, split roughly evenly past zero (9 days at 1-3, 14 at
-# 4-9, 12 at 10+); the top band stays open-ended because nothing has reached
-# 30 - a "30+" nothing has ever painted would be a legend entry that lies.
+# Corpus-derived cuts (9 days at 1-3, 14 at 4-9, 12 at 10+). Open-ended top
+# band: nothing has reached 30, so "30+" would be a legend entry that never paints.
 BANDS = ((1, "0"), (4, "1"), (10, "2"))
 OVER_BAND = "3"
 NO_DATA = "8"
@@ -56,9 +50,8 @@ BAND_LABEL = {
     NO_DATA: "no data",
 }
 
-# Two cells with no count: a day not yet reached is not one the collector
-# missed. NO_DATA names the collector rather than "data" so it doesn't echo
-# "nothing listed" two cells over.
+# NO_DATA names the collector, not "data", so it doesn't echo "nothing
+# listed" two cells over.
 EMPTY_LABEL = {
     NO_DATA: "the collector missed this day",
     FUTURE: "still to come",
@@ -91,12 +84,8 @@ def _short(when):
 
 
 def day_caption(row):
-    """What a day box says on hover: a plain count, not a family breakdown.
-
-    A breakdown could say more than the total - a disruption naming a fault
-    and its own knock-on counts in both families - and each disruption's own
-    row already carries its cause.
-    """
+    """A plain count, not a family breakdown - a fault and its own knock-on
+    would count in both and could say more than the total."""
     counts = row["counts"]
     if counts is None:
         return EMPTY_LABEL[FUTURE if row.get("future") else NO_DATA]
@@ -107,7 +96,6 @@ def day_caption(row):
 
 
 def day_bar(rows):
-    """The month's day cells, with the day's count in each caption."""
     cells = []
     for row in rows:
         code = FUTURE if row.get("future") else band(row["total"])
@@ -124,12 +112,10 @@ def legend():
 
 
 def tiles(disruptions):
-    """Four counts of the month's disruptions.
-
-    The fourth is not the month's most-named fault - that is the ranked panel
-    below. None of the four partition the month: a fault and its own knock-on
-    count in both the second and the third.
-    """
+    """The fourth counts disruptions naming no cause, not the month's
+    most-named fault (that's the ranked panel below). None of the four
+    partition the month - a fault and its own knock-on count in both the
+    second and third."""
     named = sum(1 for d in disruptions if d.origins)
     knock_on = sum(1 for d in disruptions if CONSEQUENCE in d.families)
     silent = sum(1 for d in disruptions if not (set(d.families) - {UNSTATED}))
@@ -181,23 +167,16 @@ def _chip(cause):
 
 
 def shown_causes(causes):
-    """The causes a row carries as tags.
-
-    "No cause given" is shown only when it is the whole answer - beside a
-    real cause it would read as the page contradicting itself, though the
-    reading itself keeps both.
-    """
+    """`No cause given` shows only when it's the whole answer - beside a
+    real cause it would contradict the page."""
     named = tuple(c for c in causes if c.family != UNSTATED)
     return named or causes
 
 
 def case(disruption):
-    """One disruption: what it is, what is known about it, then its own words.
-
-    The time sits inside the phrase it measures rather than floating at the
-    top right: a bare timestamp does not say what happened then, and the
-    `title` that used to explain it is unopenable on a touch screen.
-    """
+    """The time sits inside the phrase it measures rather than floating at
+    the top right: a bare timestamp doesn't say what happened then, and a
+    `title` tooltip is unopenable on a touch screen."""
     chips = "".join(_chip(c) for c in shown_causes(disruption.causes))
     if not chips:
         chips = '<span class="chip chip-none">No cause given</span>'
@@ -244,11 +223,8 @@ def tabs(ym, months):
 
 
 def paged_cases(disruptions):
-    """The month's cases, chunked into `PAGE_SIZE`-row pages.
-
-    Page 1 renders visible, so a reader with no JS still gets the newest page
-    rather than nothing; `pageDelays()` moves between the rest.
-    """
+    """Page 1 renders visible, so a reader with no JS still gets the newest
+    page; `pageDelays()` moves between the rest."""
     ordered = sorted(disruptions, key=lambda d: d.first_seen, reverse=True)
     if not ordered:
         return '<p class="empty">No disruption notice was listed this month.</p>'
@@ -273,8 +249,7 @@ def paged_cases(disruptions):
 def month_page(ym, disruptions, corpus, months, now, template, css):
     rows = model.day_counts(corpus.disruptions, ym, corpus.horizon, now)
     cases = paged_cases(disruptions)
-    # Past STALE_AFTER the stamp itself goes red - an age in words would only
-    # be true at build time, and this page has no clock at read time to fix it.
+    # Red past STALE_AFTER: an age in words would only be true at build time.
     observed = statusui.stamp(corpus.horizon)
     if now - corpus.horizon > model.STALE_AFTER:
         observed = f'<span class="stale">{observed}</span>'
@@ -287,8 +262,7 @@ def month_page(ym, disruptions, corpus, months, now, template, css):
         if capacity
         else ""
     )
-    # "so far" while the month is the one still collecting, as the sibling
-    # banners say it: a headline for a finished month is a final figure.
+    # A finished month gets a final figure, not "so far".
     so_far = " so far" if ym == _dublin(corpus.horizon).strftime("%Y-%m") else ""
     headline = (
         f"<b>{_esc(month_label(ym) + so_far)}:</b> "
