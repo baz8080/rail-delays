@@ -465,3 +465,44 @@ specific and does not need to say so - the quoted notice underneath already
 carries whatever the notice itself commits to. The refusal to decode what
 "incident" is standing in for (`notes/cause-reading.md`, "What the reader
 refuses to say") is unchanged; only the label's own wording moved.
+
+## "How a cause is read" left the page - 2026-09-17
+
+The footer carried a fourth disclosure summarising the same ground
+`notes/cause-reading.md` already covers in full, with the actual counts and
+the rejected alternatives the page's short version could not carry. A
+reviewer pointed out the duplication: the methodology belongs in the repo's
+own file, not restated in miniature on every build. Dropped; nothing on the
+page reads it, and the footer's three disclosures are "What this measures",
+"How to read a disruption" and "What this cannot tell you".
+
+## "What this cannot tell you" left the page too - 2026-09-17
+
+Dropped on the same pass and for the same reason: its three paragraphs (no
+summed minutes, no percentage, no measured end) restate what `notes/site.md`
+already carries in full under "The minutes are never added up" and "No
+denominator", with the numbers this shorter version could not fit. The
+underlying decisions are unchanged - still no percentage anywhere on the page,
+still no summed minutes - only the on-page explanation of them is gone.
+`test_the_footer_says_why` went with it; `test_nothing_above_the_footer_states_a_percentage`
+still holds the actual guarantee.
+
+## The footer lost the rest of its disclosures - 2026-09-17
+
+Same reviewer, same pass, two more: "What this measures" (the feed, the
+fold-notices-into-one-event rule, the reduced-capacity exclusion) and the
+bold "A notice going up..." paragraph both went, "nobody cares" for the
+second. Between this and the two disclosures above, the footer is down to
+"How to read a disruption" and the source-code line.
+
+Two things moved with them. The only remaining link to the sibling lift site
+was inside "What this measures" ("published there"); the page now names
+`baz8080/lifts` nowhere; a reader wants the source code, which is still
+linked, or nothing further. `render.py`'s `start_day`/`START` marker had no
+other reader once its one use (the collection-start date, printed inside the
+removed disclosure) was gone, so it left `month_page` rather than compute a
+value nothing prints.
+
+All of it still lives in `notes/site.md` and `CLAUDE.md`, in more depth than
+any footer copy could carry - the "How this measures" reasoning is the same
+ground `notes/site.md`'s main sections above already cover with the counts.

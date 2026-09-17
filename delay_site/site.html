@@ -54,25 +54,6 @@
   </main>
 
   <footer>
-    <p><b>A notice going up is the only signal, and a notice coming down is the only other
-    one.</b> The feed has no "resolved" field: a notice leaving it just means the author took
-    it down, and nothing here says when the trains were running normally again.</p>
-
-    <details><summary>What this measures</summary>
-    <p>The same feed of service messages the sibling lift site reads, polled every 30 minutes,
-    minus the lift and escalator outages, which are published
-    <a href="https://baz8080.github.io/lifts">there</a>. Nothing before <!--START--> exists
-    here, and days before it are shown as "no data".</p>
-    <p>One disruption is one event, not one notice. Irish Rail re-words a live notice as
-    things develop - nine wordings over eight hours on 17 August were one closure between
-    Thurles and Limerick Junction - so those are folded into one entry that says how many
-    times it was re-worded.</p>
-    <p>Trains listed as having reduced capacity are left out. "Customer Notice: This train has
-    reduced capacity" is a template about the seating rather than about a train running late,
-    and on the corpus to September 2026 it was a third of the feed. The count is printed above
-    each month's list, so a third of the subject is never quietly missing.</p>
-    </details>
-
     <details><summary>How to read a disruption</summary>
     <p>Each entry names the service or the stretch of line the notice is about, when it was
     first listed, and how often it was re-worded while it stood. Under that are Irish Rail's
@@ -81,32 +62,6 @@
     <p>Where a notice claims a figure, the entry carries the worst figure that notice ever
     claimed, prefixed "at least". The feed writes ranges - "+15/20 minutes delayed" - and a
     range is only a promise at its lower end.</p>
-    </details>
-
-    <details><summary>What this cannot tell you</summary>
-    <p><b>How late the trains were, overall.</b> Some notices carry a figure and most do not,
-    and the ones that do are not the same kind of number: "this service departed +25 minutes
-    behind schedule" is one train observed, while "+90 minute delays can be expected" is a
-    forecast over many. Adding them up would also count one event several times, because the
-    figure is re-stated every time the notice is re-worded. So each disruption carries the
-    worst figure it ever claimed, and nothing anywhere is added up.</p>
-    <p><b>What share of trains ran late.</b> Irish Rail names a service only when something is
-    wrong with it. There is no published roll of the services that ran, so
-    there is nothing to divide by: this site can say how many disruptions were listed and
-    never what share of trains were late. Any such figure would be invented.</p>
-    <p><b>When a disruption ended.</b> A notice leaving the feed means somebody took it down,
-    which is not the same fact as the trains running normally again, so nothing here measures
-    how long anything lasted.</p>
-    </details>
-
-    <details><summary>How a cause is read</summary>
-    <p>Each notice usually names a cause in its own words - "due to a signalling issue",
-    "following an incident on the line". Those words are read into a set of categories drawn
-    from what the feed actually writes, and a notice can name more than one.</p>
-    <p>Nothing is decoded. "An incident on the line" is published as that and no more,
-    because the notice says no more. "An operational issue" is filed as no cause given,
-    because that is what it is. And a notice blaming another delay is marked as doing so
-    rather than counted beside a fault.</p>
     </details>
 
     <p id="gen"><a href="https://github.com/baz8080/rail-delays">Source code</a> &middot;

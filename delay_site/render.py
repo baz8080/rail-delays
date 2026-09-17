@@ -321,7 +321,6 @@ def month_page(ym, disruptions, corpus, months, now, template, css):
         f"{count} disruption{'s' if count != 1 else ''} listed"
         + (f" across {routes} route{'s' if routes != 1 else ''}" if routes else "")
     )
-    start_day = model.COLLECTION_START.astimezone(model.DUBLIN).date().isoformat()
     return statusui.assemble(
         template,
         {
@@ -337,7 +336,6 @@ def month_page(ym, disruptions, corpus, months, now, template, css):
             "ORIGINS": origins_panel(disruptions),
             "CASES": cases,
             "CAPACITY": _esc(capacity_note),
-            "START": _esc(statusui.fmt_day(start_day)),
         },
     )
 

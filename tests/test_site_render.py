@@ -95,9 +95,6 @@ class TheSiteNeverInventsADenominator(unittest.TestCase):
     def test_nothing_above_the_footer_states_a_percentage(self):
         self.assertNotRegex(prose(page([SIGNALLING])), r"\d\s*%")
 
-    def test_the_footer_says_why(self):
-        self.assertIn("nothing to divide by", page([SIGNALLING]))
-
 
 class WhatThePageCallsThings(unittest.TestCase):
     def test_it_counts_disruptions_and_says_disruptions(self):
