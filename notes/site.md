@@ -439,7 +439,8 @@ budget," and this repository already has one (`BUDGET_BYTES`). Splitting the
 list into `m/2026-09-p2.html` and so on would multiply pages forever and give
 every row two URLs depending on which page it landed on this month.
 
-`PAGE_SIZE` (20) chunks the sorted list into `.page` divs at render time, all
+`PAGE_SIZE` (10, changed from an initial 20 on a follow-up review) chunks the
+sorted list into `.page` divs at render time, all
 of them shipped in the same file inside the existing budget - nothing new is
 fetched. Page 1 renders visible and the rest `hidden`; a small script
 (`pageDelays()`, beside the existing caption listener) moves the boundary on
