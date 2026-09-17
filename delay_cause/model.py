@@ -68,7 +68,7 @@ LABEL = {
     PASSENGER: "Passenger issue, including illness",
     INCIDENT: "Incident on the line, not specified",
     CONGESTION: "Congestion",
-    KNOCK_ON: "Knock-on from an earlier service",
+    KNOCK_ON: "Knock-on delay",
     PLANNED: "Planned works",
     UNSPECIFIED: "No cause given",
 }

@@ -417,3 +417,14 @@ month, and the heading did not need a fourth restatement in three words.
 "Hover a day in a bar for its detail," which had matched uisce's own hint
 character for character since the last review, was pointed back to plainer
 words: "Hover over a day for details."
+
+## The knock-on chip shortened - 2026-09-17
+
+"Knock-on from an earlier service" became "Knock-on delay" on the same review
+pass. The longer form said the same thing the row's own words already say
+around it ("a knock-on from another delay" in the day caption before it was
+simplified, "Howth to Greystones ... at least 10 minutes late" beside it now);
+the chip only needs to name the category, the way "Signalling fault" and
+"Level crossing issue" do. `delay_cause.model.LABEL` is the one place the
+string lives - the golden fixture pins category keys, not display text, so
+nothing there needed regenerating.
