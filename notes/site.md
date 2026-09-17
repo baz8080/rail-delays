@@ -506,3 +506,15 @@ value nothing prints.
 All of it still lives in `notes/site.md` and `CLAUDE.md`, in more depth than
 any footer copy could carry - the "How this measures" reasoning is the same
 ground `notes/site.md`'s main sections above already cover with the counts.
+
+## "Newest first" and the capacity count shortened - 2026-09-17
+
+"Newest first, by when Irish Rail first listed the notice. Irish Rail listed
+another 142 trains as having reduced capacity this month, which is a notice
+about the seating rather than about a train running late. Those are counted
+nowhere on this page." became "Newest first. 142 trains had reduced capacity,
+but they are not counted as a delay." on the same live review. The dropped
+clause ("by when Irish Rail first listed the notice") is still true of every
+row underneath it; nothing reads it back out except this one sentence, so the
+list's own dates carry it now. The capacity fact itself stays, in six words
+instead of twenty-six.

@@ -133,11 +133,12 @@ class TheReducedCapacityNoticesAreNamedRatherThanDropped(unittest.TestCase):
             start="2026-09-10T11:00:00",
         )]
         rendered = page(found)
-        self.assertIn("1 train as having reduced capacity", rendered)
+        self.assertIn("1 train had reduced capacity", rendered)
+        self.assertIn("it is not counted as a delay", rendered)
         self.assertIn("1 disruption listed", rendered)
 
     def test_a_month_without_any_says_nothing_about_them(self):
-        self.assertNotIn("reduced capacity this month", page([SIGNALLING]))
+        self.assertNotIn("reduced capacity", page([SIGNALLING]))
 
 
 class TheMonthTabs(unittest.TestCase):

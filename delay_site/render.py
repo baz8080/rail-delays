@@ -307,9 +307,8 @@ def month_page(ym, disruptions, corpus, months, now, template, css):
     count = len(disruptions)
     capacity = sum(1 for d in corpus.capacity if d.day.strftime("%Y-%m") == ym)
     capacity_note = (
-        f"Irish Rail listed another {capacity} train{'s' if capacity != 1 else ''} as having "
-        "reduced capacity this month, which is a notice about the seating rather than about a "
-        "train running late. Those are counted nowhere on this page."
+        f"{capacity} train{'s' if capacity != 1 else ''} had reduced capacity, but "
+        f"{'they are' if capacity != 1 else 'it is'} not counted as a delay."
         if capacity
         else ""
     )
