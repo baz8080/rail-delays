@@ -174,18 +174,14 @@ def shown_causes(causes):
 
 
 def case(disruption):
-    """The time sits inside the phrase it measures rather than floating at
-    the top right: a bare timestamp doesn't say what happened then, and a
-    `title` tooltip is unopenable on a touch screen."""
+    """The time and the figure sit inside the phrase they measure rather than
+    floating at the top right: a bare timestamp doesn't say what happened then,
+    a `title` tooltip is unopenable on a touch screen, and a figure on its own
+    only ever restates the quoted notice, except where that notice eased or
+    stopped giving one."""
     chips = "".join(_chip(c) for c in shown_causes(disruption.causes))
     if not chips:
         chips = '<span class="chip chip-none">No cause given</span>'
-    minutes = (
-        f'<span class="when">at least {disruption.minutes} '
-        f'{"minute" if disruption.minutes == 1 else "minutes"} late</span>'
-        if disruption.minutes is not None
-        else ""
-    )
     bits = [f"first listed {statusui.when(_short(disruption.first_seen))}"]
     if len(disruption.updates) > 1:
         times = len(disruption.updates) - 1
@@ -195,10 +191,15 @@ def case(disruption):
             if times == 1
             else f"re-worded {times} times while it was listed, last at {last}"
         )
+    if disruption.minutes is not None:
+        bits.append(
+            f"at least {disruption.minutes} "
+            f'{"minute" if disruption.minutes == 1 else "minutes"} late'
+        )
     return (
         '<div class="case">'
         '<div class="top">'
-        f'<span class="where">{_esc(disruption.route)}</span>{chips}{minutes}'
+        f'<span class="where">{_esc(disruption.route)}</span>{chips}'
         "</div>"
         f'<div class="sum">{_esc(" · ".join(bits))}</div>'
         f'<div class="txt head">{_esc(readable(disruption.head))}</div>'
