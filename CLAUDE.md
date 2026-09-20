@@ -101,13 +101,21 @@ pointers only, never the rationale, or it becomes the thing it exists to fix.
 
 ## Comments
 
-Comments earn their place or they go. Say **why**, not what - never a paraphrase
-of the line below, a heading for an obviously-named block, or an explanation of a
-standard flag. What does earn a comment: a reason the obvious approach was
-rejected, a dependency nothing else records, a constraint from outside the code.
+**Comment sparingly.** Say **why**, not what - never a paraphrase of the line
+below, a heading for an obviously-named block, or an explanation of a standard
+flag. Do not restate a settled decision at each site that follows it: state it
+once, in `notes/` or the PR, and let the code stand.
+
+A comment earns its place only when it records something the reader cannot see:
+an external system's behaviour, a measurement, a dependency nothing else
+records, a reason the obvious approach was rejected, or a trap that would
+otherwise be refactored away. The data-shape traps above are what that looks
+like in code.
 
 One line where one will do. If the reasoning needs a paragraph it belongs in the
-commit message, the PR, or `notes/` - not above the line.
+commit message, the PR, or `notes/`, not above the line. No docstring on a test
+whose name already says what it asserts, and none on a function whose name and
+signature already say it.
 
 ## Punctuation
 
