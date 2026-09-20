@@ -5,9 +5,9 @@ One page per month: the newest is `index.html` and every earlier one is
 a reader arriving cold gets one month, never the corpus - and it is the same
 reason the sibling lift site shards its outages per station.
 
-Everything is rendered here, in Python. The only script on the page is
-statusui's day-cell caption listener, so there is no data file to fetch and
-nothing to wait for; the month tabs are ordinary links.
+Everything is rendered here, in Python. The page's script is two pieces of
+statusui, the day-cell caption listener and the data-age line, so there is no
+data file to fetch and nothing to wait for; the month tabs are ordinary links.
 """
 
 from __future__ import annotations
@@ -249,7 +249,8 @@ def paged_cases(disruptions):
 def month_page(ym, disruptions, corpus, months, now, template, css):
     rows = model.day_counts(corpus.disruptions, ym, corpus.horizon, now)
     cases = paged_cases(disruptions)
-    # Red past STALE_AFTER: an age in words would only be true at build time.
+    # The no-JS read. freshness() replaces it in the browser, where the same
+    # question can be put to the reader's own clock.
     observed = statusui.stamp(corpus.horizon)
     if now - corpus.horizon > model.STALE_AFTER:
         observed = f'<span class="stale">{observed}</span>'
@@ -277,6 +278,8 @@ def month_page(ym, disruptions, corpus, months, now, template, css):
             "MONTH": _esc(month_label(ym)),
             "HEADLINE": headline,
             "META": f"Data to {observed}",
+            "OBSERVED": f"{corpus.horizon:%Y-%m-%dT%H:%M:00Z}",
+            "STALE-HOURS": str(round(model.STALE_AFTER.total_seconds() / 3600)),
             "TABS": tabs(ym, months),
             "TILES": tiles(disruptions),
             "BAR": day_bar(rows),

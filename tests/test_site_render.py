@@ -11,6 +11,8 @@ import re
 import unittest
 from datetime import UTC, datetime
 
+import statusui
+
 from delay_site import model, render
 from tests.test_site_model import at, sighting
 
@@ -215,13 +217,30 @@ class TheBanner(unittest.TestCase):
         self.assertIn("August 2026:", rendered)
         self.assertNotIn("August 2026 so far", rendered)
 
+    def stamp(self, rendered):
+        # The banner's own span, not the whole page: freshness() carries the
+        # same stale markup in its source, so a page-wide search always matches.
+        return rendered.split('<span class="meta"', 1)[1].split("</div>", 1)[0]
+
     def test_data_past_the_stale_threshold_is_marked_on_the_stamp(self):
         # The default horizon is a day behind the default build clock.
-        self.assertIn('Data to <span class="stale">', page([SIGNALLING]))
+        self.assertIn('Data to <span class="stale">', self.stamp(page([SIGNALLING])))
 
     def test_fresh_data_is_not(self):
         # Not a bare "stale": base.css carries the rule that paints it.
-        self.assertNotIn('<span class="stale">', page([SIGNALLING], now=at(18)))
+        self.assertNotIn('<span class="stale">', self.stamp(page([SIGNALLING], now=at(18))))
+
+    def test_the_stamp_carries_what_the_age_is_worked_out_from(self):
+        # Z rather than isoformat's +00:00, the same shape the lift site emits.
+        rendered = page([SIGNALLING])
+        self.assertIn('data-observed="2026-09-10T17:00:00Z"', rendered)
+        self.assertIn('data-stale="10"', rendered)
+
+    def test_the_age_arrives_without_the_app_bundle(self):
+        rendered = page([SIGNALLING])
+        self.assertIn("function freshness", rendered)
+        self.assertIn("showAge();", rendered)
+        self.assertNotIn("function loadShard", rendered)
 
 
 class TheDisruptionRow(unittest.TestCase):
@@ -272,6 +291,23 @@ class ThePagedDisruptionList(unittest.TestCase):
         rendered = page(_many(render.PAGE_SIZE + 1))
         self.assertIn("function pageDelays()", rendered)
         self.assertIn("pageDelays();", rendered)
+
+
+class TheScriptStaysOutOfStatusuisWay(unittest.TestCase):
+    """A name this page declares again below the inlined bundle shadows the real
+    one for every call after. The set comes from js_globals() rather than from
+    the inlined text, which is only the two pieces this page happens to take.
+    """
+
+    def own_script(self):
+        template = render.SITE_HTML.read_text(encoding="utf-8")
+        return re.split(r"<!--UI-JS[A-Z-]*-->", template)[-1]
+
+    def test_it_redeclares_nothing_statusui_declares(self):
+        declared = set(re.findall(r"^(?:function|var)\s+(\w+)", self.own_script(), re.M))
+        # or the split found the end of the file and the check is vacuous
+        self.assertIn("pageDelays", declared)
+        self.assertEqual(declared & statusui.js_globals(), set())
 
 
 class TheHoverCaptionActuallyFires(unittest.TestCase):
