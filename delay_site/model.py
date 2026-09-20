@@ -70,6 +70,12 @@ MINUTES = re.compile(r"\+?\s*(\d{1,3})\s*(?:/\s*\d{1,3}\s*)?(?:mins?|minutes?)\b
 # same reasoning as the lift site's.
 STALE_AFTER = timedelta(hours=10)
 
+# The same question asked of the reader's clock, so a different number: nothing
+# dispatches this build, so its two crons are 17 hours apart at their widest and
+# the data can already be seven hours old when one runs. Past 24 a push or a
+# build really was missed.
+STALE_TO_READER = timedelta(hours=24)
+
 
 class Sighting(NamedTuple):
     head: str

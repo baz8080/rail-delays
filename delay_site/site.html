@@ -25,7 +25,7 @@
   <main>
     <div class="banner">
       <span><!--HEADLINE--></span>
-      <span class="meta"><!--META--></span>
+      <span class="meta" data-observed="<!--OBSERVED-->" data-stale="<!--STALE-HOURS-->"><!--META--></span>
     </div>
 
     <div class="controls">
@@ -68,8 +68,17 @@
   </footer>
 </div>
 <script>
+<!--UI-JS-FRESH-->
 <!--UI-JS-CAPTION-->
 bindDayCaption();
+
+// The stamp stays in the HTML for a reader with no JS; the age says the same
+// thing without the timezone arithmetic, and only their own clock can tell it.
+function showAge() {
+  var meta = document.querySelector(".banner .meta[data-observed]");
+  if (meta) meta.innerHTML = freshness(meta.dataset.observed, +meta.dataset.stale);
+}
+showAge();
 
 // `hidden`, not removed, so ctrl-F still finds a row on an unclicked page.
 function pageDelays() {

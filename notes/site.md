@@ -272,7 +272,9 @@ lift notice's head is "Lift(s) out of order" and nothing else. Both stay.
 **An age in words on the banner, as the app pages show.** `freshness()` runs in
 the browser against the reader's clock. These pages have no JS but the caption
 listener, so the only age they could print is the one true at build time, which
-is wrong the moment the page is cached. The stamp is a fact that stays true.
+is wrong the moment the page is cached. The stamp is a fact that stays true. Reversed
+on 2026-09-20: the first half of this is simply wrong, and the second half was
+fixed upstream. § The banner prints an age.
 
 ## How this gets published - 2026-09-12
 
@@ -540,3 +542,71 @@ this whole family of pages avoids on purpose (`notes/site.md` § What counts
 as a disruption - the subject is disruption, not the word "delay"). Caught by
 the same reviewer pointing at the word itself. Fixed to "not counted as a
 disruption."
+
+## The banner prints an age - 2026-09-20
+
+`Data to 2026-09-17 05:01 UTC` asks a reader to know the time in UTC before it
+answers the only question they had, which is whether the page is current. It
+reads `Updated 44 minutes ago` now, from statusui's `freshness()`, which is
+what esb's and lifts' app pages have shown all along. Issue #3.
+
+**The rejection above was wrong on its facts.** It said the only age this page
+could print was the one true at build time. `freshness()` measures against
+`Date.now()` in the browser, so it is right on a page served from a cache a
+week later; that argument never held. The cost was real, though: statusui
+shipped either the caption listener alone or the whole 15 KB app bundle, and
+15 KB for one function is not a trade this page makes.
+
+**So the bundle was split rather than taken whole.** `freshness.js` upstream is
+that function and the two helpers only it calls, `num` and `plural`, behind a
+`<!--UI-JS-FRESH-->` marker: 1.3 KB rather than 15, on the `caption.js` pattern
+that was already there for exactly this. This page takes both markers. lifts'
+station pages are the same shape and can take it whenever lifts wants it.
+
+**The stamp stays in the HTML.** It is what a reader with no JS gets, the build
+still reddens it past `STALE_AFTER`, and `showAge()` replaces it on every other
+read. The two never disagree: both are the newest successful run, one read
+against the build clock and one against the reader's.
+
+**The stale sentence is the shared one.** Past ten hours the line reads
+"Updated 16 hours ago - the last data build may have failed", where the content
+pass had settled on a stamp that says the record is not current without
+claiming to know why it is not. This does claim a why, hedged, and the hedge is
+the upstream function's own reasoning: the page cannot tell a stalled build
+from a stalled collector, so "may have failed" is a reading the reader can act
+on. Taken as it stands, because a shared function that grows a per-site wording
+parameter is the thing the design layer exists to prevent, and because on this
+site both candidates are real - the collector is in another repository and the
+build has no dispatch (§ How this gets published).
+
+**The threshold had to be cut a second time.** `STALE_AFTER` is ten hours and
+its own comment says what that measures: how far the data may lag *the build*.
+Handing the same number to `freshness()` re-points it at the reader's clock,
+and this is the one site in the family where the two are far apart, because
+nothing dispatches this build (§ How this gets published). The crons are 07:20
+and 14:20, so the widest healthy gap between builds is 17 hours, on top of the
+seven the data can already be behind when one runs. At ten hours every reader
+arriving in the evening would have been told the build may have failed, on a
+healthy site. `STALE_TO_READER` is 24 hours, which every healthy cycle fits
+inside and a missed push or a missed build does not. The reddened stamp keeps
+the ten: it is asked at build time, where ten is still the right question.
+Found by a review pass, not by a test, because both numbers were plausible.
+
+**A redeclaration guard came with it.** The page's own script calls into three
+shared names now, and this repository never had the test the other three
+consumers have: that nothing it declares is in `statusui.js_globals()`. It asks
+that function rather than reading the inlined text, because the bundle is three
+files and this page takes two of them, so reading what arrived would only ever
+check the names it already has. Confirmed by declaring `num` in the page's own
+block and watching it fail.
+
+Rejected: **the age beside the stamp**, "Data to 2026-09-17 05:01 UTC (44
+minutes ago)". The content pass removed a second way of saying the same thing
+when the stale box became the stamp; this would put it back.
+
+Rejected: **a copy of `freshness()` in this site's inline block.** It is a short
+function, but the twelve node cases that pin its boundaries - the clock running
+fast, the rounding that never understates, the stale cut at the exact minute -
+are upstream where there is a node to run them. A copy here would be untested
+on all three, and lifts' station pages want the same function, so the copy
+would get copied.
