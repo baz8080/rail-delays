@@ -234,7 +234,9 @@ class TheBanner(unittest.TestCase):
         # Z rather than isoformat's +00:00, the same shape the lift site emits.
         rendered = page([SIGNALLING])
         self.assertIn('data-observed="2026-09-10T17:00:00Z"', rendered)
-        self.assertIn('data-stale="10"', rendered)
+        # The reader's clock, not the build's: STALE_AFTER is how far the data
+        # may lag a build, and a reader meets a page hours older than that.
+        self.assertIn('data-stale="24"', rendered)
 
     def test_the_age_arrives_without_the_app_bundle(self):
         rendered = page([SIGNALLING])

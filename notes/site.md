@@ -579,6 +579,19 @@ parameter is the thing the design layer exists to prevent, and because on this
 site both candidates are real - the collector is in another repository and the
 build has no dispatch (§ How this gets published).
 
+**The threshold had to be cut a second time.** `STALE_AFTER` is ten hours and
+its own comment says what that measures: how far the data may lag *the build*.
+Handing the same number to `freshness()` re-points it at the reader's clock,
+and this is the one site in the family where the two are far apart, because
+nothing dispatches this build (§ How this gets published). The crons are 07:20
+and 14:20, so the widest healthy gap between builds is 17 hours, on top of the
+seven the data can already be behind when one runs. At ten hours every reader
+arriving in the evening would have been told the build may have failed, on a
+healthy site. `STALE_TO_READER` is 24 hours, which every healthy cycle fits
+inside and a missed push or a missed build does not. The reddened stamp keeps
+the ten: it is asked at build time, where ten is still the right question.
+Found by a review pass, not by a test, because both numbers were plausible.
+
 **A redeclaration guard came with it.** The page's own script calls into three
 shared names now, and this repository never had the test the other three
 consumers have: that nothing it declares is in `statusui.js_globals()`. It asks

@@ -279,7 +279,7 @@ def month_page(ym, disruptions, corpus, months, now, template, css):
             "HEADLINE": headline,
             "META": f"Data to {observed}",
             "OBSERVED": f"{corpus.horizon:%Y-%m-%dT%H:%M:00Z}",
-            "STALE-HOURS": str(round(model.STALE_AFTER.total_seconds() / 3600)),
+            "STALE-HOURS": f"{model.STALE_TO_READER.total_seconds() / 3600:g}",
             "TABS": tabs(ym, months),
             "TILES": tiles(disruptions),
             "BAR": day_bar(rows),
