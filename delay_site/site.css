@@ -59,9 +59,11 @@
 .chip-planned { background: color-mix(in srgb, var(--maint) 15%, transparent); color: var(--maint); }
 .chip-unstated, .chip-none { background: var(--grid); color: var(--muted); }
 
-/* .where, .when and .sum are base.css's; only the notice's own words are this
-   site's, and the head is set apart from the body because Irish Rail writes the
-   two separately and the body is not always a superset of the head. */
+/* .where and .sum are base.css's; only the notice's own words are this site's,
+   and the head is set apart from the body because Irish Rail writes the two
+   separately and the body is not always a superset of the head. `.case .when`
+   stays in base.css for lifts, which derives a span its notices never state;
+   this site no longer emits it. */
 .case .txt { color: var(--ink-2); font-size: 12.5px; margin-top: 3px; }
 .case .txt.head { color: var(--muted); font-style: italic; }
 

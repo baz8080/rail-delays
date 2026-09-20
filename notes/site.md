@@ -610,3 +610,79 @@ fast, the rounding that never understates, the stale cut at the exact minute -
 are upstream where there is a node to run them. A copy here would be untested
 on all three, and lifts' station pages want the same function, so the copy
 would get copied.
+
+## The minutes badge folded into the row's sentence - 2026-09-20
+
+Issue #4 asked whether the `.when` "at least N minutes late" badge earns its
+place, since the figure is usually already in the notice quoted underneath it.
+It argued that it does, "the same reason esb and lifts give minutes their own
+badge rather than only stating them in a quoted sentence". That reason is not
+true, in either direction.
+
+**esb removed this exact span.** `baz8080/esb` `notes/design-alignment.md`
+§ The outage row stopped reading like a database row: `span.when` was "named as
+the worst of it. Sometimes present, sometimes not, never adding clarity",
+carrying a number "disconnected from the timestamp it measured, and blank on 40%
+of rows". It moved into the phrase naming what it measures, and
+`tests/test_site_model.py:1108` pins `assertNotIn('class="when"', html)` there.
+
+**lifts keeps `.when`, and its figure is derived.** `lift_site/render.py:462`
+emits "listed 3 h 20 min so far", a span worked out from the site's own
+sightings. A lift notice never states it, so that badge repeats nothing. This
+page's badge quotes Irish Rail back at itself, which is the opposite case.
+
+**The number is already on the row.** Of the 492 notices pinned in
+`tests/fixtures/delay-cause-golden.json`, 222 carry a minute figure, and in 222
+of those 222 the badge's exact number is already visible in the displayed head
+(187) or body (205). Within a single wording the badge has never once supplied a
+number the prose lacks.
+
+Across wordings it sometimes does, because `group` takes `max(figures)` while
+the row quotes the latest. On the corpus to 2026-09-20 11:02Z, 346 disruptions,
+199 of them carrying a figure and 147 (42%, esb's number almost exactly) not:
+
+| | |
+|---|---:|
+| badge repeats the latest wording exactly | 179 |
+| notice eased from its peak, badge says more | 12 |
+| latest wording dropped its figure, badge is the only one | 8 |
+| notice grew, badge says more | 0 |
+
+**The growth case the issue named cannot happen.** It offered "a disruption that
+grew from +25 to +90 shows at least 90, which the currently-displayed latest
+wording alone would not say", counted at 17. A notice that grew to +90 says +90
+in its own latest wording, so the badge repeats it; the count is zero. The two
+real cases are the ones the issue did not name, and they are the ones
+`model.py` already documents: Limerick Junction to Thurles reading 60, 60, 34,
+34, 30, and the signalling failure reading 25, 60, 80, 90, 50, 50, 30.
+
+**Settled: the badge goes, the figure stays, in the `.sum` line.** 20 rows of
+346 is thin ground for a span at the end of every row, but it is the only place
+the worst-rather-than-newest rule above is expressed, so the clause joins the
+phrase that already carries the disruption's provenance: "first listed 11 Sep,
+17:00 · re-worded 3 times while it was listed, last at 14:20 · at least 90
+minutes late". The model is untouched. The footer's "How to read a disruption"
+already says the entry carries the worst figure the notice ever claimed, so
+nothing on the page needed rewording.
+
+### Rejected
+
+**Leaving it as is.** The sibling precedent it was defended with points the
+other way, and the specific complaint esb acted on - blank on 40% of rows - is
+worse here at 42%.
+
+**Dropping the figure altogether**, the issue's second option. It reads as
+removing a repetition and is not: on 20 rows the quoted text is the eased or
+silent wording, so the page would print 30 where the disruption reached 90. That
+reverses "worst rather than newest" at the presentation layer while leaving it
+in the model, and `Disruption.minutes` would have had no reader left.
+
+**Showing the badge only where it disagrees with the quoted text**, the issue's
+third option. "Sometimes present, sometimes not" is the exact fault esb pulled
+the span for, and a reader cannot decode what the absence means. It would also
+need new copy to say "this row's badge says more than its words do", on a page
+that spent four reviews removing copy.
+
+**Qualifying the clause "at least 90 minutes late at its worst".** Three words
+on all 199 figure-carrying rows to pre-empt a question 20 of them raise, when
+the footer answers it already.

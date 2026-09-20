@@ -81,6 +81,32 @@ class TheMinutesAreNeverAddedUp(unittest.TestCase):
     def test_a_figure_is_shown_as_a_floor_and_not_a_measurement(self):
         self.assertIn("at least 25 minutes late", page([SIGNALLING]))
 
+    def test_the_figure_sits_in_the_phrase_it_measures_and_not_in_a_badge(self):
+        # esb pulled the same span for the same reason: it restates the quoted
+        # notice on 179 of the 199 rows that carry a figure, and is blank on the
+        # 42% that carry none. `.case .when` stays in base.css for lifts, which
+        # derives a span its notices never state.
+        rendered = page([SIGNALLING])
+        self.assertNotIn('class="when"', rendered)
+        sum_line = re.search(r'<div class="sum">(.*?)</div>', rendered, flags=re.S)
+        self.assertIn("at least 25 minutes late", sum_line.group(1))
+
+    def test_one_minute_is_not_one_minutes(self):
+        rendered = page([sighting("+1min delayed", "Delayed +1 minute due to congestion.")])
+        self.assertIn("at least 1 minute late", rendered)
+
+    def test_an_eased_notice_still_prints_the_worst_it_ever_claimed(self):
+        # The 20 rows on the corpus where the figure is not already in the
+        # quoted text, and so the only reason it is printed at all.
+        rendered = page([
+            sighting("+60mins delayed", "Delayed +60 minutes due to a signalling issue.",
+                     seen_at=at(9)),
+            sighting("+30mins delayed", "Delayed +30 minutes due to a signalling issue.",
+                     seen_at=at(10)),
+        ])
+        self.assertIn("at least 60 minutes late", rendered)
+        self.assertNotIn("at least 30 minutes late", rendered)
+
     def test_no_rendered_page_states_a_total_in_minutes(self):
         # The prototype's headline summed them and overstated by 1.26x. Nothing
         # on this page may grow one back.
