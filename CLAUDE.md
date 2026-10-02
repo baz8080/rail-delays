@@ -39,8 +39,8 @@ pinned in `uv.lock`** and inlined into every page at build by
 `statusui.assemble()`. Edit it there, push, then `../statusui/rollout.sh` bumps
 the pin in each site. This site's own rules are `delay_site/site.css`.
 
-This is the fourth consumer, after uisce, esb and lifts. `rollout.sh` upstream
-does not know about it yet.
+This is the fourth consumer, after uisce, esb and lifts, and the last in
+`rollout.sh`'s loop, which expects this checkout at `../rail-delays`.
 
 ## Data-shape traps
 
