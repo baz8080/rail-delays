@@ -49,4 +49,4 @@ wheels = [
 [[package]]
 name = "statusui"
 version = "0.1.0"
-source = { git = "https://github.com/baz8080/statusui#52f5a5280866a9274c79c3973e94863ec4375e48" }
+source = { git = "https://github.com/baz8080/statusui#7b246236baf1ea1bf595ee83a0c2c94074606c8b" }
