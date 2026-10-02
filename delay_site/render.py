@@ -230,8 +230,9 @@ def paged_cases(disruptions):
     if not ordered:
         return '<p class="empty">No disruption notice was listed this month.</p>'
     pages = [ordered[i : i + PAGE_SIZE] for i in range(0, len(ordered), PAGE_SIZE)]
+    later = ' hidden="until-found"'
     body = "".join(
-        f'<div class="page"{"" if n == 0 else " hidden"} data-page="{n + 1}">'
+        f'<div class="page"{"" if n == 0 else later} data-page="{n + 1}">'
         + "".join(case(d) for d in page)
         + "</div>"
         for n, page in enumerate(pages)

@@ -456,6 +456,49 @@ a built page in headless Chromium and reading back which page moved to
 Not corpus-derived like the day bands: 20 is a plain readability choice, and
 says so in the code rather than pretending otherwise.
 
+### Amended 2026-10-02: ctrl-F could not reach a hidden page
+
+A perf audit found the comment in `pageDelays()` was false: it claimed ctrl-F
+still found a row on an unclicked page, but plain `hidden` is `display: none`,
+and find-in-page does not search a `display: none` subtree. Measured in headless
+Chromium 154 (Brave 1.96) on the September build from the local `lifts-data`
+checkout (data to 2026-09-24, 238 disruptions, 24 pages), probing a phrase that
+appears only on page 3:
+
+| Build | Text fragment to the phrase | `window.find` |
+|---|---|---|
+| plain `hidden`, as shipped | nothing revealed | false |
+| `hidden="until-found"`, statusui at 52f5a52 | nothing revealed | false |
+| `hidden="until-found"`, statusui with the exclusion | page 3 revealed, `beforematch` fired on it, pager reads "Page 3 of 24" | true, but nothing revealed |
+
+The middle row is statusui's `[hidden] { display: none !important }`. It beat
+the user agent's `content-visibility: hidden` for until-found and put the page
+back out of the find bar's reach. The shared rule now spares until-found
+([baz8080/statusui#19](https://github.com/baz8080/statusui/pull/19)), and pages 2
+and later render `hidden="until-found"`.
+
+`pageDelays()` handles `beforematch` by making the found page the current one.
+The page it leaves goes back to until-found, never plain `hidden`, or it would
+drop out of reach again. The label and buttons follow, and it does not scroll,
+because the browser scrolls to the match itself. Measured on the same build: a
+text fragment to page 3, then an id fragment back to page 1, fired `beforematch`
+on each in turn and left exactly one page shown. After a reveal, Older and Newer
+step from page 3 to 4 and back.
+
+**What was not measured.** The find bar itself: neither headless Chromium nor
+the desktop app's preview pane exposes one to automation. The text fragment
+stands in for it, because the HTML spec runs the same ancestor-revealing steps
+for find-in-page, fragment navigation and text fragments, and those steps are
+what fire `beforematch`. `window.find` is **not** a stand-in and should not be
+used to re-check this. It is non-standard, and with the fix in place it returns
+true and scrolls to the phrase while page 3 stays hidden and no `beforematch`
+fires. It was a fair probe of the bug and is a misleading one of the fix. No
+browser without until-found support was available. Such a browser should read
+`hidden="until-found"` as plain `hidden` under its own UA rule, and the
+`.hidden = "until-found"` setter as `true`, so the pager falls back to the old
+behaviour rather than showing every page; no author rule sets a `display` on
+`.page` that could beat that UA rule.
+
 ## Two chips got shorter - 2026-09-17
 
 "Knock-on from an earlier service" and "Passenger issue, including illness"

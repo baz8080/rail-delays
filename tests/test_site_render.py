@@ -299,7 +299,8 @@ def _many(n):
 
 class ThePagedDisruptionList(unittest.TestCase):
     """PAGE_SIZE rows a page, client-side: every row still ships in the same
-    build, `hidden` is what keeps the rest off screen until a click.
+    build, and `hidden="until-found"` keeps the rest off screen until a click
+    or a find-in-page lands in one.
     """
 
     def test_a_month_at_or_under_the_page_size_has_no_pager(self):
@@ -311,14 +312,30 @@ class ThePagedDisruptionList(unittest.TestCase):
         rendered = page(_many(render.PAGE_SIZE + 5))
         self.assertIn('class="pager"', rendered)
         self.assertEqual(rendered.count('class="case"'), render.PAGE_SIZE + 5)
-        starts_hidden = rendered.count('class="page" hidden')
+        starts_hidden = rendered.count('class="page" hidden="until-found"')
         self.assertEqual(starts_hidden, 1, "only the second page starts hidden")
+        self.assertNotIn('class="page" hidden ', rendered)
         self.assertIn("Page 1 of 2", rendered)
 
     def test_the_script_defines_and_calls_the_pager(self):
         rendered = page(_many(render.PAGE_SIZE + 1))
         self.assertIn("function pageDelays()", rendered)
         self.assertIn("pageDelays();", rendered)
+
+    def test_a_page_the_browser_reveals_becomes_the_current_page(self):
+        script = render.SITE_HTML.read_text(encoding="utf-8").split("function pageDelays()")[1]
+        self.assertIn('addEventListener("beforematch"', script)
+        # a plain `hidden = true` would put the page it leaves beyond ctrl-F again
+        self.assertIn('.hidden = "until-found"', script)
+        self.assertNotIn(".hidden = true", script)
+
+    def test_the_inlined_css_leaves_until_found_to_the_browser(self):
+        # display: none would put an until-found page beyond find-in-page's reach
+        css = re.sub(r"/\*.*?\*/", "", page(_many(render.PAGE_SIZE + 1)), flags=re.S)
+        hiding = re.findall(r"([^{}]*\[hidden[^{}]*)\{[^{}]*display\s*:\s*none", css)
+        self.assertTrue(hiding, "no [hidden] rule found; the check would pass vacuously")
+        for selector in hiding:
+            self.assertIn(':not([hidden="until-found"])', selector)
 
 
 class TheScriptStaysOutOfStatusuisWay(unittest.TestCase):

@@ -80,7 +80,8 @@ function showAge() {
 }
 showAge();
 
-// `hidden`, not removed, so ctrl-F still finds a row on an unclicked page.
+// until-found, not removed, so ctrl-F still finds a row on an unclicked page:
+// the browser reveals the page it lands in and fires beforematch on it first.
 function pageDelays() {
   document.querySelectorAll(".pager").forEach(function (pager) {
     var pages = pager.parentElement.querySelectorAll(".page");
@@ -89,16 +90,23 @@ function pageDelays() {
     var next = pager.querySelector(".next");
     var current = 0;
     var show = function (i) {
-      pages[current].hidden = true;
+      pages[current].hidden = "until-found";
       pages[i].hidden = false;
       current = i;
       label.textContent = "Page " + (i + 1) + " of " + pages.length;
       prev.disabled = i === 0;
       next.disabled = i === pages.length - 1;
+    };
+    var step = function (by) {
+      show(current + by);
       pager.scrollIntoView({block: "nearest"});
     };
-    prev.addEventListener("click", function () { show(current - 1); });
-    next.addEventListener("click", function () { show(current + 1); });
+    prev.addEventListener("click", function () { step(-1); });
+    next.addEventListener("click", function () { step(1); });
+    // no scroll here: the browser is about to scroll to the match itself
+    pages.forEach(function (page, i) {
+      page.addEventListener("beforematch", function () { show(i); });
+    });
   });
 }
 pageDelays();
