@@ -686,3 +686,55 @@ that spent four reviews removing copy.
 **Qualifying the clause "at least 90 minutes late at its worst".** Three words
 on all 199 figure-carrying rows to pre-empt a question 20 of them raise, when
 the footer answers it already.
+
+## The age is swapped in under the banner - 2026-10-02
+
+`showAge()` ran at the end of the body. Past 24 hours `freshness()` replaces
+the one-line stamp with "Updated 4 days ago - the last data build may have
+failed", which wraps inside the banner, and a browser that paints before the
+parser has reached the end of the body shows the stamp first and then moves
+everything under the banner down. The page is otherwise server-rendered, so
+this one line is the only thing that changes after first paint.
+
+Lab, Chromium on the harness's two profiles (412x915 phone at DPR 2.625 and
+1366x768 desktop), cache off, 1.6 Mbps and 150 ms RTT, 4x CPU, the full-month
+page `m/2026-09.html` (167 KB, 20 KB gzipped). "Stale" is the built page with
+`data-observed` backdated to four days before the reader's clock, which is what
+a reader of a stalled site sees. Before is five runs, after is nine:
+
+| CLS | before | after |
+|---|---|---|
+| stale, phone | 0.107 | 0 |
+| stale, desktop | 0.078 | 0 |
+| fresh, phone | 0.0007 | 0 |
+| fresh, desktop | 0.0002 | 0 |
+
+The stale 25 KB index shifts in 3 of 5 runs on either profile, because whether
+it does depends on whether the browser paints a partial document first; after,
+none of nine does. LCP is unchanged within run-to-run noise, 260 to 350 ms on
+both pages.
+
+The `<!--UI-JS-FRESH-->` marker and `showAge()` now sit in an inline script
+directly after the banner, so the text is replaced before anything below it is
+parsed, let alone painted. A reader with no JavaScript still gets the stamp, and
+the redeclaration guard now reads every inline block, since "the last chunk
+after a marker" is no longer where the page's own functions are. This costs 12
+bytes gzipped on the index.
+
+The same change moves the statusui pin to 43e1852 by hand (this site is not in
+`rollout.sh` yet), which strips the comments from the inlined CSS and JS: the
+index went from 31.4 KB to 26.0 KB raw and 9.3 KB to 6.8 KB gzipped, the month
+page from 172.4 KB to 167.1 KB raw and 22.7 KB to 20.1 KB gzipped.
+
+Rejected:
+
+- **The skeleton gate the app sites got** (`<!--UI-WAIT-->` and `data-wait`).
+  There is no skeleton: the page is rendered at build and nothing above the
+  fold waits on data, so the gate would hold back content for no shift.
+- **Printing the age in the HTML at build.** The build's clock is not the
+  reader's, and that is the point of `freshness()` and of `STALE_TO_READER`
+  (§ The banner prints an age); a page served from a cache a week later would
+  say "4 hours ago".
+- **Leaving `showAge()` where it was.** Correct on a fast connection and a small
+  page, which is how it went unnoticed, and wrong on exactly the stalled site
+  where the sentence is long enough to wrap.
