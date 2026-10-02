@@ -307,7 +307,8 @@ def _many(n):
 
 class ThePagedDisruptionList(unittest.TestCase):
     """PAGE_SIZE rows a page, client-side: every row still ships in the same
-    build, `hidden` is what keeps the rest off screen until a click.
+    build, `hidden="until-found"` is what keeps the rest off screen until a click
+    or a find.
     """
 
     def test_a_month_at_or_under_the_page_size_has_no_pager(self):
@@ -319,14 +320,21 @@ class ThePagedDisruptionList(unittest.TestCase):
         rendered = page(_many(render.PAGE_SIZE + 5))
         self.assertIn('class="pager"', rendered)
         self.assertEqual(rendered.count('class="case"'), render.PAGE_SIZE + 5)
-        starts_hidden = rendered.count('class="page" hidden')
+        starts_hidden = rendered.count('class="page" hidden="until-found"')
         self.assertEqual(starts_hidden, 1, "only the second page starts hidden")
+        self.assertNotIn('class="page" hidden ', rendered)
         self.assertIn("Page 1 of 2", rendered)
 
     def test_the_script_defines_and_calls_the_pager(self):
         rendered = page(_many(render.PAGE_SIZE + 1))
         self.assertIn("function pageDelays()", rendered)
         self.assertIn("pageDelays();", rendered)
+
+    def test_a_page_a_find_reveals_moves_the_pager_and_one_left_stays_findable(self):
+        rendered = page(_many(render.PAGE_SIZE + 1))
+        self.assertIn('addEventListener("beforematch"', rendered)
+        self.assertIn('setAttribute("hidden", "until-found")', rendered)
+        self.assertNotIn(".hidden = true", rendered)
 
 
 class TheScriptStaysOutOfStatusuisWay(unittest.TestCase):
