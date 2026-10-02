@@ -27,19 +27,16 @@
       <span><!--HEADLINE--></span>
       <span class="meta" data-observed="<!--OBSERVED-->" data-stale="<!--STALE-HOURS-->"><!--META--></span>
     </div>
-<script>
+    <script>
 <!--UI-JS-FRESH-->
 
-// Straight after the banner, not at the end of the body: a stale sentence wraps,
-// and swapping it in after first paint shifts everything below the banner.
-// The stamp stays in the HTML for a reader with no JS; the age says the same
-// thing without the timezone arithmetic, and only their own clock can tell it.
-function showAge() {
-  var meta = document.querySelector(".banner .meta[data-observed]");
-  if (meta) meta.innerHTML = freshness(meta.dataset.observed, +meta.dataset.stale);
-}
-showAge();
-</script>
+    // here, not at the end of the body: before the content below is painted
+    function showAge() {
+      var meta = document.querySelector(".banner .meta[data-observed]");
+      if (meta) meta.innerHTML = freshness(meta.dataset.observed, +meta.dataset.stale);
+    }
+    showAge();
+    </script>
 
     <div class="controls">
       <div class="months"><!--TABS--></div>

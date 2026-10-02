@@ -721,10 +721,11 @@ the redeclaration guard now reads every inline block, since "the last chunk
 after a marker" is no longer where the page's own functions are. This costs 12
 bytes gzipped on the index.
 
-The same change moves the statusui pin to 43e1852 by hand (this site is not in
-`rollout.sh` yet), which strips the comments from the inlined CSS and JS: the
-index went from 31.4 KB to 26.0 KB raw and 9.3 KB to 6.8 KB gzipped, the month
-page from 172.4 KB to 167.1 KB raw and 22.7 KB to 20.1 KB gzipped.
+The same change moves the statusui pin by hand (this site is not in
+`rollout.sh` yet), to 7b24623 after the two review rounds upstream, which strips
+the comments from the inlined CSS and JS: the index went from 31.4 KB to 25.4 KB
+raw and 9.3 KB to 6.6 KB gzipped, the month page from 172.4 KB to 163.2 KB raw
+and 22.7 KB to 19.8 KB gzipped.
 
 Rejected:
 
