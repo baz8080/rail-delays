@@ -264,6 +264,14 @@ class TheBanner(unittest.TestCase):
         # may lag a build, and a reader meets a page hours older than that.
         self.assertIn('data-stale="24"', rendered)
 
+    def test_the_age_is_swapped_in_before_the_rest_of_the_page_is_parsed(self):
+        rendered = page([SIGNALLING])
+        age = rendered.index("showAge();")
+        self.assertLess(rendered.index('<span class="meta"'), age)
+        self.assertLess(age, rendered.index('class="controls"'))
+        # a function in a later <script> block does not exist yet when this runs
+        self.assertLess(rendered.index("function freshness"), age)
+
     def test_the_age_arrives_without_the_app_bundle(self):
         rendered = page([SIGNALLING])
         self.assertIn("function freshness", rendered)
@@ -346,12 +354,13 @@ class TheScriptStaysOutOfStatusuisWay(unittest.TestCase):
 
     def own_script(self):
         template = render.SITE_HTML.read_text(encoding="utf-8")
-        return re.split(r"<!--UI-JS[A-Z-]*-->", template)[-1]
+        scripts = re.findall(r"<script\b[^>]*>(.*?)</script>", template, re.S)
+        return "\n".join(re.sub(r"<!--UI-JS[A-Z-]*-->", "", script) for script in scripts)
 
     def test_it_redeclares_nothing_statusui_declares(self):
-        declared = set(re.findall(r"^(?:function|var)\s+(\w+)", self.own_script(), re.M))
-        # or the split found the end of the file and the check is vacuous
-        self.assertIn("pageDelays", declared)
+        declared = set(re.findall(r"^\s*(?:function|var)\s+(\w+)", self.own_script(), re.M))
+        # or the scan found nothing and the check is vacuous
+        self.assertLessEqual({"pageDelays", "showAge"}, declared)
         self.assertEqual(declared & statusui.js_globals(), set())
 
 
