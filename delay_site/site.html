@@ -81,7 +81,8 @@
 <!--UI-JS-CAPTION-->
 bindDayCaption();
 
-// `hidden`, not removed, so ctrl-F still finds a row on an unclicked page.
+// hidden="until-found", not plain hidden: find-in-page and a #fragment can reach a row
+// on an unclicked page, and beforematch keeps the pager in step when they do.
 function pageDelays() {
   document.querySelectorAll(".pager").forEach(function (pager) {
     var pages = pager.parentElement.querySelectorAll(".page");
@@ -89,17 +90,21 @@ function pageDelays() {
     var prev = pager.querySelector(".prev");
     var next = pager.querySelector(".next");
     var current = 0;
-    var show = function (i) {
-      pages[current].hidden = true;
+    var show = function (i, found) {
+      if (i !== current) pages[current].setAttribute("hidden", "until-found");
       pages[i].hidden = false;
       current = i;
       label.textContent = "Page " + (i + 1) + " of " + pages.length;
       prev.disabled = i === 0;
       next.disabled = i === pages.length - 1;
-      pager.scrollIntoView({block: "nearest"});
+      // a find has already scrolled to its match
+      if (!found) pager.scrollIntoView({block: "nearest"});
     };
     prev.addEventListener("click", function () { show(current - 1); });
     next.addEventListener("click", function () { show(current + 1); });
+    pages.forEach(function (page, i) {
+      page.addEventListener("beforematch", function () { show(i, true); });
+    });
   });
 }
 pageDelays();

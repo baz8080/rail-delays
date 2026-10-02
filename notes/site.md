@@ -456,6 +456,26 @@ a built page in headless Chromium and reading back which page moved to
 Not corpus-derived like the day bands: 20 is a plain readability choice, and
 says so in the code rather than pretending otherwise.
 
+### Find-in-page reaches the hidden pages - 2026-10-02
+
+The script's comment said plain `hidden` left an unclicked page searchable. It
+did not: a perf audit on 2026-10-02 found `window.find` matched nothing on a
+hidden page, because `hidden` is `display: none` and the find bar cannot reach
+into that. Pages after the first now render `hidden="until-found"`, which the
+browser hides with `content-visibility: hidden` and reveals itself when
+find-in-page or a link lands inside, firing `beforematch` first. `pageDelays()`
+listens for it and moves the pager there (label, buttons, and the page it
+leaves going back to `until-found`), without the scroll a click makes, since
+the find has already scrolled. statusui's `[hidden]` rule leaves `until-found`
+out since 2026-10-02, or its `!important` would have hidden these pages from
+the find all over again.
+
+Checked in headless Chromium on September (32 pages): a text-fragment link to
+"first listed 28 Sep, 12:30" on page 3 opened page 3, the pager read "Page 3 of
+32" and page 1 went back to `until-found`; Older and Newer then carried on from
+page 3. A browser without `until-found` treats the attribute as plain `hidden`,
+which is where every browser was before.
+
 ## Two chips got shorter - 2026-09-17
 
 "Knock-on from an earlier service" and "Passenger issue, including illness"
